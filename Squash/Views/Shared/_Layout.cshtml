@@ -393,9 +393,12 @@
                                 <a href="@Url.Action("Index","Home")"><i class="si si-speedometer"></i><span class="sidebar-mini-hide">Dashboard</span></a>
                             </li>
 
-                            @if (User.IsInRole("Project Manager"))
+                            @if (User.IsInRole("Project Manager") || User.IsInRole("Administrator"))
                             {
                                 <li class="nav-main-heading"><span class="sidebar-mini-hide">Project Management Tools</span></li>
+                                <li>
+                                    <a href="@Url.Action("Index","Projects")"><i class="si si-folder"></i><span class="sidebar-mini-hide">Project Managment</span></a>
+                                </li>
                             }
 
                             @if (User.IsInRole("Developer"))
@@ -408,9 +411,6 @@
                                 <li class="nav-main-heading"><span class="sidebar-mini-hide">Administrative Tools</span></li>
                                 <li>
                                     <a href="@Url.Action("Index","UserManagment")"><i class="si si-user"></i><span class="sidebar-mini-hide">User Managment</span></a>
-                                </li>
-                                <li>
-                                    <a href="@Url.Action("Index","Projects")"><i class="si si-folder"></i><span class="sidebar-mini-hide">Project Managment</span></a>
                                 </li>
                             }
                         </ul>
@@ -503,7 +503,7 @@
                 Developed by Damien Ostler
             </div>
             <div class="pull-left">
-                <a class="font-w600" href="http://goo.gl/6LF10W" target="_blank">Squash 0.0.4</a> &copy; <span class="js-year-copy">2019</span>
+                Squash 0.0.4 &copy; <span class="js-year-copy">2019</span>
             </div>
         </footer>
         <!-- END Footer -->

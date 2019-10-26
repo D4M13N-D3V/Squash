@@ -1,81 +1,94 @@
-﻿
-    <main id="main-container">
+﻿@model Squash.Models.DashboardViewModel
 
-        <div class="bg-image" style="background-image: url('/Images/photos/photo28@2x.jpg');">
-            <div class="content content-full bg-primary-dark-op">
-                <div class="row">
-                    <div class="col-xs-6">
-                        <h1 class="page-heading text-white">
-                            Projects
-                        </h1>
-                    </div>
-                    <div class="col-xs-6 text-right">
-                        <a class="btn btn-default" href="base_pages_projects_create.html">
-                            <i class="fa fa-plus-circle text-success push-5-r"></i> New Project
-                        </a>
-                    </div>
-                </div>
+<main id="main-container">
+    <div class="content bg-image overflow-hidden" style="background-image: url('/Images/photos/photo3@2x.jpg');">
+        <div class="push-50-t push-15">
+            <h1 class="h2 text-white animated zoomIn">Dashboard</h1>
+            <h2 class="h5 text-white-op animated zoomIn">Welcome @Model.FullName</h2>
+        </div>
+    </div>
+    <div class="content bg-white border-b">
+        <div class="row items-push text-uppercase">
+            <div class="col-xs-6 col-sm-3">
+                <div class="font-w700 text-gray-darker animated fadeIn">Assigned Projects</div>
+                <a class="h2 font-w300 text-primary animated flipInX" href="#">@Model.AssignedProjects.Count</a>
+            </div>
+            <div class="col-xs-6 col-sm-3">
+                <div class="font-w700 text-gray-darker animated fadeIn">Assigned Tickets</div>
+                <a class="h2 font-w300 text-primary animated flipInX" href="#">0</a>
+            </div>
+            <div class="col-xs-6 col-sm-3">
+                <div class="font-w700 text-gray-darker animated fadeIn">Active Tickets</div>
+                <a class="h2 font-w300 text-primary animated flipInX" href="#">0</a>
+            </div>
+            <div class="col-xs-6 col-sm-3">
+                <div class="font-w700 text-gray-darker animated fadeIn">Archived Tickets</div>
+                <a class="h2 font-w300 text-primary animated flipInX" href="#">0</a>
             </div>
         </div>
-        <div class="content">
-            <div class="row">
-                <div class="col-4">
-                    <div class="row">
-                        <div class="col-sm-6 col-lg-4">
+    </div>
+    <div class="content">
+        <div class="row">
+            @if (Model.AssignedProjects.Any())
+            {
+                <div class="col-lg-6">
+                    <div class="block">
+                        <div class="block-header">
+                            <ul class="block-options">
+                                <li>
+                                    <button type="button" data-toggle="block-option" data-action="refresh_toggle" data-action-mode="demo"><i class="si si-refresh"></i></button>
+                                </li>
+                            </ul>
+                            <h3 class="block-title">My Assigned Projects</h3>
+                        </div>
+                        <div class="block-content block-content-full bg-gray-lighter">
 
-                            
-                            <div class="block block-rounded block-themed">
-                                <div class="block-header bg-primary">
-                                    <ul class="block-options">
-                                        <li>
-                                            <button type="button" data-toggle="block-option" data-action="refresh_toggle" data-action-mode="demo">
-                                                <i class="si si-refresh"></i>
-                                            </button>
-                                        </li>
-                                        <li class="dropdown">
-                                            <button type="button" data-toggle="dropdown"><i class="si si-settings"></i></button>
-                                            <ul class="dropdown-menu dropdown-menu-right">
-                                                <li>
-                                                    <a tabindex="-1" href="javascript:void(0)">
-                                                        <i class="si si-pencil pull-right"></i>
-                                                        Edit Project
+                            <div class="row">
+
+                                @foreach (var project in Model.AssignedProjects)
+                                {
+                                    <div class="col-sm-6 col-lg-6">
+                                        <div class="block block-rounded block-themed">
+                                            <div class="block-header bg-primary">
+                                                <h3 class="h4 font-w600 push-5">
+                                                    <a class="text-white" href="base_pages_projects_view.html">@project.Name</a>
+                                                </h3>
+                                                <h4 class="h5 text-white-op">@project.Description</h4>
+                                            </div>
+                                            <div class="block-content text-center">
+                                                <div class="btn-group push">
+                                                    <a class="btn btn-default js-tooltip" href="javascript:void(0)" title="Developers">
+                                                        @project.Users.Count
+                                                        <i class="fa fa-user-circle-o"></i>
                                                     </a>
-                                                </li>
-                                                <li class="divider"></li>
-                                                <li>
-                                                    <a tabindex="-1" href="javascript:void(0)">
-                                                        <i class="si si-trash text-danger pull-right"></i>
-                                                        Delete Project
+
+                                                    <a class="btn btn-default js-tooltip" href="javascript:void(0)" title="Tickets">
+                                                        @project.Tickets.Count <i class="fa fa-files-o"></i>
                                                     </a>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                    <h3 class="h4 font-w600 push-5">
-                                        <a class="text-white" href="base_pages_projects_view.html">Project Name</a>
-                                    </h3>
-                                   <h4 class="h5 text-white-op">Summary of a piece of software being tracked by this software.</h4>
-                                </div>
-                                <div class="block-content text-center">
-                                    <div class="btn-group push">
-                                        <a class="btn btn-default js-tooltip" href="javascript:void(0)" title="Developers">
-                                            <i class="fa fa-user-circle-o"></i>
-                                        </a>
-                                        <a class="btn btn-default js-tooltip" href="javascript:void(0)" title="Tickets">
-                                            1000 <i class="fa fa-files-o"></i>
-                                        </a>
-                                        <a class="btn btn-default js-tooltip" href="javascript:void(0)" title="Add Developer">
-                                            <i class="fa fa-user-plus"></i>
-                                        </a>
+                                                    <a class="btn btn-default js-tooltip" href="javascript:void(0)" title="View Tickets">
+                                                        View Tickets <i class="si si-magnifier"></i>
+                                                    </a>
+                                                </div>
+                                                <ul class="list-inline push">
+                                                </ul>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <ul class="list-inline push">
+                                }
 
-                                    </ul>
-                                </div>
+
+
                             </div>
+
+                        </div>
+                        <div class="block-content">
                         </div>
                     </div>
                 </div>
+            }
+            <div class="col-lg-6">
+
             </div>
         </div>
-    </main>
+    </div>
+</main>
