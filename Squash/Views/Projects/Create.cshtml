@@ -1,0 +1,95 @@
+﻿@model Squash.Models.Project
+
+@{
+    ViewBag.Title = "Create";
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<main id="main-container">
+
+    <div class="bg-image" style="background-image: url('/Images/photos/photo28@2x.jpg');">
+        <div class="content content-full bg-flat-op">
+            <div class="row">
+                <div class="col-xs-6">
+                    <h1 class="page-heading text-white">
+                        New Project
+                    </h1>
+                </div>
+                <div class="col-xs-6 text-right">
+                    <a class="btn btn-default" href="@Url.Action("Index","Projects")">
+                        <i class="fa fa-arrow-left text-success push-5-r"></i> Back To Projects
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content">
+        <div class="content content-boxed">
+            <!-- Create Project -->
+            <h2 class="content-heading text-center">Create a new project in the system!</h2>
+            <div class="block">
+                <div class="block-content">
+                    @using (Html.BeginForm("Create", "Projects", new { }, FormMethod.Post, new { @class = "form-horizontal push-30-t push-30", role = "form" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="row items-push">
+                            <div class="col-sm-6 col-sm-offset-3">
+                                <div class="form-group">
+                                    <div class="col-xs-12">
+                                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control input-lg", @placeholder = "Name" } })
+                                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-xs-12">
+
+                                        @Html.TextAreaFor(model => model.Description, new { @rows = "3", @class = "form-control", @placeholder = "Description" })
+                                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-xs-12">
+                                        <button class="btn btn-lg btn-success" type="submit">
+                                            <i class="fa fa-plus push-5-r"></i> Add Project
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+</main>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\

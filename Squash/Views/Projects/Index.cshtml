@@ -1,0 +1,177 @@
+﻿@model  IEnumerable<Squash.Models.ProjectManagementViewModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<main id="main-container">
+
+    <div class="bg-image" style="background-image: url('/Images/photos/photo28@2x.jpg');">
+        <div class="content content-full bg-primary-dark-op">
+            <div class="row">
+                <div class="col-xs-6">
+                    <h1 class="page-heading text-white">
+                        Projects
+                    </h1>
+                </div>
+                <div class="col-xs-6 text-right">
+                    <a class="btn btn-default" href="@Url.Action("Create","Projects")">
+                        <i class="fa fa-plus-circle text-success push-5-r"></i> New Project
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content">
+        <div class="row">
+            <div class="col-4">
+                <div class="row">
+                    @foreach (var project in Model)
+                    {
+
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="block block-rounded block-themed">
+                                <div class="block-header bg-primary">
+                                    <ul class="block-options">
+                                        <li>
+                                            <button type="button" data-toggle="block-option" data-action="refresh_toggle" data-action-mode="demo">
+                                                <i class="si si-refresh"></i>
+                                            </button>
+                                        </li>
+                                        <li class="dropdown">
+                                            <button type="button" data-toggle="dropdown"><i class="si si-settings"></i></button>
+                                            <ul class="dropdown-menu dropdown-menu-right">
+                                                <li>
+                                                    <a tabindex="-1" href="@Url.Action("Edit","Projects",new { id=project.Id })">
+                                                        <i class="si si-pencil pull-right"></i>
+                                                        Edit Project
+                                                    </a>
+                                                </li>
+                                                <li class="divider"></li>
+                                                <li>
+
+                                                    <a tabindex="-1" href="javascript:document.getElementById('deleteForm').submit()">
+                                                        <i class="si si-trash text-danger pull-right"></i>
+                                                        Delete Project
+                                                    </a>
+                                                    @using (Html.BeginForm("Delete", "Projects", new { id = project.Id }, FormMethod.Post, new { id = "deleteForm" }))
+                                                    {
+                                                        @Html.AntiForgeryToken();
+                                                    }
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                    <h3 class="h4 font-w600 push-5">
+                                        <a class="text-white" href="base_pages_projects_view.html">@project.Name</a>
+                                    </h3>
+                                    <h4 class="h5 text-white-op">@project.Description</h4>
+                                </div>
+                                <div class="block-content text-center">
+                                    <div class="btn-group push">
+                                        <a class="btn btn-default js-tooltip" href="javascript:void(0)" title="Developers">
+                                            <i class="fa fa-user-circle-o"></i>
+                                        </a>
+
+                                        <a class="btn btn-default js-tooltip" href="javascript:void(0)" title="Tickets">
+                                            0 <i class="fa fa-files-o"></i>
+                                        </a>
+                                        <a class="btn btn-default js-tooltip" href="javascript:void(0)" data-toggle="modal" data-target="#addToProject-@project.Id" title="Add Developer">
+                                            <i class="fa fa-plus"></i>
+                                        </a>
+                                        <div class="modal fade" id="addToProject-@project.Id" tabindex="-1" role="dialog" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-top">
+
+                                                @using (Html.BeginForm("AddToProject", "Projects", new { }, FormMethod.Post, new { @class = "form-horizontal push-30-t push-30", role = "form" }))
+                                                {
+                                                    @Html.Hidden("projectId", project.Id)
+                                                    <div class="modal-content">
+                                                        <div class="block block-themed block-transparent remove-margin-b">
+                                                            <div class="block-header bg-primary-dark">
+                                                                <ul class="block-options">
+                                                                    <li>
+                                                                        <button data-dismiss="modal" type="button"><i class="si si-close"></i></button>
+                                                                    </li>
+                                                                </ul>
+                                                                <h3 class="block-title">Add User To Project</h3>
+                                                            </div>
+                                                            <div class="block-content">
+                                                                <div class="col-12">
+                                                                    <div class="form-material floating">
+                                                                        <select class="form-control" id="userId" name="userId" size="1" style="width:100%">
+                                                                            <option></option><!-- Empty value for demostrating material select box -->
+                                                                            @foreach (var user in project.UsersNotInProject)
+                                                                            {
+                                                                                var name = user.FirstName + " " + user.LastName;
+                                                                                <option value="@user.Id">@name</option>
+                                                                            }
+                                                                        </select>
+                                                                        <label for="material-select2">Please Select User To Add</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button class="btn btn-sm btn-success" type="submit"><i class="fa fa-check push-5-r"></i>Add User To Project</button>
+                                                            <button class="btn btn-sm btn-default" type="button" data-dismiss="modal"><i class="fa fa-close push-5-r"></i>Close</button>
+                                                        </div>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+
+                                        <a class="btn btn-default js-tooltip"  data-toggle="modal" data-target="#removeFromProject-@project.Id" href="javascript:void(0)" title="Remove Developer">
+                                            <i class="fa fa-minus"></i>
+                                        </a>
+                                        <div class="modal fade" id="removeFromProject-@project.Id" tabindex="-1" role="dialog" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-top">
+
+                                                @using (Html.BeginForm("RemoveFromProject", "Projects", new { }, FormMethod.Post, new { @class = "form-horizontal push-30-t push-30", role = "form" }))
+                                                {
+                                                    @Html.Hidden("projectId", project.Id)
+                                                    <div class="modal-content">
+                                                        <div class="block block-themed block-transparent remove-margin-b">
+                                                            <div class="block-header bg-primary-dark">
+                                                                <ul class="block-options">
+                                                                    <li>
+                                                                        <button data-dismiss="modal" type="button"><i class="si si-close"></i></button>
+                                                                    </li>
+                                                                </ul>
+                                                                <h3 class="block-title">Remove User From Project</h3>
+                                                            </div>
+                                                            <div class="block-content">
+                                                                <div class="col-12">
+                                                                    <div class="form-material floating">
+                                                                        <select class="form-control" id="userId" name="userId" size="1" style="width:100%">
+                                                                            <option></option><!-- Empty value for demostrating material select box -->
+                                                                            @foreach (var user in project.UsersInProject)
+                                                                            {
+                                                                                var name = user.FirstName + " " + user.LastName;
+                                                                                <option value="@user.Id">@name</option>
+                                                                            }
+                                                                        </select>
+                                                                        <label for="material-select2">Please Select User To Remove</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button class="btn btn-sm btn-danger" type="submit"><i class="fa fa-check push-5-r"></i>Remove User From Project</button>
+                                                            <button class="btn btn-sm btn-default" type="button" data-dismiss="modal"><i class="fa fa-close push-5-r"></i>Close</button>
+                                                        </div>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <ul class="list-inline push">
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

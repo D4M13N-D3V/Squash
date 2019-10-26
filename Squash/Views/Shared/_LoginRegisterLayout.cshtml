@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A fully featured admin theme which can be used to build CRM, CMS, etc.">
+    <meta name="author" content="Coderthemes">
+
+    <link rel="shortcut icon" href="assets/images/favicon.ico">
+
+    <title>Ubold - Responsive Admin Dashboard Template</title>
+
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/icons.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/darkStyle.css" rel="stylesheet" type="text/css" />
+
+    <script src="~/Scripts/modernizr.min.js"></script>
+
+</head>
+<body>
+
+    <div class="account-pages"></div>
+    <div class="clearfix"></div>
+    <div class="wrapper-page">
+        @RenderBody()
+    </div>
+
+
+    <!-- jQuery  -->
+    <script src="~/Scripts/jquery.min.js"></script>
+    <script src="~/Scripts/popper.min.js"></script><!-- Popper for Bootstrap -->
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/waves.js"></script>
+    <script src="~/Scripts/jquery.slimscroll.js"></script>
+    <script src="~/Scripts/jquery.scrollTo.min.js"></script>
+
+    <!-- App js -->
+    <script src="~/Scripts/jquery.core.js"></script>
+    <script src="~/Scripts/jquery.app.js"></script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>
