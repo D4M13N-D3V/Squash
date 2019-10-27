@@ -27,7 +27,7 @@ namespace Squash.Models
         }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string Role { get; set; }
+        public string Role { get; set; }    
         public virtual ICollection<TicketNotification> Notifications { get; set; }
         public virtual ICollection<Ticket> AssignedTickets { get; set; }
         public virtual ICollection<Ticket> CreatedTickets { get; set; }

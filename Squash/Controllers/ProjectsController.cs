@@ -10,25 +10,27 @@ using Squash.Models;
 
 namespace Squash.Controllers
 {
-    [Authorize(Roles = "Administrator, Project Manager")]
     public class ProjectsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
 
         [HttpPost]
+        [Authorize(Roles = "Administrator, Project Manager")]
         public ActionResult AddToProject(string userId, int projectId)
         {
             Helpers.ProjectHelpers.AddUserToProject(userId, projectId);
             return RedirectToAction("Index", "Projects");
         }
         [HttpPost]
+        [Authorize(Roles = "Administrator, Project Manager")]
         public ActionResult RemoveFromProject(string userId, int projectId)
         {
             Helpers.ProjectHelpers.RemoveUserFromProject(userId, projectId);
             return RedirectToAction("Index", "Projects");
         }
 
+        [Authorize(Roles = "Administrator, Project Manager")]
         // GET: Projects
         public ActionResult Index()
         {
@@ -48,6 +50,7 @@ namespace Squash.Controllers
             return View(viewModels);
         }
 
+        [Authorize]
         // GET: Projects/Details/5
         public ActionResult Details(int? id)
         {
@@ -64,6 +67,7 @@ namespace Squash.Controllers
         }
 
         // GET: Projects/Create
+        [Authorize(Roles = "Administrator, Project Manager")]
         public ActionResult Create()
         {
             return View();
@@ -88,6 +92,7 @@ namespace Squash.Controllers
         }
 
         // GET: Projects/Edit/5
+        [Authorize(Roles = "Administrator, Project Manager")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -119,23 +124,10 @@ namespace Squash.Controllers
             return View(project);
         }
 
-        // GET: Projects/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Project project = db.Projects.Find(id);
-            if (project == null)
-            {
-                return HttpNotFound();
-            }
-            return View(project);
-        }
 
         // POST: Projects/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Administrator, Project Manager")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
@@ -143,15 +135,6 @@ namespace Squash.Controllers
             db.Projects.Remove(project);
             db.SaveChanges();
             return RedirectToAction("Index");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
         }
     }
 }

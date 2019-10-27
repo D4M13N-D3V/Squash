@@ -20,9 +20,9 @@
 <head>
     <meta charset="utf-8">
 
-    <title>OneUI - Admin Dashboard Template &amp; UI Framework</title>
+    <title>Squash - Login</title>
 
-    <meta name="description" content="OneUI - Admin Dashboard Template &amp; UI Framework created by pixelcave and published on Themeforest">
+    <meta name="description" content="Squash - Login">
     <meta name="author" content="pixelcave">
     <meta name="robots" content="noindex, nofollow">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0">
@@ -68,7 +68,7 @@
                     <div class="push-30-t push-50 animated fadeIn">
                         <!-- Login Title -->
                         <div class="text-center">
-                            <img src="~/Images/logo.png" style="width:50%"/>
+                            <img src="~/Images/logo.png" style="width:50%" />
                             <p class="text-muted push-15-t">Track your bugs so you can squash them as soon as possible!</p>
                         </div>
                         <!-- END Login Title -->
@@ -110,8 +110,9 @@
                             <div class="form-group push-30-t">
                                 <div class="col-xs-12 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
                                     <button class="btn btn-sm btn-block btn-primary" type="submit">Log in</button>
+                                    <button class="btn btn-sm btn-block btn-warning" onclick="window.location.href = '@Url.Action("Register","Account")';" type="button">Sign Up</button>
                                 </div>
-                            </div>
+                            </div>  
                         }
                         <!-- END Login Form -->
                     </div>

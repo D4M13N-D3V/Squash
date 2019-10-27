@@ -1,4 +1,5 @@
-﻿@model Squash.Models.Project
+﻿@using Microsoft.AspNet.Identity;
+@model Squash.Models.Project
 
 @{
     ViewBag.Title = "Details";
@@ -17,7 +18,7 @@
                     </h1>
                 </div>
                 <div class="col-xs-6 text-right">
-                    <a class="btn btn-default" href="@Url.Action("Edit","Projects", new { id = Model.Id })">
+                    <a class="btn btn-default" href="@Url.Action("Edit", "Projects", new { id = Model.Id })">
                         <i class="fa fa-pencil push-5-r"></i> Edit Project
                     </a>
                 </div>
@@ -27,6 +28,84 @@
     <!-- END Page Header -->
     <!-- Page Content -->
     <div class="content content-boxed">
+        @{
+            var tickets = Model.Tickets.Where(x => x.AssignedUser.Id == User.Identity.GetUserId());
+            if (tickets.Any())
+            {
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2">
+                        <div class="block">
+                                    <div class="block-content">
+                                        <div class="text-center">
+                                              My Assigned Tickets
+                                        </div>
+                                        <!-- DataTables init on table by adding .js-dataTable-full class, functionality initialized in js/pages/base_tables_datatables.js -->
+                                        <table class="table  table-striped" id="myTicketViewTable">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width">Title</th>
+                                                    <th class="hidden-xs">Summary</th>
+                                                    <th>Priority</th>
+                                                    <th class="hidden-xs">Status</th>
+                                                    <th class="hidden-xs">Type</th>
+                                                    <th class="hidden-xs">Created</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var ticket in tickets)
+                                                {
+
+                                                    <tr>
+                                                        <td>@ticket.Title</td>
+                                                        <td class="hidden-xs">@ticket.Summary</td>
+                                                        <td>
+                                                            @switch (ticket.Priority.Name)
+                                                            {
+                                                                case "High":
+                                                                    <span class="label label-danger">High</span>
+                                                                    break;
+                                                                case "Medium":
+                                                                    <span class="label label-warning">Medium</span>
+                                                                    break;
+                                                                case "Low":
+                                                                    <span class="label label-info">Low</span>
+                                                                    break;
+                                                            }
+                                                        </td>
+                                                        <td class="hidden-xs">
+
+                                                            @switch (ticket.Status.Name)
+                                                            {
+                                                                case "Created":
+                                                                    <span class="label label-danger">Created</span>
+                                                                    break;
+                                                                case "Assigned":
+                                                                    <span class="label label-warning">Assigned</span>
+                                                                    break;
+                                                                case "Resolved":
+                                                                    <span class="label label-success">Resolved</span>
+                                                                    break;
+                                                                case "Reopened":
+                                                                    <span class="label label-danger">Reopened</span>
+                                                                    break;
+                                                                case "Archived":
+                                                                    <span class="label label-info">Archived</span>
+                                                                    break;
+                                                            }
+                                                        </td>
+                                                        <td class="hidden-xs"><span class="label label-info">@ticket.Type.Name</span></td>
+
+                                                        <td class="hidden-xs">@ticket.CreatedDate</td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
         <div class="row">
             <div class="col-lg-5">
                 <div class="block">
@@ -74,14 +153,48 @@
                                 @foreach (var ticket in Model.Tickets)
                                 {
 
-                                <tr>
-                                    <td>@ticket.Title</td>
-                                    <td class="hidden-xs">@ticket.Summary</td>
-                                    <td>@ticket.Priority.Name</td>
-                                    <td class="hidden-xs">@ticket.Status.Name</td>
-                                    <td class="hidden-xs">@ticket.Type.Name</td>
-                                    <td class="hidden-xs">@ticket.CreatedDate</td>
-                                </tr>
+                                    <tr>
+                                        <td>@ticket.Title</td>
+                                        <td class="hidden-xs">@ticket.Summary</td>
+                                        <td>
+                                            @switch (ticket.Priority.Name)
+                                            {
+                                                case "High":
+                                                    <span class="label label-danger">High</span>
+                                                    break;
+                                                case "Medium":
+                                                    <span class="label label-warning">Medium</span>
+                                                    break;
+                                                case "Low":
+                                                    <span class="label label-info">Low</span>
+                                                    break;
+                                            }
+                                        </td>
+                                        <td class="hidden-xs">
+
+                                            @switch (ticket.Status.Name)
+                                            {
+                                                case "Created":
+                                                    <span class="label label-danger">Created</span>
+                                                    break;
+                                                case "Assigned":
+                                                    <span class="label label-warning">Assigned</span>
+                                                    break;
+                                                case "Resolved":
+                                                    <span class="label label-success">Resolved</span>
+                                                    break;
+                                                case "Reopened":
+                                                    <span class="label label-danger">Reopened</span>
+                                                    break;
+                                                case "Archived":
+                                                    <span class="label label-info">Archived</span>
+                                                    break;
+                                            }
+                                        </td>
+                                        <td class="hidden-xs"><span class="label label-info">@ticket.Type.Name</span></td>
+
+                                        <td class="hidden-xs">@ticket.CreatedDate</td>
+                                    </tr>
                                 }
                             </tbody>
                         </table>
@@ -100,6 +213,9 @@
                 "bFilter": false
             });
             $('#ticketViewTable').DataTable({
+                "bFilter": false
+            });
+            $('#myTicketViewTable').DataTable({
                 "bFilter": false
             });
         });
