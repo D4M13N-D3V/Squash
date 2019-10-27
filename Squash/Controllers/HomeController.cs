@@ -23,5 +23,13 @@ namespace Squash.Controllers
                 AssignedProjects = user.Projects.ToList()
             });
         }
+
+        [Authorize(Roles="Developer, Submitter")]
+        public ActionResult ViewAssignedProjectsList()
+        {
+            var user = db.Users.Find(User.Identity.GetUserId());
+            var AssignedProjects = user.Projects.ToList();
+            return View(AssignedProjects);
+        }
     }
 }

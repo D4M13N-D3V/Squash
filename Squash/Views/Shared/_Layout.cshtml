@@ -404,6 +404,18 @@
                             @if (User.IsInRole("Developer"))
                             {
                                 <li class="nav-main-heading"><span class="sidebar-mini-hide">Developer Tools</span></li>
+                                <li>
+                                    <a href="@Url.Action("ViewAssignedProjectsList","Home")"><i class="si si-folder-alt"></i><span class="sidebar-mini-hide">Assigned Projects</span></a>
+                                </li>
+                            }
+
+
+                            @if (User.IsInRole("Submitter"))
+                            {
+                                <li class="nav-main-heading"><span class="sidebar-mini-hide">Submitter Tools</span></li>
+                                <li>
+                                    <a href="@Url.Action("ViewAssignedProjectsList","Home")"><i class="si si-folder-alt"></i><span class="sidebar-mini-hide">Assigned Projects</span></a>
+                                </li>
                             }
 
                             @if (User.IsInRole("Administrator"))

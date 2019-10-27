@@ -63,7 +63,7 @@
                                         </li>
                                     </ul>
                                     <h3 class="h4 font-w600 push-5">
-                                        <a class="text-white" href="base_pages_projects_view.html">@project.Name</a>
+                                        <a class="text-white" href="@Url.Action("Details","Projects", new { id=project.Id })">@project.Name</a>
                                     </h3>
                                     <h4 class="h5 text-white-op">@project.Description</h4>
                                 </div>
@@ -74,9 +74,97 @@
                                             <i class="fa fa-user-circle-o"></i>
                                         </a>
 
-                                        <a class="btn btn-default js-tooltip" href="javascript:void(0)" title="Tickets">
-                                            0 <i class="fa fa-files-o"></i>
+                                        <a class="btn btn-default js-tooltip" data-toggle="modal" data-target="#viewTicketsModal-@project.Id" href="javascript:void(0)" title="Tickets">
+                                            @project.Tickets.Count  <i class="fa fa-files-o"></i>
                                         </a>
+
+                                        <div class="modal fade" id="viewTicketsModal-@project.Id" tabindex="-1" role="dialog" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg modal-dialog-top">
+                                                <div class="modal-content">
+                                                    <div class="block">
+                                                        <div class="block-content">
+                                                            <table class="table table-striped ticketViewTable" id="userManagmentTable">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Title</th>
+                                                                        <th>Summary</th>
+                                                                        <th class="hidden-xs" style="width: 15%;">Created Date</th>
+                                                                        <th class="hidden-xs" style="width: 15%;">Updated Date</th>
+                                                                        <th class="hidden-xs" style="width: 5%;">Priority</th>
+                                                                        <th class="hidden-xs" style="width: 5%;">Status</th>
+                                                                        <th class="hidden-xs" style="width: 5%;">Type</th>
+                                                                        <th style="width:2%">Action</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @foreach (var ticket in project.Tickets)
+                                                                    {
+
+                                                                    <tr>
+                                                                        <td class="font-w600">@ticket.Title</td>
+                                                                        <td>@ticket.Summary</td>
+                                                                        <td class="hidden-xs">@ticket.CreatedDate</td>
+                                                                        <td class="hidden-xs">@ticket.UpdatedDate</td>
+                                                                        <td class="hidden-xs">
+                                                                            @switch (ticket.Priority.Name)
+                                                                            {
+                                                                                case "High":
+                                                                                    <span class="label label-danger">High</span>
+                                                                                    break;
+                                                                                case "Medium":
+                                                                                    <span class="label label-warning">Medium</span>
+                                                                                    break;
+                                                                                case "Low":
+                                                                                    <span class="label label-info">Low</span>
+                                                                                    break;
+                                                                            }
+                                                                        </td>
+                                                                        <td class="hidden-xs">
+
+                                                                            @switch (ticket.Status.Name)
+                                                                            {
+                                                                                case "Created":
+                                                                                    <span class="label label-danger">Created</span>
+                                                                                    break;
+                                                                                case "Assigned":
+                                                                                    <span class="label label-warning">Assigned</span>
+                                                                                    break;
+                                                                                case "Resolved":
+                                                                                    <span class="label label-success">Resolved</span>
+                                                                                    break;
+                                                                                case "Reopened":
+                                                                                    <span class="label label-danger">Reopened</span>
+                                                                                    break;
+                                                                                case "Archived":
+                                                                                    <span class="label label-info">Archived</span>
+                                                                                    break;
+                                                                            }
+                                                                        </td>
+                                                                        <td class="hidden-xs"><span class="label label-info">@ticket.Type.Name</span></td>
+                                                                        <td class="text-center">
+                                                                            <div class="btn-group">
+                                                                                <button class="btn btn-xs btn-default" type="button"><i class="fa fa-pencil" data-toggle="tooltip" data-title="Edit Ticket"></i></button>
+                                                                                <button class="btn btn-xs btn-default" type="button"><i class="fa fa-plus" data-toggle="tooltip" data-title="Assign User"></i></button>
+                                                                                <button class="btn btn-xs btn-default" type="button"><i class="fa fa-minus" data-toggle="tooltip" data-title="Remove User"></i></button>
+                                                                                <button class="btn btn-xs btn-default" type="button"><i class="fa fa-exclamation-triangle" data-toggle="tooltip" data-title="Set Priority"></i></button>
+                                                                                <button class="btn btn-xs btn-default" type="button"><i class="si si-note" data-toggle="tooltip" data-title="Set Status"></i></button>
+                                                                                <button class="btn btn-xs btn-default" type="button"><i class="si si-grid" data-toggle="tooltip" data-title="Set Type"></i></button>
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+                                                                    }
+                                                                </tbody>
+                                                            </table>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button class="btn btn-sm btn-default" type="button" data-dismiss="modal"><i class="fa fa-close push-5-r"></i>Close</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                         <a class="btn btn-default js-tooltip" href="javascript:void(0)" data-toggle="modal" data-target="#addToProject-@project.Id" title="Add Developer">
                                             <i class="fa fa-plus"></i>
                                         </a>
@@ -121,7 +209,7 @@
                                             </div>
                                         </div>
 
-                                        <a class="btn btn-default js-tooltip"  data-toggle="modal" data-target="#removeFromProject-@project.Id" href="javascript:void(0)" title="Remove Developer">
+                                        <a class="btn btn-default js-tooltip" data-toggle="modal" data-target="#removeFromProject-@project.Id" href="javascript:void(0)" title="Remove Developer">
                                             <i class="fa fa-minus"></i>
                                         </a>
                                         <div class="modal fade" id="removeFromProject-@project.Id" tabindex="-1" role="dialog" aria-hidden="true">
@@ -176,3 +264,11 @@
         </div>
     </div>
 </main>
+@section scripts{
+    <script>
+
+        $(document).ready(function() {
+    $('.ticketViewTable').DataTable();
+                                                                                } );
+    </script>
+}

@@ -8,8 +8,7 @@ namespace Squash.Models
 {
     public class Type
     {
-        [Key]
-        public int Int { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public Type()
         {

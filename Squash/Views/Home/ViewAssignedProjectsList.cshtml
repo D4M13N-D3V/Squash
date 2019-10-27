@@ -1,0 +1,57 @@
+﻿@model IEnumerable<Squash.Models.Project>
+
+@{
+    ViewBag.Title = "My Assigned Projects";
+}
+    <main id="main-container">
+
+        <div class="bg-image" style="background-image: url('/Images/photos/photo28@2x.jpg');">
+            <div class="content content-full bg-city-dark-op">
+                <div class="row">
+                    <div class="col-xs-6">
+                        <h1 class="page-heading text-white animated zoomIn">
+                            My Assigned Projects    
+                        </h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="block">
+            <div class="block-content">
+                <!-- DataTables init on table by adding .js-dataTable-full class, functionality initialized in js/pages/base_tables_datatables.js -->
+                <table class="table table-bordered table-striped" id="assignedProjectsList">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th class="hidden-xs">Description</th>
+                            <th class="hidden-xs">Created Date</th>
+                            <th class="text-center" style="width: 10%;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var project in Model)
+                        {
+
+                            <tr>
+                                <td class="font-w600">@project.Name</td>
+                                <td class="hidden-xs">@project.Description</td>
+                                <td class="hidden-xs">@project.CreatedDate</td>
+                                <td class="text-center">
+                                    <div class="btn-group">
+                                        <button class="btn btn-xs btn-default" type="button" data-toggle="modal" data-target="#addToProject-@project.Id">View Tickets<i class="si si-magnifier  push-5-l"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+@section scripts{
+    <script>
+        $(document).ready(function() {
+    $('#assignedProjectsList').DataTable();
+} );
+    </script>
+    }

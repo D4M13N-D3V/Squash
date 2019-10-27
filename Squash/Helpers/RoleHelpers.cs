@@ -26,6 +26,8 @@ namespace Squash.Helpers
         public static bool AddUserToRole(string userId, string roleName)
         {
             var result = userManager.AddToRole(userId, roleName);
+            db.Users.Find(userId).Role = roleName;
+            db.SaveChanges();
             return result.Succeeded;
         }
 

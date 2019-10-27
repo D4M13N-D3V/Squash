@@ -6,13 +6,13 @@
 
 var BaseTableDatatables = function() {
     // Init full DataTable, for more examples you can check out https://www.datatables.net/
-    var initDataTableFull = function() {
+    var initDataTableFull = function () {
         jQuery('.js-dataTable-full').dataTable({
-            columnDefs: [ { orderable: false, targets: [ 4 ] } ],
+            columnDefs: [{ orderable: false, targets: [4] }],
             pageLength: 10,
             lengthMenu: [[5, 10, 15, 20], [5, 10, 15, 20]]
         });
-    };
+    }; 
 
     // Init full extra DataTable, for more examples you can check out https://www.datatables.net/
     var initDataTableFullPagination = function() {

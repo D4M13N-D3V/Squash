@@ -17,7 +17,7 @@
     <div class="block">
         <div class="block-content">
             <!-- DataTables init on table by adding .js-dataTable-full class, functionality initialized in js/pages/base_tables_datatables.js -->
-            <table class="table table-bordered table-striped js-dataTable-full">
+            <table class="table table-striped" id="userManagmentTable">
                 <thead>
                     <tr>    
                         <th>Name</th>
@@ -57,9 +57,12 @@
                             </td>
                             <td class="text-center">
                                 <div class="btn-group">
-                                    <button class="btn btn-xs btn-default" type="button" data-toggle="modal" data-target="#addToProject-@viewModel.Id">Project<i class="fa fa-plus  push-5-l"></i></button>
-                                    <button class="btn btn-xs btn-default" type="button" data-toggle="modal" data-target="#setRoleModal-@viewModel.Id">Role<i class="fa fa-pencil  push-5-l"></i></button>
-                                    <button class="btn btn-xs btn-default" type="button" data-toggle="modal" data-target="#removeFromProject-@viewModel.Id">Project<i class="fa fa-minus  push-5-l"></i></button>
+                                        <button class="btn btn-xs btn-default" type="button" data-toggle="modal" data-target="#addToProject-@viewModel.Id"><i class="fa fa-plus" data-toggle="tooltip" data-title="Add To Project"></i></button>
+                                    
+                                    <button class="btn btn-xs btn-default" type="button" data-toggle="modal" data-target="#setRoleModal-@viewModel.Id"><i class="fa fa-pencil" data-toggle="tooltip" data-title="Set User Role"></i></button>
+
+                                        <button class="btn btn-xs btn-default" type="button" data-toggle="modal" data-target="#removeFromProject-@viewModel.Id"><i class="fa fa-minus" data-toggle="tooltip" data-title="Remove From Project"></i></button>
+                                    
 
                                     <div class="modal fade" id="addToProject-@viewModel.Id" tabindex="-1" role="dialog" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-top">
@@ -187,6 +190,12 @@
             </table>
         </div>
     </div>
-</div>
+</main>
 @section scripts{
+    <script>
+        
+        $(document).ready(function() {
+    $('#userManagmentTable').DataTable();
+} );
+    </script>
     }
