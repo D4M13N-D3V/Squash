@@ -38,10 +38,68 @@
                                             </div>
                                             <div class="block-content text-center">
                                                 <div class="btn-group push">
-                                                    <a class="btn btn-default js-tooltip" href="javascript:void(0)" title="Developers">
+                                                    <a class="btn btn-default js-tooltip" href="javascript:void(0)" title="Developers" data-toggle="modal" data-target="#viewDevelopersModal-@project.Id">
                                                         @project.Users.Count
                                                         <i class="fa fa-user-circle-o"></i>
                                                     </a>
+
+
+                                                    <div class="modal fade" id="viewDevelopersModal-@project.Id" tabindex="-1" role="dialog" aria-hidden="true">
+                                                        <div class="modal-dialog modal-lg modal-dialog-top">
+                                                            <div class="modal-content">
+                                                                <div class="block">
+                                                                    <div class="block-content">
+
+                                                                        <table class="table table-striped viewDevelopersTable" id="userManagmentTable">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th>Name</th>
+                                                                                    <th class="hidden-xs">Email</th>
+                                                                                    <th class="hidden-xs" style="width: 15%;">Assigned Projects</th>
+                                                                                    <th class="hidden-xs" style="width: 15%;">Role</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                @foreach (var user in project.Users)
+                                                                                {
+
+                                                                                    <tr>
+                                                                                        <td class="font-w600">@user.FirstName @user.LastName</td>
+                                                                                        <td class="hidden-xs">@user.Email</td>
+                                                                                        <td class="hidden-xs">@user.Projects.Count</td>
+                                                                                        <td class="hidden-xs">
+                                                                                            @switch (user.Role)
+                                                                                            {
+                                                                                                case "Administrator":
+                                                                                                    <span class="label label-danger">Administrator</span>
+                                                                                                    break;
+                                                                                                case "Project Manager":
+                                                                                                    <span class="label label-warning">Project Manager</span>
+                                                                                                    break;
+                                                                                                case "Developer":
+                                                                                                    <span class="label label-success">Developer</span>
+                                                                                                    break;
+                                                                                                case "Submitter":
+                                                                                                    <span class="label label-primary">Submitter</span>
+                                                                                                    break;
+                                                                                                default:
+                                                                                                    <span class="label label-info">UNKNOWN</span>
+                                                                                                    break;
+                                                                                            }
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                }
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button class="btn btn-sm btn-default" type="button" data-dismiss="modal"><i class="fa fa-close push-5-r"></i>Close</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
                                                     <a class="btn btn-default js-tooltip" href="javascript:void(0)" title="View Assigned Tickets">
                                                         My Tickets (@project.Tickets.Where(x => x.AssignedUserId == User.Identity.GetUserId()).Count()) <i class="si si-magnifier"></i>
                                                     </a>
@@ -155,6 +213,7 @@
 
         $(document).ready(function () {
             $('#ticketViewTable').DataTable();
+            $('.viewDevelopersTable').DataTable();
         });
     </script>
 }

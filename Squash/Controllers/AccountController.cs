@@ -263,12 +263,13 @@ namespace Squash.Controllers
             if (user == null)
             {
                 // Don't reveal that the user does not exist
-                return RedirectToAction("ResetPasswordConfirmation", "Account");
+                return RedirectToAction("Login", "Account");
             }
             var result = await UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
             if (result.Succeeded)
             {
-                return RedirectToAction("ResetPasswordConfirmation", "Account");
+                await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                return RedirectToAction("Index", "Home");
             }
             AddErrors(result);
             return View();
@@ -432,12 +433,9 @@ namespace Squash.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult UserSettingsAsync(UserSettingsViewModel ViewModel)
+        public ActionResult UserSettings(UserSettingsViewModel ViewModel)
         {
             var EditedUser = ViewModel.User;
-            var newPassword = ViewModel.NewPassword;
-            var newPasswordConfirm = ViewModel.ConfirmNewPassword;
-            var currentPassword = ViewModel.CurrentPassword;
             ViewBag.PasswordChanged = false;
             var user = db.Users.Find(User.Identity.GetUserId());
             var userExists = db.Users.Any(x => x.Email == EditedUser.Email);
@@ -446,29 +444,6 @@ namespace Squash.Controllers
             {
                 ModelState.AddModelError("Email", "Email/Username exists already.");
                 return View();
-            }
-
-            //Password Change Logic
-            if (newPassword != "")
-            {
-                if (newPasswordConfirm == newPassword)
-                {
-                    if (UserManager.PasswordHasher.VerifyHashedPassword(user.PasswordHash, currentPassword) == PasswordVerificationResult.Success)
-                    {
-                        user.PasswordHash = UserManager.PasswordHasher.HashPassword(newPassword);
-                        ViewBag.PasswordChanged = true;
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("currentPassword", "Current Password Incorrect!");
-                        return View();
-                    }
-                }
-                else
-                {
-                    ModelState.AddModelError("newPasswordConfirm", "Passwords do not match.");
-                    return View();
-                }
             }
 
             user.FirstName = EditedUser.FirstName;

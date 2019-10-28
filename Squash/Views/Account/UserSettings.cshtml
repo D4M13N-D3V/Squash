@@ -3,61 +3,98 @@
 @{
     ViewBag.Title = "UserSettings";
 }
+
+<main id="main-container">
+
+    <div class="bg-image" style="background-image: url('/Images/photos/photo28@2x.jpg');">
+        <div class="content content-full bg-city-op">
+            <div class="row">
+                <div class="col-xs-6">
+                    <h1 class="page-heading text-white animated zoomIn">
+                        My Account Settings
+                    </h1>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content">
+        <div class="content content-boxed">
+            <!-- Create Project -->
+            <h2 class="content-heading text-center">Make some changes to your account!</h2>
+            <div class="col-lg-6 col-lg-offset-3">
+                <div class="block">
+                    <div class="block-content">
+                        <div class="row">
+                            <div class="col text-center">
+                                <h2>Account Settings</h2>
+                            </div>
+                        </div>
+                        @if (ViewBag.PasswordChanged == true)
+                        {
+                            <div class="row">
+                                <div class="col text-center">
+                                    <h4 class="success">Password Sucessfully Changed!</h4>
+                                </div>
+                            </div>
+                        }
+                        @using (Html.BeginForm("UserSettings", "Account", new { }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    @Html.TextBoxFor(m => m.User.FirstName, new { @class = "form-control", @placeholder = "First Name" })
+                                    @Html.ValidationMessageFor(m => m.User.FirstName, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="col-lg-6">
+                                    @Html.TextBoxFor(m => m.User.LastName, new { @class = "form-control", @placeholder = "Last Name" })
+                                    @Html.ValidationMessageFor(m => m.User.LastName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="row" style="padding-top:2%">
+                                <div class="col-lg-6">
+                                    @Html.TextBoxFor(m => m.User.Email, new { @class = "form-control", @placeholder = "email" })
+                                    @Html.ValidationMessageFor(m => m.User.Email, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="col-lg-6">
+                                    <button type="button" class="btn btn-danger btn-block text-uppercase waves-effect waves-light" onclick="window.location.href = '@Url.Action("ForgotPassword","Account")';"  type="submit" style="width:100%">Reset Password</button>
+                                </div>
+                            </div>
+                            <div class="row" style="padding-top:2%;padding-bottom:2%">
+                                <div class="col-lg-6 col-lg-offset-3">
+                                    <button class="btn btn-success btn-block text-uppercase waves-effect waves-light" type="submit" style="width:100%">Save</button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+</main>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <div class="row" style="padding-top:2%">
     <div class="col-4 offset-4">
         <div class="card-box">
-            <div class="row">
-                <div class="col text-center">
-                    <h2>Account Settings</h2>
-                </div>
-            </div>
-            @if (ViewBag.PasswordChanged==true)
-            {
-                <div class="row">
-                    <div class="col text-center">
-                        <h4 class="success">Password Sucessfully Changed!</h4>
-                    </div>
-                </div>
-            }
-            @using (Html.BeginForm("UserSettings", "Account", new { }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-            {
-                @Html.AntiForgeryToken()
-                <div class="row">
-                    <div class="col-6">
-                        @Html.TextBoxFor(m => m.User.FirstName, new { @class = "form-control", @placeholder = "First Name" })
-                        @Html.ValidationMessageFor(m => m.User.FirstName, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="col-6">
-                        @Html.TextBoxFor(m => m.User.LastName, new { @class = "form-control", @placeholder = "Last Name" })
-                        @Html.ValidationMessageFor(m => m.User.LastName, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-                <div class="row" style="padding-top:2%">
-                    <div class="col-6">
-                        @Html.TextBoxFor(m => m.User.Email, new { @class = "form-control", @placeholder = "email" })
-                        @Html.ValidationMessageFor(m => m.User.Email, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="col-6">
-                        @Html.PasswordFor(x => x.CurrentPassword, new { @class = "form-control", @placeholder = "Current Password" })
-                        @Html.ValidationMessageFor(x => x.CurrentPassword, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-                <div class="row" style="padding-top:2%">
-                    <div class="col-6">
-                        @Html.PasswordFor(x => x.NewPassword, new { @class = "form-control", @placeholder = "New Password" })
-                        @Html.ValidationMessageFor(x => x.NewPassword, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="col-6">
-                        @Html.PasswordFor(x => x.ConfirmNewPassword, new { @class = "form-control", @placeholder = "New Password" })
-                        @Html.ValidationMessageFor(x => x.ConfirmNewPassword, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-                <div class="row" style="padding-top:2%">
-                    <div class="col-6 offset-3">
-                        <button class="btn btn-green btn-block text-uppercase waves-effect waves-light" style="width:100%">Save</button>
-                    </div>
-                </div>
-            }
+            
         </div>
     </div>
 </div>

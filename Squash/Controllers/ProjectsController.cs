@@ -20,14 +20,14 @@ namespace Squash.Controllers
         public ActionResult AddToProject(string userId, int projectId)
         {
             Helpers.ProjectHelpers.AddUserToProject(userId, projectId);
-            return RedirectToAction("Index", "Projects");
+            return RedirectToAction("Details", "Projects", new { id = projectId });
         }
         [HttpPost]
         [Authorize(Roles = "Administrator, Project Manager")]
         public ActionResult RemoveFromProject(string userId, int projectId)
         {
             Helpers.ProjectHelpers.RemoveUserFromProject(userId, projectId);
-            return RedirectToAction("Index", "Projects");
+            return RedirectToAction("Details", "Projects", new { id = projectId });
         }
 
         [Authorize(Roles = "Administrator, Project Manager")]
@@ -63,7 +63,11 @@ namespace Squash.Controllers
             {
                 return HttpNotFound();
             }
-            return View(project);
+            return View(new ProjectDetailsViewModel() {
+                Project = project,
+                UsersInProject = Helpers.ProjectHelpers.GetUsersOnProject(project.Id),
+                UsersNotInProject = Helpers.ProjectHelpers.GetUsersNotOnProject(project.Id)
+            });
         }
 
         // GET: Projects/Create

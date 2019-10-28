@@ -34,8 +34,7 @@ namespace Squash.Controllers
         [HttpPost]
         public ActionResult SetRole(string userId, string roleName)
         {
-            foreach (var role in Helpers.RoleHelpers.ListUserRoles(userId))
-                Helpers.RoleHelpers.RemoveUserFromRole(userId, role);
+            Helpers.RoleHelpers.RemoveUserFromRole(userId, Helpers.RoleHelpers.ListUserRoles(userId).First());
             Helpers.RoleHelpers.AddUserToRole(userId, roleName);
             return RedirectToAction("Index", "UserManagment");
         }

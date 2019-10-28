@@ -1,5 +1,5 @@
 ﻿@using Microsoft.AspNet.Identity;
-@model Squash.Models.Project
+@model Squash.Models.ProjectDetailsViewModel
 
 @{
     ViewBag.Title = "Details";
@@ -14,11 +14,11 @@
             <div class="row">
                 <div class="col-xs-6">
                     <h1 class="page-heading text-white">
-                        @Model.Name <small class="hidden-xs"><span class="text-white-op">@Model.Description</span></small>
+                        @Model.Project.Name <small class="hidden-xs"><span class="text-white-op">@Model.Project.Description</span></small>
                     </h1>
                 </div>
                 <div class="col-xs-6 text-right">
-                    <a class="btn btn-default" href="@Url.Action("Edit", "Projects", new { id = Model.Id })">
+                    <a class="btn btn-default" href="@Url.Action("Edit", "Projects", new { id = Model.Project.Id })">
                         <i class="fa fa-pencil push-5-r"></i> Edit Project
                     </a>
                 </div>
@@ -28,89 +28,101 @@
     <!-- END Page Header -->
     <!-- Page Content -->
     <div class="content content-boxed">
-        @{
-            var tickets = Model.Tickets.Where(x => x.AssignedUser.Id == User.Identity.GetUserId());
-            if (tickets.Any())
-            {
-                <div class="row">
-                    <div class="col-lg-8 col-lg-offset-2">
-                        <div class="block">
-                                    <div class="block-content">
-                                        <div class="text-center">
-                                              My Assigned Tickets
-                                        </div>
-                                        <!-- DataTables init on table by adding .js-dataTable-full class, functionality initialized in js/pages/base_tables_datatables.js -->
-                                        <table class="table  table-striped" id="myTicketViewTable">
-                                            <thead>
-                                                <tr>
-                                                    <th style="width">Title</th>
-                                                    <th class="hidden-xs">Summary</th>
-                                                    <th>Priority</th>
-                                                    <th class="hidden-xs">Status</th>
-                                                    <th class="hidden-xs">Type</th>
-                                                    <th class="hidden-xs">Created</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach (var ticket in tickets)
-                                                {
-
-                                                    <tr>
-                                                        <td>@ticket.Title</td>
-                                                        <td class="hidden-xs">@ticket.Summary</td>
-                                                        <td>
-                                                            @switch (ticket.Priority.Name)
-                                                            {
-                                                                case "High":
-                                                                    <span class="label label-danger">High</span>
-                                                                    break;
-                                                                case "Medium":
-                                                                    <span class="label label-warning">Medium</span>
-                                                                    break;
-                                                                case "Low":
-                                                                    <span class="label label-info">Low</span>
-                                                                    break;
-                                                            }
-                                                        </td>
-                                                        <td class="hidden-xs">
-
-                                                            @switch (ticket.Status.Name)
-                                                            {
-                                                                case "Created":
-                                                                    <span class="label label-danger">Created</span>
-                                                                    break;
-                                                                case "Assigned":
-                                                                    <span class="label label-warning">Assigned</span>
-                                                                    break;
-                                                                case "Resolved":
-                                                                    <span class="label label-success">Resolved</span>
-                                                                    break;
-                                                                case "Reopened":
-                                                                    <span class="label label-danger">Reopened</span>
-                                                                    break;
-                                                                case "Archived":
-                                                                    <span class="label label-info">Archived</span>
-                                                                    break;
-                                                            }
-                                                        </td>
-                                                        <td class="hidden-xs"><span class="label label-info">@ticket.Type.Name</span></td>
-
-                                                        <td class="hidden-xs">@ticket.CreatedDate</td>
-                                                    </tr>
-                                                }
-                                            </tbody>
-                                        </table>
-                                    </div>
-                        </div>
-                    </div>
-                </div>
-            }
-        }
         <div class="row">
             <div class="col-lg-5">
                 <div class="block">
                     <div class="block-content">
                         <!-- DataTables init on table by adding .js-dataTable-full class, functionality initialized in js/pages/base_tables_datatables.js -->
+                        <div class="col-xs-6 text-right">
+                            <a class="btn btn-success" data-toggle="modal" data-target="#addToProject-@Model.Project.Id">
+                                <i class="fa fa-plus push-5-r"></i> Add User
+                            </a>
+                        </div>
+                        <div class="modal fade" id="addToProject-@Model.Project.Id" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-top">
+
+                                @using (Html.BeginForm("AddToProject", "Projects", new { }, FormMethod.Post, new { @class = "form-horizontal push-30-t push-30", role = "form" }))
+                                {
+                                    @Html.Hidden("projectId", Model.Project.Id)
+                                    <div class="modal-content">
+                                        <div class="block block-themed block-transparent remove-margin-b">
+                                            <div class="block-header bg-primary-dark">
+                                                <ul class="block-options">
+                                                    <li>
+                                                        <button data-dismiss="modal" type="button"><i class="si si-close"></i></button>
+                                                    </li>
+                                                </ul>
+                                                <h3 class="block-title">Add User To Project</h3>
+                                            </div>
+                                            <div class="block-content">
+                                                <div class="col-12">
+                                                    <div class="form-material floating">
+                                                        <select class="form-control" id="userId" name="userId" size="1" style="width:100%">
+                                                            <option></option><!-- Empty value for demostrating material select box -->
+                                                            @foreach (var user in Model.UsersNotInProject)
+                                                            {
+                                                                var name = user.FirstName + " " + user.LastName;
+                                                                <option value="@user.Id">@name</option>
+                                                            }
+                                                        </select>
+                                                        <label for="material-select2">Please Select User To Add</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button class="btn btn-sm btn-success" type="submit"><i class="fa fa-check push-5-r"></i>Add User To Project</button>
+                                            <button class="btn btn-sm btn-default" type="button" data-dismiss="modal"><i class="fa fa-close push-5-r"></i>Close</button>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-xs-6 text-left">
+                            <a class="btn btn-danger" data-target="#removeFrom-@Model.Project.Id" data-toggle="modal">
+                                <i class="fa fa-minus push-5-r"></i> Remove User
+                            </a>
+                        </div>
+                        <div class="modal fade" id="removeFrom-@Model.Project.Id" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-top">
+
+                                @using (Html.BeginForm("RemoveFromProject", "Projects", new { }, FormMethod.Post, new { @class = "form-horizontal push-30-t push-30", role = "form" }))
+                                {
+                                    @Html.Hidden("projectId", Model.Project.Id)
+                                    <div class="modal-content">
+                                        <div class="block block-themed block-transparent remove-margin-b">
+                                            <div class="block-header bg-primary-dark">
+                                                <ul class="block-options">
+                                                    <li>
+                                                        <button data-dismiss="modal" type="button"><i class="si si-close"></i></button>
+                                                    </li>
+                                                </ul>
+                                                <h3 class="block-title">Remove Use From Project</h3>
+                                            </div>
+                                            <div class="block-content">
+                                                <div class="col-12">
+                                                    <div class="form-material floating">
+                                                        <select class="form-control" id="userId" name="userId" size="1" style="width:100%">
+                                                            <option></option><!-- Empty value for demostrating material select box -->
+                                                            @foreach (var user in Model.UsersInProject)
+                                                            {
+                                                                var name = user.FirstName + " " + user.LastName;
+                                                                <option value="@user.Id">@name</option>
+                                                            }
+                                                        </select>
+                                                        <label for="material-select2">Please Select User To Remove</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button class="btn btn-sm btn-danger" type="submit"><i class="fa fa-check push-5-r"></i>Remove User From Project</button>
+                                            <button class="btn btn-sm btn-default" type="button" data-dismiss="modal"><i class="fa fa-close push-5-r"></i>Close</button>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
                         <table class="table  table-striped" id="userViewTable">
                             <thead>
                                 <tr>
@@ -120,7 +132,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var user in Model.Users)
+                                @foreach (var user in Model.Project.Users)
                                 {
 
                                     <tr>
@@ -144,57 +156,70 @@
                                     <th style="width">Title</th>
                                     <th class="hidden-xs">Summary</th>
                                     <th>Priority</th>
-                                    <th class="hidden-xs">Status</th>
-                                    <th class="hidden-xs">Type</th>
-                                    <th class="hidden-xs">Created</th>
+                                    <th class="hidden-xs" style="width:10%">Status</th>
+                                    <th class="hidden-xs" style="width:10%">Type</th>
+                                    <th class="hidden-xs" style="width:10%">Created</th>
+                                    @if (User.IsInRole("Administrator") || User.IsInRole("Project Manager"))
+                                    {
+                                        <th style="width:10%" 2>Action</th>
+                                    }
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var ticket in Model.Tickets)
+                                @foreach (var ticket in Model.Project.Tickets)
                                 {
 
-                                    <tr>
-                                        <td>@ticket.Title</td>
-                                        <td class="hidden-xs">@ticket.Summary</td>
-                                        <td>
-                                            @switch (ticket.Priority.Name)
-                                            {
-                                                case "High":
-                                                    <span class="label label-danger">High</span>
-                                                    break;
-                                                case "Medium":
-                                                    <span class="label label-warning">Medium</span>
-                                                    break;
-                                                case "Low":
-                                                    <span class="label label-info">Low</span>
-                                                    break;
-                                            }
-                                        </td>
-                                        <td class="hidden-xs">
+                                <tr>
+                                    <td>@ticket.Title</td>
+                                    <td class="hidden-xs">@ticket.Summary</td>
+                                    <td>
+                                        @switch (ticket.Priority.Name)
+                                        {
+                                            case "High":
+                                                <span class="label label-danger">High</span>
+                                                break;
+                                            case "Medium":
+                                                <span class="label label-warning">Medium</span>
+                                                break;
+                                            case "Low":
+                                                <span class="label label-info">Low</span>
+                                                break;
+                                        }
+                                    </td>
+                                    <td class="hidden-xs">
 
-                                            @switch (ticket.Status.Name)
-                                            {
-                                                case "Created":
-                                                    <span class="label label-danger">Created</span>
-                                                    break;
-                                                case "Assigned":
-                                                    <span class="label label-warning">Assigned</span>
-                                                    break;
-                                                case "Resolved":
-                                                    <span class="label label-success">Resolved</span>
-                                                    break;
-                                                case "Reopened":
-                                                    <span class="label label-danger">Reopened</span>
-                                                    break;
-                                                case "Archived":
-                                                    <span class="label label-info">Archived</span>
-                                                    break;
-                                            }
-                                        </td>
-                                        <td class="hidden-xs"><span class="label label-info">@ticket.Type.Name</span></td>
+                                        @switch (ticket.Status.Name)
+                                        {
+                                            case "Created":
+                                                <span class="label label-danger">Created</span>
+                                                break;
+                                            case "Assigned":
+                                                <span class="label label-warning">Assigned</span>
+                                                break;
+                                            case "Resolved":
+                                                <span class="label label-success">Resolved</span>
+                                                break;
+                                            case "Reopened":
+                                                <span class="label label-danger">Reopened</span>
+                                                break;
+                                            case "Archived":
+                                                <span class="label label-info">Archived</span>
+                                                break;
+                                        }
+                                    </td>
+                                    <td class="hidden-xs"><span class="label label-info">@ticket.Type.Name</span></td>
 
-                                        <td class="hidden-xs">@ticket.CreatedDate</td>
-                                    </tr>
+                                    <td class="hidden-xs">@ticket.CreatedDate</td>
+
+                                    @if (User.IsInRole("Administrator") || User.IsInRole("Project Manager"))
+                                    {
+                                        <td class="text-center">
+                                            <div class="btn-group">
+                                                <button class="btn btn-xs btn-default" data-toggle="tooltip" data-title="Edit Ticket" type="button">Edit Ticket <i class="fa fa-pencil push-5-l"></i></button>
+                                            </div>
+                                        </td>
+                                    }
+                                </tr>
                                 }
                             </tbody>
                         </table>

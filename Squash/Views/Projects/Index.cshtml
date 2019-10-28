@@ -31,48 +31,147 @@
 
                         <div class="col-sm-6 col-lg-4">
                             <div class="block block-rounded block-themed">
-                                <div class="block-header bg-primary">
-                                    <ul class="block-options">
-                                        <li>
-                                            <button type="button" data-toggle="block-option" data-action="refresh_toggle" data-action-mode="demo">
-                                                <i class="si si-refresh"></i>
-                                            </button>
-                                        </li>
-                                        <li class="dropdown">
-                                            <button type="button" data-toggle="dropdown"><i class="si si-settings"></i></button>
-                                            <ul class="dropdown-menu dropdown-menu-right">
-                                                <li>
-                                                    <a tabindex="-1" href="@Url.Action("Edit","Projects",new { id=project.Id })">
-                                                        <i class="si si-pencil pull-right"></i>
-                                                        Edit Project
-                                                    </a>
-                                                </li>
-                                                <li class="divider"></li>
-                                                <li>
+                                @if (project.UsersInProject.Any())
+                                {
+                                    <div class="block-header bg-primary">
+                                        <ul class="block-options">
+                                            <li>
+                                                <button type="button" data-toggle="block-option" data-action="refresh_toggle" data-action-mode="demo">
+                                                    <i class="si si-refresh"></i>
+                                                </button>
+                                            </li>
+                                            <li class="dropdown">
+                                                <button type="button" data-toggle="dropdown"><i class="si si-settings"></i></button>
+                                                <ul class="dropdown-menu dropdown-menu-right">
+                                                    <li>
+                                                        <a tabindex="-1" href="@Url.Action("Edit","Projects",new { id=project.Id })">
+                                                            <i class="si si-pencil pull-right"></i>
+                                                            Edit Project
+                                                        </a>
+                                                    </li>
+                                                    <li class="divider"></li>
+                                                    <li>
 
-                                                    <a tabindex="-1" href="javascript:document.getElementById('deleteForm').submit()">
-                                                        <i class="si si-trash text-danger pull-right"></i>
-                                                        Delete Project
-                                                    </a>
-                                                    @using (Html.BeginForm("Delete", "Projects", new { id = project.Id }, FormMethod.Post, new { id = "deleteForm" }))
-                                                    {
-                                                        @Html.AntiForgeryToken();
-                                                    }
-                                                </li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                    <h3 class="h4 font-w600 push-5">
-                                        <a class="text-white" href="@Url.Action("Details","Projects", new { id=project.Id })">@project.Name</a>
-                                    </h3>
-                                    <h4 class="h5 text-white-op">@project.Description</h4>
-                                </div>
+                                                        <a tabindex="-1" href="javascript:document.getElementById('deleteForm').submit()">
+                                                            <i class="si si-trash text-danger pull-right"></i>
+                                                            Delete Project
+                                                        </a>
+                                                        @using (Html.BeginForm("Delete", "Projects", new { id = project.Id }, FormMethod.Post, new { id = "deleteForm" }))
+                                                        {
+                                                            @Html.AntiForgeryToken();
+                                                        }
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                        <h3 class="h4 font-w600 push-5">
+                                            <a class="text-white" href="@Url.Action("Details","Projects", new { id=project.Id })">@project.Name</a>
+                                        </h3>
+                                        <h4 class="h5 text-white-op">@project.Description</h4>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="block-header bg-danger">
+                                        <ul class="block-options">
+                                            <li>
+                                                <button type="button" data-toggle="block-option" data-action="refresh_toggle" data-action-mode="demo">
+                                                    <i class="si si-refresh"></i>
+                                                </button>
+                                            </li>
+                                            <li class="dropdown">
+                                                <button type="button" data-toggle="dropdown"><i class="si si-settings"></i></button>
+                                                <ul class="dropdown-menu dropdown-menu-right">
+                                                    <li>
+                                                        <a tabindex="-1" href="@Url.Action("Edit","Projects",new { id=project.Id })">
+                                                            <i class="si si-pencil pull-right"></i>
+                                                            Edit Project
+                                                        </a>
+                                                    </li>
+                                                    <li class="divider"></li>
+                                                    <li>
+
+                                                        <a tabindex="-1" href="javascript:document.getElementById('deleteForm').submit()">
+                                                            <i class="si si-trash text-danger pull-right"></i>
+                                                            Delete Project
+                                                        </a>
+                                                        @using (Html.BeginForm("Delete", "Projects", new { id = project.Id }, FormMethod.Post, new { id = "deleteForm" }))
+                                                        {
+                                                            @Html.AntiForgeryToken();
+                                                        }
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                        <h3 class="h4 font-w600 push-5">
+                                            <a class="text-white" href="@Url.Action("Details","Projects", new { id=project.Id })">@project.Name</a>
+                                        </h3>
+                                        <h4 class="h5 text-white-op">@project.Description</h4>
+                                    </div>
+                                }
                                 <div class="block-content text-center">
                                     <div class="btn-group push">
-                                        <a class="btn btn-default js-tooltip" href="javascript:void(0)" title="Developers">
+                                        <a class="btn btn-default js-tooltip" href="javascript:void(0)" title="Developers" data-toggle="modal" data-target="#viewDevelopersModal-@project.Id">
                                             @project.UsersInProject.Count
                                             <i class="fa fa-user-circle-o"></i>
                                         </a>
+
+
+                                        <div class="modal fade" id="viewDevelopersModal-@project.Id" tabindex="-1" role="dialog" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg modal-dialog-top">
+                                                <div class="modal-content">
+                                                    <div class="block">
+                                                        <div class="block-content">
+
+                                                            <table class="table table-striped viewDevelopersTable" id="userManagmentTable">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Name</th>
+                                                                        <th class="hidden-xs">Email</th>
+                                                                        <th class="hidden-xs" style="width: 15%;">Assigned Projects</th>
+                                                                        <th class="hidden-xs" style="width: 15%;">Role</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @foreach (var user in project.UsersInProject)
+                                                                    {
+
+                                                                        <tr>
+                                                                            <td class="font-w600">@user.FirstName @user.LastName</td>
+                                                                            <td class="hidden-xs">@user.Email</td>
+                                                                            <td class="hidden-xs">@user.Projects.Count</td>
+                                                                            <td class="hidden-xs">
+                                                                                @switch (user.Role)
+                                                                                {
+                                                                                    case "Administrator":
+                                                                                        <span class="label label-danger">Administrator</span>
+                                                                                        break;
+                                                                                    case "Project Manager":
+                                                                                        <span class="label label-warning">Project Manager</span>
+                                                                                        break;
+                                                                                    case "Developer":
+                                                                                        <span class="label label-success">Developer</span>
+                                                                                        break;
+                                                                                    case "Submitter":
+                                                                                        <span class="label label-primary">Submitter</span>
+                                                                                        break;
+                                                                                    default:
+                                                                                        <span class="label label-info">UNKNOWN</span>
+                                                                                        break;
+                                                                                }
+                                                                            </td>
+                                                                        </tr>
+                                                                    }
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button class="btn btn-sm btn-default" type="button" data-dismiss="modal"><i class="fa fa-close push-5-r"></i>Close</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
 
                                         <a class="btn btn-default js-tooltip" data-toggle="modal" data-target="#viewTicketsModal-@project.Id" href="javascript:void(0)" title="Tickets">
                                             @project.Tickets.Count  <i class="fa fa-files-o"></i>
@@ -100,53 +199,53 @@
                                                                     @foreach (var ticket in project.Tickets)
                                                                     {
 
-                                                                    <tr>
-                                                                        <td class="font-w600">@ticket.Title</td>
-                                                                        <td>@ticket.Summary</td>
-                                                                        <td class="hidden-xs">@ticket.CreatedDate</td>
-                                                                        <td class="hidden-xs">@ticket.UpdatedDate</td>
-                                                                        <td class="hidden-xs">
-                                                                            @switch (ticket.Priority.Name)
-                                                                            {
-                                                                                case "High":
-                                                                                    <span class="label label-danger">High</span>
-                                                                                    break;
-                                                                                case "Medium":
-                                                                                    <span class="label label-warning">Medium</span>
-                                                                                    break;
-                                                                                case "Low":
-                                                                                    <span class="label label-info">Low</span>
-                                                                                    break;
-                                                                            }
-                                                                        </td>
-                                                                        <td class="hidden-xs">
+                                                                        <tr>
+                                                                            <td class="font-w600">@ticket.Title</td>
+                                                                            <td>@ticket.Summary</td>
+                                                                            <td class="hidden-xs">@ticket.CreatedDate</td>
+                                                                            <td class="hidden-xs">@ticket.UpdatedDate</td>
+                                                                            <td class="hidden-xs">
+                                                                                @switch (ticket.Priority.Name)
+                                                                                {
+                                                                                    case "High":
+                                                                                        <span class="label label-danger">High</span>
+                                                                                        break;
+                                                                                    case "Medium":
+                                                                                        <span class="label label-warning">Medium</span>
+                                                                                        break;
+                                                                                    case "Low":
+                                                                                        <span class="label label-info">Low</span>
+                                                                                        break;
+                                                                                }
+                                                                            </td>
+                                                                            <td class="hidden-xs">
 
-                                                                            @switch (ticket.Status.Name)
-                                                                            {
-                                                                                case "Created":
-                                                                                    <span class="label label-danger">Created</span>
-                                                                                    break;
-                                                                                case "Assigned":
-                                                                                    <span class="label label-warning">Assigned</span>
-                                                                                    break;
-                                                                                case "Resolved":
-                                                                                    <span class="label label-success">Resolved</span>
-                                                                                    break;
-                                                                                case "Reopened":
-                                                                                    <span class="label label-danger">Reopened</span>
-                                                                                    break;
-                                                                                case "Archived":
-                                                                                    <span class="label label-info">Archived</span>
-                                                                                    break;
-                                                                            }
-                                                                        </td>
-                                                                        <td class="hidden-xs"><span class="label label-info">@ticket.Type.Name</span></td>
-                                                                        <td class="text-center">
-                                                                            <div class="btn-group">
-                                                                                <button class="btn btn-xs btn-default" data-toggle="tooltip" data-title="Edit Ticket" type="button">Edit Ticket <i class="fa fa-pencil push-5-l" ></i></button>
-                                                                            </div>
-                                                                        </td>
-                                                                    </tr>
+                                                                                @switch (ticket.Status.Name)
+                                                                                {
+                                                                                    case "Created":
+                                                                                        <span class="label label-danger">Created</span>
+                                                                                        break;
+                                                                                    case "Assigned":
+                                                                                        <span class="label label-warning">Assigned</span>
+                                                                                        break;
+                                                                                    case "Resolved":
+                                                                                        <span class="label label-success">Resolved</span>
+                                                                                        break;
+                                                                                    case "Reopened":
+                                                                                        <span class="label label-danger">Reopened</span>
+                                                                                        break;
+                                                                                    case "Archived":
+                                                                                        <span class="label label-info">Archived</span>
+                                                                                        break;
+                                                                                }
+                                                                            </td>
+                                                                            <td class="hidden-xs"><span class="label label-info">@ticket.Type.Name</span></td>
+                                                                            <td class="text-center">
+                                                                                <div class="btn-group">
+                                                                                    <button class="btn btn-xs btn-default" data-toggle="tooltip" data-title="Edit Ticket" type="button">Edit Ticket <i class="fa fa-pencil push-5-l"></i></button>
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
                                                                     }
                                                                 </tbody>
                                                             </table>
@@ -264,6 +363,7 @@
 
         $(document).ready(function() {
     $('.ticketViewTable').DataTable();
+    $('.viewDevelopersTable').DataTable();
                                                                                 } );
     </script>
 }
