@@ -7,7 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Squash.Models;
-
+using Microsoft.AspNet.Identity;
 namespace Squash.Controllers
 {
     public class ProjectsController : Controller
@@ -87,6 +87,7 @@ namespace Squash.Controllers
             if (ModelState.IsValid)
             {
                 project.CreatedDate = DateTime.Now;
+                project.Users.Add(db.Users.Find(User.Identity.GetUserId()));
                 db.Projects.Add(project);
                 db.SaveChanges();
                 return RedirectToAction("Index");

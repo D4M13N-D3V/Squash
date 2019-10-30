@@ -79,7 +79,7 @@
                             <div class="form-group">
                                 <div class="col-xs-12">
                                     <div class="form-material form-material-success">
-                                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @placeholder="Please enter a email" })
+                                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @maxlength=50 ,@placeholder="Please enter a email" })
                                         <label for="register-username">Email</label>
                                     </div>
                                 </div>
@@ -87,13 +87,13 @@
                             <div class="form-group">
                                 <div class="col-xs-6">
                                     <div class="form-material form-material-success">
-                                        @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", @placeholder = "Enter your first name" })
+                                        @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", @maxlength=15 ,@placeholder = "Enter your first name" })
                                         <label for="register-email">First Name</label>
                                     </div>
                                 </div>
                                 <div class="col-xs-6">
                                     <div class="form-material form-material-success">
-                                        @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", @placeholder = "Enter your last name." })
+                                        @Html.TextBoxFor(m => m.LastName, new { @class = "form-control",@maxlength=15 ,@placeholder = "Enter your last name." })
                                         <label for="register-email">Last Name</label>
                                     </div>
                                 </div>
@@ -101,13 +101,13 @@
                             <div class="form-group">
                                 <div class="col-xs-6">
                                     <div class="form-material form-material-success">
-                                        @Html.PasswordFor(m => m.Password, new { @class = "form-control", @placeholder = "Enter your password." })
+                                        @Html.PasswordFor(m => m.Password, new { @class = "form-control", @maxlength=20 ,@placeholder = "Enter your password." })
                                         <label for="register-password">Password</label>
                                     </div>
                                 </div>
                                 <div class="col-xs-6">
                                     <div class="form-material form-material-success">
-                                        @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", @placeholder = "Confirm your password." })
+                                        @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", @maxlength=20, @placeholder = "Confirm your password." })
                                         <label for="register-password2">Confirm Password</label>
                                     </div>
                                 </div>

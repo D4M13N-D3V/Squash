@@ -9,5 +9,6 @@ namespace Squash.Models
     {
         public string FullName { get; set; }
         public List<Project> AssignedProjects { get; set; }
+        public List<Ticket> OwnedTickets { get; set; }
     }
 }

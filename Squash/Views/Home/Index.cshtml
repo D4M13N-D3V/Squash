@@ -10,6 +10,90 @@
     </div>
     <div class="content">
         <div class="row">
+            @if (Model.OwnedTickets.Any())
+            {
+                <div class="col-lg-6">
+                    <div class="block">
+                        <div class="block-header">
+                            <ul class="block-options">
+                                <li>
+                                    <button type="button" data-toggle="block-option" data-action="refresh_toggle" data-action-mode="demo"><i class="si si-refresh"></i></button>
+                                </li>
+                            </ul>
+                            <h3 class="block-title">My Submitted Tickets</h3>
+                        </div>
+                        <div class="block-content block-content-full bg-gray-lighter">
+
+                            <div class="row">
+
+                                <table class="table hoverTable table-striped viewTicketsModal" id="submittedTicketViewTable">
+                                    <thead>
+                                        <tr>
+                                            <th style="width">Title</th>
+                                            <th class="hidden-xs">Summary</th>
+                                            <th>Priority</th>
+                                            <th class="hidden-xs">Status</th>
+                                            <th class="hidden-xs">Type</th>
+                                            <th class="hidden-xs">Created</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var ticket in Model.OwnedTickets)
+                                            {
+
+                                                <tr style="cursor:pointer" onclick="window.location.href = '@Url.Action("Details","Tickets", new { id=ticket.Id })';" >
+                                                    <td>@ticket.Title</td>
+                                                    <td class="hidden-xs">@ticket.Summary</td>
+                                                    <td>
+                                                        @switch (ticket.Priority.Name)
+                                                        {
+                                                            case "High":
+                                                                <span class="label label-danger">High</span>
+                                                                break;
+                                                            case "Medium":
+                                                                <span class="label label-warning">Medium</span>
+                                                                break;
+                                                            case "Low":
+                                                                <span class="label label-info">Low</span>
+                                                                break;
+                                                        }
+                                                    </td>
+                                                    <td class="hidden-xs">
+
+                                                        @switch (ticket.Status.Name)
+                                                        {
+                                                            case "Created":
+                                                                <span class="label label-danger">Created</span>
+                                                                break;
+                                                            case "Assigned":
+                                                                <span class="label label-warning">Assigned</span>
+                                                                break;
+                                                            case "Resolved":
+                                                                <span class="label label-success">Resolved</span>
+                                                                break;
+                                                            case "Reopened":
+                                                                <span class="label label-danger">Reopened</span>
+                                                                break;
+                                                            case "Archived":
+                                                                <span class="label label-info">Archived</span>
+                                                                break;
+                                                        }
+                                                    </td>
+                                                    <td class="hidden-xs"><span class="label label-info">@ticket.Type.Name</span></td>
+
+                                                    <td class="hidden-xs">@ticket.CreatedDate</td>
+                                                </tr>
+                                            }
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                        <div class="block-content">
+                        </div>
+                    </div>
+                </div>
+            }
             @if (Model.AssignedProjects.Any())
             {
                 <div class="col-lg-6">
@@ -55,6 +139,7 @@
                                                                                 <tr>
                                                                                     <th>Name</th>
                                                                                     <th class="hidden-xs">Email</th>
+                                                                                    <th class="hidden-xs" style="width: 15%;">Assigned Tickets</th>
                                                                                     <th class="hidden-xs" style="width: 15%;">Assigned Projects</th>
                                                                                     <th class="hidden-xs" style="width: 15%;">Role</th>
                                                                                 </tr>
@@ -63,31 +148,32 @@
                                                                                 @foreach (var user in project.Users)
                                                                                 {
 
-                                                                                    <tr>
-                                                                                        <td class="font-w600">@user.FirstName @user.LastName</td>
-                                                                                        <td class="hidden-xs">@user.Email</td>
-                                                                                        <td class="hidden-xs">@user.Projects.Count</td>
-                                                                                        <td class="hidden-xs">
-                                                                                            @switch (user.Role)
-                                                                                            {
-                                                                                                case "Administrator":
-                                                                                                    <span class="label label-danger">Administrator</span>
-                                                                                                    break;
-                                                                                                case "Project Manager":
-                                                                                                    <span class="label label-warning">Project Manager</span>
-                                                                                                    break;
-                                                                                                case "Developer":
-                                                                                                    <span class="label label-success">Developer</span>
-                                                                                                    break;
-                                                                                                case "Submitter":
-                                                                                                    <span class="label label-primary">Submitter</span>
-                                                                                                    break;
-                                                                                                default:
-                                                                                                    <span class="label label-info">UNKNOWN</span>
-                                                                                                    break;
-                                                                                            }
-                                                                                        </td>
-                                                                                    </tr>
+                                                                                <tr>
+                                                                                    <td class="font-w600">@user.FirstName @user.LastName</td>
+                                                                                    <td class="hidden-xs">@user.Email</td>
+                                                                                    <td class="hidden-xs">@user.AssignedTickets.Count</td>
+                                                                                    <td class="hidden-xs">@user.Projects.Count</td>
+                                                                                    <td class="hidden-xs">
+                                                                                        @switch (user.Role)
+                                                                                        {
+                                                                                            case "Administrator":
+                                                                                                <span class="label label-danger">Administrator</span>
+                                                                                                break;
+                                                                                            case "Project Manager":
+                                                                                                <span class="label label-warning">Project Manager</span>
+                                                                                                break;
+                                                                                            case "Developer":
+                                                                                                <span class="label label-success">Developer</span>
+                                                                                                break;
+                                                                                            case "Submitter":
+                                                                                                <span class="label label-primary">Submitter</span>
+                                                                                                break;
+                                                                                            default:
+                                                                                                <span class="label label-info">UNKNOWN</span>
+                                                                                                break;
+                                                                                        }
+                                                                                    </td>
+                                                                                </tr>
                                                                                 }
                                                                             </tbody>
                                                                         </table>
@@ -100,9 +186,165 @@
                                                         </div>
                                                     </div>
 
-                                                    <a class="btn btn-default js-tooltip" href="javascript:void(0)" title="View Assigned Tickets">
-                                                        My Tickets (@project.Tickets.Where(x => x.AssignedUserId == User.Identity.GetUserId()).Count()) <i class="si si-magnifier"></i>
+                                                    <a class="btn btn-default js-tooltip" data-toggle="modal" data-target="#viewAssignedTicketsModal-@project.Id" href="javascript:void(0)" title="View Assigned Tickets">
+                                                        (@project.Tickets.Where(x => x.AssignedUserId == User.Identity.GetUserId()).Count()) <i class="fa fa-search"></i>
                                                     </a>
+
+                                                    <a class="btn btn-default js-tooltip" data-toggle="modal" data-target="#viewTicketsModal-@project.Id" href="javascript:void(0)" title="View All Tickets">
+                                                        (@project.Tickets.Count()) <i class="fa fa-files-o"></i>
+                                                    </a>
+
+                                                    <div class="modal fade " id="viewTicketsModal-@project.Id" tabindex="-1" role="dialog" aria-hidden="true">
+                                                        <div class="modal-dialog modal-lg modal-dialog-top">
+                                                            <div class="modal-content">
+                                                                <div class="block">
+                                                                    <div class="block-content">
+                                                                        <table class="table table-striped hoverTable viewTicketsModal" id="userManagmentTable">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th>Title</th>
+                                                                                    <th>Summary</th>
+                                                                                    <th class="hidden-xs" style="width: 15%;">Created Date</th>
+                                                                                    <th class="hidden-xs" style="width: 15%;">Updated Date</th>
+                                                                                    <th class="hidden-xs" style="width: 5%;">Priority</th>
+                                                                                    <th class="hidden-xs" style="width: 5%;">Status</th>
+                                                                                    <th class="hidden-xs" style="width: 5%;">Type</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                @foreach (var ticket in project.Tickets)
+                                                                                {
+
+                                                                                    <tr style="cursor:pointer" onclick="window.location.href = '@Url.Action("Details","Tickets", new { id=ticket.Id })';">
+                                                                                        <td class="font-w600">@ticket.Title</td>
+                                                                                        <td>@ticket.Summary</td>
+                                                                                        <td class="hidden-xs">@ticket.CreatedDate</td>
+                                                                                        <td class="hidden-xs">@ticket.UpdatedDate</td>
+                                                                                        <td class="hidden-xs">
+                                                                                            @switch (ticket.Priority.Name)
+                                                                                            {
+                                                                                                case "High":
+                                                                                                    <span class="label label-danger">High</span>
+                                                                                                    break;
+                                                                                                case "Medium":
+                                                                                                    <span class="label label-warning">Medium</span>
+                                                                                                    break;
+                                                                                                case "Low":
+                                                                                                    <span class="label label-info">Low</span>
+                                                                                                    break;
+                                                                                            }
+                                                                                        </td>
+                                                                                        <td class="hidden-xs">
+
+                                                                                            @switch (ticket.Status.Name)
+                                                                                            {
+                                                                                                case "Created":
+                                                                                                    <span class="label label-danger">Created</span>
+                                                                                                    break;
+                                                                                                case "Assigned":
+                                                                                                    <span class="label label-warning">Assigned</span>
+                                                                                                    break;
+                                                                                                case "Resolved":
+                                                                                                    <span class="label label-success">Resolved</span>
+                                                                                                    break;
+                                                                                                case "Reopened":
+                                                                                                    <span class="label label-danger">Reopened</span>
+                                                                                                    break;
+                                                                                                case "Archived":
+                                                                                                    <span class="label label-info">Archived</span>
+                                                                                                    break;
+                                                                                            }
+                                                                                        </td>
+                                                                                        <td class="hidden-xs"><span class="label label-info">@ticket.Type.Name</span></td>
+                                                                                    </tr>
+                                                                                }
+                                                                            </tbody>
+                                                                        </table>
+
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button class="btn btn-sm btn-default" type="button" data-dismiss="modal"><i class="fa fa-close push-5-r"></i>Close</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal fade " id="viewAssignedTicketsModal-@project.Id" tabindex="-1" role="dialog" aria-hidden="true">
+                                                        <div class="modal-dialog modal-lg modal-dialog-top">
+                                                            <div class="modal-content">
+                                                                <div class="block">
+                                                                    <div class="block-content">
+                                                                        <table class="table table-striped hoverTable viewTicketsModal" id="userManagmentTable">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th>Title</th>
+                                                                                    <th>Summary</th>
+                                                                                    <th class="hidden-xs" style="width: 15%;">Created Date</th>
+                                                                                    <th class="hidden-xs" style="width: 15%;">Updated Date</th>
+                                                                                    <th class="hidden-xs" style="width: 5%;">Priority</th>
+                                                                                    <th class="hidden-xs" style="width: 5%;">Status</th>
+                                                                                    <th class="hidden-xs" style="width: 5%;">Type</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                @foreach (var ticket in project.Tickets.Where(x => x.AssignedUserId == User.Identity.GetUserId()))
+                                                                                {
+
+                                                                                    <tr style="cursor:pointer" onclick="window.location.href = '@Url.Action("Details","Tickets", new { id=ticket.Id })';">
+                                                                                        <td class="font-w600">@ticket.Title</td>
+                                                                                        <td>@ticket.Summary</td>
+                                                                                        <td class="hidden-xs">@ticket.CreatedDate</td>
+                                                                                        <td class="hidden-xs">@ticket.UpdatedDate</td>
+                                                                                        <td class="hidden-xs">
+                                                                                            @switch (ticket.Priority.Name)
+                                                                                            {
+                                                                                                case "High":
+                                                                                                    <span class="label label-danger">High</span>
+                                                                                                    break;
+                                                                                                case "Medium":
+                                                                                                    <span class="label label-warning">Medium</span>
+                                                                                                    break;
+                                                                                                case "Low":
+                                                                                                    <span class="label label-info">Low</span>
+                                                                                                    break;
+                                                                                            }
+                                                                                        </td>
+                                                                                        <td class="hidden-xs">
+
+                                                                                            @switch (ticket.Status.Name)
+                                                                                            {
+                                                                                                case "Created":
+                                                                                                    <span class="label label-danger">Created</span>
+                                                                                                    break;
+                                                                                                case "Assigned":
+                                                                                                    <span class="label label-warning">Assigned</span>
+                                                                                                    break;
+                                                                                                case "Resolved":
+                                                                                                    <span class="label label-success">Resolved</span>
+                                                                                                    break;
+                                                                                                case "Reopened":
+                                                                                                    <span class="label label-danger">Reopened</span>
+                                                                                                    break;
+                                                                                                case "Archived":
+                                                                                                    <span class="label label-info">Archived</span>
+                                                                                                    break;
+                                                                                            }
+                                                                                        </td>
+                                                                                        <td class="hidden-xs"><span class="label label-info">@ticket.Type.Name</span></td>
+                                                                                    </tr>
+                                                                                }
+                                                                            </tbody>
+                                                                        </table>
+
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button class="btn btn-sm btn-default" type="button" data-dismiss="modal"><i class="fa fa-close push-5-r"></i>Close</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
                                                 </div>
                                                 <ul class="list-inline push">
                                                 </ul>
@@ -134,7 +376,7 @@
 
                             <div class="row">
 
-                                <table class="table  table-striped" id="ticketViewTable">
+                                <table class="table  table-striped hoverTable" id="ticketViewTable">
                                     <thead>
                                         <tr>
                                             <th style="width">Title</th>
@@ -148,10 +390,10 @@
                                     <tbody>
                                         @foreach (var project in Model.AssignedProjects.Where(project => project.Tickets.Any()))
                                         {
-                                            foreach (var ticket in project.Tickets)
+                                            foreach (var ticket in project.Tickets.Where(x => x.AssignedUserId == User.Identity.GetUserId()))
                                             {
 
-                                                <tr>
+                                                <tr  style="cursor:pointer" onclick="window.location.href = '@Url.Action("Details","Tickets", new { id=ticket.Id })';">
                                                     <td>@ticket.Title</td>
                                                     <td class="hidden-xs">@ticket.Summary</td>
                                                     <td>
@@ -210,10 +452,10 @@
 </main>
 @section scripts{
     <script>
-
         $(document).ready(function () {
             $('#ticketViewTable').DataTable();
             $('.viewDevelopersTable').DataTable();
+            $(".viewTicketsModal").DataTable();
         });
     </script>
 }

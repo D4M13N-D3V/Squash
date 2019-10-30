@@ -1,4 +1,5 @@
-﻿@model  IEnumerable<Squash.Models.ProjectManagementViewModel>
+﻿@using Microsoft.AspNet.Identity;
+@model  IEnumerable<Squash.Models.ProjectManagementViewModel>
 
 @{
     ViewBag.Title = "Index";
@@ -26,7 +27,18 @@
         <div class="row">
             <div class="col-4">
                 <div class="row">
-                    @foreach (var project in Model)
+                    @{
+                        IEnumerable<Squash.Models.ProjectManagementViewModel> projects;
+                        if (User.IsInRole("Administrator"))
+                        {
+                            projects = Model;
+                        }
+                        else
+                        {
+                            projects = Model.Where(x => x.UsersInProject.Any(z => z.Id == User.Identity.GetUserId()));
+                        }
+                    }
+                    @foreach (var project in projects)
                     {
 
                         <div class="col-sm-6 col-lg-4">
@@ -52,12 +64,13 @@
                                                     <li class="divider"></li>
                                                     <li>
 
-                                                        <a tabindex="-1" href="javascript:document.getElementById('deleteForm').submit()">
+                                                        <a tabindex="-1" href="javascript:document.getElementById('deleteForm-@project.Id').submit()">
                                                             <i class="si si-trash text-danger pull-right"></i>
                                                             Delete Project
                                                         </a>
-                                                        @using (Html.BeginForm("Delete", "Projects", new { id = project.Id }, FormMethod.Post, new { id = "deleteForm" }))
+                                                        @using (Html.BeginForm("Delete", "Projects", null, FormMethod.Post, new { id = "deleteForm-"+project.Id }))
                                                         {
+                                                            @Html.Hidden("id",project.Id)
                                                             @Html.AntiForgeryToken();
                                                         }
                                                     </li>
@@ -128,6 +141,7 @@
                                                                     <tr>
                                                                         <th>Name</th>
                                                                         <th class="hidden-xs">Email</th>
+                                                                        <th class="hidden-xs" style="width: 15%;">Assigned Tickets</th>
                                                                         <th class="hidden-xs" style="width: 15%;">Assigned Projects</th>
                                                                         <th class="hidden-xs" style="width: 15%;">Role</th>
                                                                     </tr>
@@ -136,31 +150,32 @@
                                                                     @foreach (var user in project.UsersInProject)
                                                                     {
 
-                                                                        <tr>
-                                                                            <td class="font-w600">@user.FirstName @user.LastName</td>
-                                                                            <td class="hidden-xs">@user.Email</td>
-                                                                            <td class="hidden-xs">@user.Projects.Count</td>
-                                                                            <td class="hidden-xs">
-                                                                                @switch (user.Role)
-                                                                                {
-                                                                                    case "Administrator":
-                                                                                        <span class="label label-danger">Administrator</span>
-                                                                                        break;
-                                                                                    case "Project Manager":
-                                                                                        <span class="label label-warning">Project Manager</span>
-                                                                                        break;
-                                                                                    case "Developer":
-                                                                                        <span class="label label-success">Developer</span>
-                                                                                        break;
-                                                                                    case "Submitter":
-                                                                                        <span class="label label-primary">Submitter</span>
-                                                                                        break;
-                                                                                    default:
-                                                                                        <span class="label label-info">UNKNOWN</span>
-                                                                                        break;
-                                                                                }
-                                                                            </td>
-                                                                        </tr>
+                                                                    <tr>
+                                                                        <td class="font-w600">@user.FirstName @user.LastName</td>
+                                                                        <td class="hidden-xs">@user.Email</td>
+                                                                        <td class="hidden-xs">@user.AssignedTickets.Count</td>
+                                                                        <td class="hidden-xs">@user.Projects.Count</td>
+                                                                        <td class="hidden-xs">
+                                                                            @switch (user.Role)
+                                                                            {
+                                                                                case "Administrator":
+                                                                                    <span class="label label-danger">Administrator</span>
+                                                                                    break;
+                                                                                case "Project Manager":
+                                                                                    <span class="label label-warning">Project Manager</span>
+                                                                                    break;
+                                                                                case "Developer":
+                                                                                    <span class="label label-success">Developer</span>
+                                                                                    break;
+                                                                                case "Submitter":
+                                                                                    <span class="label label-primary">Submitter</span>
+                                                                                    break;
+                                                                                default:
+                                                                                    <span class="label label-info">UNKNOWN</span>
+                                                                                    break;
+                                                                            }
+                                                                        </td>
+                                                                    </tr>
                                                                     }
                                                                 </tbody>
                                                             </table>
@@ -192,14 +207,14 @@
                                                                         <th class="hidden-xs" style="width: 5%;">Priority</th>
                                                                         <th class="hidden-xs" style="width: 5%;">Status</th>
                                                                         <th class="hidden-xs" style="width: 5%;">Type</th>
-                                                                        <th style="width:2%">Action</th>
+                                                                        <th style="width:5%">Assigned</th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
                                                                     @foreach (var ticket in project.Tickets)
                                                                     {
 
-                                                                        <tr>
+                                                                        <tr style="cursor:pointer" onclick="window.location.href = '@Url.Action("Details","Tickets", new { id=ticket.Id })';">
                                                                             <td class="font-w600">@ticket.Title</td>
                                                                             <td>@ticket.Summary</td>
                                                                             <td class="hidden-xs">@ticket.CreatedDate</td>
@@ -240,11 +255,15 @@
                                                                                 }
                                                                             </td>
                                                                             <td class="hidden-xs"><span class="label label-info">@ticket.Type.Name</span></td>
-                                                                            <td class="text-center">
-                                                                                <div class="btn-group">
-                                                                                    <button class="btn btn-xs btn-default" data-toggle="tooltip" data-title="Edit Ticket" type="button">Edit Ticket <i class="fa fa-pencil push-5-l"></i></button>
-                                                                                </div>
-                                                                            </td>
+                                                                            
+                                                                                @if (ticket.AssignedUser == null)
+                                                                                {
+                                                                                    <td>Unassigned</td>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <td>@ticket.AssignedUser.FirstName @ticket.AssignedUser.LastName</td>
+                                                                                }
                                                                         </tr>
                                                                     }
                                                                 </tbody>
@@ -260,7 +279,7 @@
                                         </div>
 
                                         <a class="btn btn-default js-tooltip" href="javascript:void(0)" data-toggle="modal" data-target="#addToProject-@project.Id" title="Add Developer">
-                                            <i class="fa fa-plus"></i>
+                                            <i class="fa fa-user-plus"></i>
                                         </a>
                                         <div class="modal fade" id="addToProject-@project.Id" tabindex="-1" role="dialog" aria-hidden="true">
                                             <div class="modal-dialog modal-dialog-top">
@@ -304,7 +323,7 @@
                                         </div>
 
                                         <a class="btn btn-default js-tooltip" data-toggle="modal" data-target="#removeFromProject-@project.Id" href="javascript:void(0)" title="Remove Developer">
-                                            <i class="fa fa-minus"></i>
+                                            <i class="fa fa-user-minus"></i>
                                         </a>
                                         <div class="modal fade" id="removeFromProject-@project.Id" tabindex="-1" role="dialog" aria-hidden="true">
                                             <div class="modal-dialog modal-dialog-top">
@@ -361,9 +380,9 @@
 @section scripts{
     <script>
 
-        $(document).ready(function() {
-    $('.ticketViewTable').DataTable();
-    $('.viewDevelopersTable').DataTable();
-                                                                                } );
+        $(document).ready(function () {
+            $('.ticketViewTable').DataTable();
+            $('.viewDevelopersTable').DataTable();
+        });
     </script>
 }

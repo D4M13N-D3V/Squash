@@ -1,0 +1,107 @@
+﻿@model IEnumerable<Squash.Models.Ticket>
+
+@{
+    ViewBag.Title = "All Tickets";
+}
+<main id="main-container">
+
+    <div class="bg-image" style="background-image: url('/Images/photos/photo28@2x.jpg');">
+        <div class="content content-full bg-city-dark-op">
+            <div class="row">
+                <div class="col-xs-6">
+                    <h1 class="page-heading text-white animated zoomIn">
+                        All Tickets
+                    </h1>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="block">
+        <div class="block-content">
+            <!-- DataTables init on table by adding .js-dataTable-full class, functionality initialized in js/pages/base_tables_datatables.js --><table class="table table-striped ticketViewTable" id="userManagmentTable">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Summary</th>
+                        <th class="hidden-xs" style="width: 15%;">Created Date</th>
+                        <th class="hidden-xs" style="width: 15%;">Updated Date</th>
+                        <th class="hidden-xs" style="width: 15%;">Assigned Developer</th>
+                        <th class="hidden-xs" style="width: 5%;">Priority</th>
+                        <th class="hidden-xs" style="width: 5%;">Status</th>
+                        <th class="hidden-xs" style="width: 5%;">Type</th>
+                        <th style="width:2%">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var ticket in Model)
+                    {
+
+                    <tr>
+                        <td class="font-w600">@ticket.Title</td>
+                        <td>@ticket.Summary</td>
+                        <td class="hidden-xs">@ticket.CreatedDate</td>
+                        <td class="hidden-xs">@ticket.UpdatedDate</td>
+                        @if (ticket.AssignedUser != null)
+                        {
+                            <td class="hidden-xs">@ticket.AssignedUser.FirstName @ticket.AssignedUser.LastName</td>
+                        }
+                        else
+                        {
+                            <td class="hidden-xs danger">Unassigned</td>
+                        }
+                        <td class="hidden-xs">
+                            @switch (ticket.Priority.Name)
+                            {
+                                case "High":
+                                    <span class="label label-danger">High</span>
+                                    break;
+                                case "Medium":
+                                    <span class="label label-warning">Medium</span>
+                                    break;
+                                case "Low":
+                                    <span class="label label-info">Low</span>
+                                    break;
+                            }
+                        </td>
+                        <td class="hidden-xs">
+
+                            @switch (ticket.Status.Name)
+                            {
+                                case "Created":
+                                    <span class="label label-danger">Created</span>
+                                    break;
+                                case "Assigned":
+                                    <span class="label label-warning">Assigned</span>
+                                    break;
+                                case "Resolved":
+                                    <span class="label label-success">Resolved</span>
+                                    break;
+                                case "Reopened":
+                                    <span class="label label-danger">Reopened</span>
+                                    break;
+                                case "Archived":
+                                    <span class="label label-info">Archived</span>
+                                    break;
+                            }
+                        </td>
+                        <td class="hidden-xs"><span class="label label-info">@ticket.Type.Name</span></td>
+                        <td class="text-center">
+                            <div class="btn-group">
+                                <a class="btn btn-xs btn-default" data-toggle="tooltip" data-title="Edit Ticket" href="@Url.Action("Details", "Tickets", new { id = ticket.Id })" type="button">Edit Ticket <i class="fa fa-pencil push-5-l"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</main>
+@section scripts{
+    <script>
+        $(document).ready(function() {
+    $('#assignedProjectsList').DataTable();
+} );
+    </script>
+}

@@ -17,12 +17,11 @@
     <!-- Stylesheets -->
     <!-- Web fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400italic,600,700%7COpen+Sans:300,400,400italic,600,700">
-
     <!-- Bootstrap and OneUI CSS framework -->
     <link rel="stylesheet" href="~/Content/bootstrap.min.css">
     <link rel="stylesheet" id="css-main" href="~/Content/oneui.css">
     <link href="~/Content/jquery.dataTables.min.css" rel="stylesheet" />
-
+    <link href="~/Content/custom.css" rel="stylesheet" />
     <!-- You can include a specific file from css/themes/ folder to alter the default color theme of the template. eg: -->
     <!-- <link rel="stylesheet" id="css-theme" href="~/Content/themes/flat.min.css"> -->
     <!-- END Stylesheets -->
@@ -391,6 +390,11 @@
                             <li class="nav-main-heading"><span class="sidebar-mini-hide">General</span></li>
                             <li>
                                 <a href="@Url.Action("Index","Home")"><i class="si si-speedometer"></i><span class="sidebar-mini-hide">Dashboard</span></a>
+                                <a href="@Url.Action("ViewAllTickets","Home")"><i class="si si-note"></i><span class="sidebar-mini-hide">View All Tickets</span></a>
+                                @if (User.IsInRole("Submitter") || User.IsInRole("Administrator"))
+                                {
+                                    <a href="@Url.Action("Create","Tickets")"><i class="si si-plus"></i><span class="sidebar-mini-hide">Submit Ticket</span></a>
+                                }
                             </li>
 
                             @if (User.IsInRole("Project Manager") || User.IsInRole("Administrator"))
@@ -406,6 +410,9 @@
                                 <li class="nav-main-heading"><span class="sidebar-mini-hide">Developer Tools</span></li>
                                 <li>
                                     <a href="@Url.Action("ViewAssignedProjectsList","Home")"><i class="si si-folder-alt"></i><span class="sidebar-mini-hide">Assigned Projects</span></a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("ViewAssignedTicketsList","Home")"><i class="si si-note"></i><span class="sidebar-mini-hide">Assigned Tickets</span></a>
                                 </li>
                             }
 
@@ -532,6 +539,7 @@
     <script src="~/Scripts/jquery.dataTables.min.js"></script>
     <script src="~/Scripts/base_tables_datatables.js"></script>
     <script src="~/Scripts/app.js"></script>
+    <script src="https://kit.fontawesome.com/0e4ebe25a9.js" crossorigin="anonymous"></script>
     @RenderSection("scripts", required: false)
 </body>
 </html>

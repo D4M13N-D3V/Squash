@@ -57,11 +57,11 @@
                             </td>
                             <td class="text-center">
                                 <div class="btn-group">
-                                        <button class="btn btn-xs btn-default" type="button" data-toggle="modal" data-target="#addToProject-@viewModel.Id"><i class="fa fa-plus" data-toggle="tooltip" data-title="Add To Project"></i></button>
+                                        <button class="btn btn-xs btn-default" type="button" data-toggle="modal" data-target="#addToProject-@viewModel.Id"><i class="fa fa-user-plus" data-toggle="tooltip" data-title="Add To Project"></i></button>
                                     
                                     <button class="btn btn-xs btn-default" type="button" data-toggle="modal" data-target="#setRoleModal-@viewModel.Id"><i class="fa fa-pencil" data-toggle="tooltip" data-title="Set User Role"></i></button>
 
-                                        <button class="btn btn-xs btn-default" type="button" data-toggle="modal" data-target="#removeFromProject-@viewModel.Id"><i class="fa fa-minus" data-toggle="tooltip" data-title="Remove From Project"></i></button>
+                                        <button class="btn btn-xs btn-default" type="button" data-toggle="modal" data-target="#removeFromProject-@viewModel.Id"><i class="fa fa-user-minus" data-toggle="tooltip" data-title="Remove From Project"></i></button>
                                     
 
                                     <div class="modal fade" id="addToProject-@viewModel.Id" tabindex="-1" role="dialog" aria-hidden="true">
@@ -195,7 +195,7 @@
     <script>
         
         $(document).ready(function() {
-    $('#userManagmentTable').DataTable();
+    $('#userManagmentTa     ble').DataTable();
 } );
     </script>
     }

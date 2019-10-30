@@ -1,6 +1,7 @@
 ﻿using Squash.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -48,6 +49,12 @@ namespace Squash.Controllers
         [HttpPost]
         public ActionResult RemoveFromProject(string userId, int projectId)
         {
+            foreach(var ticket in db.Tickets.Where(x=>x.ProjectId==projectId && x.AssignedUserId == userId))
+            {
+                ticket.AssignedUserId = null;
+                db.Entry(ticket).State = EntityState.Modified;
+            }
+            db.SaveChanges();
             Helpers.ProjectHelpers.RemoveUserFromProject(userId, projectId);
             return RedirectToAction("Index", "UserManagment");
         }

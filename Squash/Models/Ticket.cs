@@ -23,11 +23,11 @@ namespace Squash.Models
         public int TypeId { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
-        public string Filepath { get; set; }
         public string OwnerId { get; set; }
         public string AssignedUserId { get; set; }
 
 
+        public virtual Project Project { get; set; }
         public virtual Priority Priority { get; set; }
         public virtual Status Status {get; set;}
         public virtual Type Type { get; set; }
