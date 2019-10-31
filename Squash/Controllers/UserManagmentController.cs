@@ -26,6 +26,7 @@ namespace Squash.Controllers
                     Email = user.Email,
                     ProjectsIn = user.Projects,
                     ProjectsOut = Helpers.ProjectHelpers.ListUserProjectsNotOn(user.Id),
+                    TicketsIn = user.AssignedTickets,
                     Role = Helpers.RoleHelpers.ListUserRoles(user.Id).FirstOrDefault()
                 });
             }

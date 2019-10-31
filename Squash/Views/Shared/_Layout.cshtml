@@ -391,7 +391,7 @@
                             <li>
                                 <a href="@Url.Action("Index","Home")"><i class="si si-speedometer"></i><span class="sidebar-mini-hide">Dashboard</span></a>
                                 <a href="@Url.Action("ViewAllTickets","Home")"><i class="si si-note"></i><span class="sidebar-mini-hide">View All Tickets</span></a>
-                                @if (User.IsInRole("Submitter") || User.IsInRole("Administrator"))
+                                @if (User.IsInRole("Submitter"))
                                 {
                                     <a href="@Url.Action("Create","Tickets")"><i class="si si-plus"></i><span class="sidebar-mini-hide">Submit Ticket</span></a>
                                 }

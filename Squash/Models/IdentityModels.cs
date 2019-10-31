@@ -31,6 +31,7 @@ namespace Squash.Models
         public virtual ICollection<TicketNotification> Notifications { get; set; }
         public virtual ICollection<Ticket> AssignedTickets { get; set; }
         public virtual ICollection<Ticket> CreatedTickets { get; set; }
+        public virtual ICollection<TicketComment> TicketComments { get; set; }
         public virtual ICollection<Project> Projects { get; set; }
     }
 

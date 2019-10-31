@@ -41,6 +41,7 @@ namespace Squash.Controllers
                 Priorities = db.Priorities.ToList(),
                 Statuses = db.Statuses.ToList(),
                 Types = db.Types.ToList(),
+                History = db.TicketHistory.Where(x => x.TicketId == ticket.Id),
                 AssignedUser = db.Users.FirstOrDefault(x => x.Id == ticket.AssignedUserId),
                 Users = db.Users.ToList().Where(x=>x.Projects.Where(z=>z.Id==ticket.ProjectId).Any())
             };
@@ -52,7 +53,56 @@ namespace Squash.Controllers
         public ActionResult Create()
         {
             var id = User.Identity.GetUserId();
-            return View(db.Projects.Where(x => x.Users.Any(z => z.Id == id)).ToList());
+            var projects = db.Projects.Where(x => x.Users.Any(z => z.Id == id)).ToList();
+            if (projects.Any())
+            {
+                return View(projects);
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
+        }
+
+        public ActionResult AddComment(int ticketId, string commentBody)
+        {
+            if (commentBody.Length > 5)
+            {
+                var ticket = db.Tickets.Find(ticketId);
+                var newComment = db.TicketComment.Add(new TicketComment()
+                {
+                    TicketId = ticketId,
+                    Body = commentBody,
+                    OwnerId = User.Identity.GetUserId(),
+                    CreatedDate = DateTime.Now
+                });
+                db.SaveChanges();
+            }
+            return RedirectToAction("Details", "Tickets", new { id = ticketId });
+
+    }
+    public ActionResult UploadAttachment(int ticketId, string fileDescription, HttpPostedFileBase fileAttachment)
+        {
+
+            if (fileAttachment != null)
+            {
+                var ticket = db.Tickets.Find(ticketId);
+                var filename = DateTime.Now.Ticks + "-" + fileAttachment.FileName;
+                var path = Path.Combine(Server.MapPath("~/Uploads/"), filename);
+                fileAttachment.SaveAs(path);
+                var attachment = db.TicketAttachments.Add(new TicketAttachment()
+                {
+                    Description = fileDescription,
+                    UploadDate = DateTime.Now,
+                    UserId = User.Identity.GetUserId(),
+                    TicketId = ticket.Id,
+                    FilePath = "/Uploads/" + filename
+                }); ;
+                var newAttachment = db.TicketAttachments.Add(attachment);
+                ticket.TicketAttachments.Add(newAttachment);
+            }
+            db.SaveChanges();
+            return RedirectToAction("Details", "Tickets", new { id = ticketId });
         }
 
         // POST: Tickets/Create
@@ -106,9 +156,11 @@ namespace Squash.Controllers
                 return RedirectToAction("Details", "Tickets", new { id=ticketId });
             }
             var ticket = db.Tickets.Find(ticketId);
+            var oldPriority = ticket.Priority.Name;
             ticket.PriorityId = priorityId;
             db.Entry(ticket).State = EntityState.Modified;
             db.SaveChanges();
+            Helpers.TicketHistoryHelpers.AddHistory(User.Identity.GetUserId(), ticketId, "Priority", oldPriority, db.Tickets.Find(ticketId).Priority.Name);
             return RedirectToAction("Details", "Tickets", new { id=ticketId });
         }
 
@@ -120,9 +172,11 @@ namespace Squash.Controllers
                 return RedirectToAction("Details", "Tickets", new { id = ticketId });
             }
             var ticket = db.Tickets.Find(ticketId);
+            var oldStatus = ticket.Status.Name;
             ticket.StatusId = statusId;
             db.Entry(ticket).State = EntityState.Modified;
             db.SaveChanges();
+            Helpers.TicketHistoryHelpers.AddHistory(User.Identity.GetUserId(), ticketId, "Status", oldStatus, db.Tickets.Find(ticketId).Status.Name);
             return RedirectToAction("Details", "Tickets", new { id = ticketId });
         }
 
@@ -134,9 +188,11 @@ namespace Squash.Controllers
                 return RedirectToAction("Details", "Tickets", new { id=ticketId });
             }
             var ticket = db.Tickets.Find(ticketId);
+            var oldType = ticket.Type.Name;
             ticket.TypeId = typeId;
             db.Entry(ticket).State = EntityState.Modified;
             db.SaveChanges();
+            Helpers.TicketHistoryHelpers.AddHistory(User.Identity.GetUserId(), ticketId, "Type", oldType, db.Tickets.Find(ticketId).Type.Name);
             return RedirectToAction("Details", "Tickets", new {id=ticketId });
         }
 
@@ -148,10 +204,16 @@ namespace Squash.Controllers
                 return RedirectToAction("Details", "Tickets", new { id = ticketId });
             }
             var ticket = db.Tickets.Find(ticketId);
+            var oldAssignedUser = "N/A";
+            if (ticket.AssignedUser != null)
+            {
+                oldAssignedUser = ticket.AssignedUser.FirstName + " " + ticket.AssignedUser.LastName;
+            }
             ticket.AssignedUserId = userId;
             ticket.StatusId = db.Statuses.FirstOrDefault(x=>x.Name=="Assigned").Id;
             db.Entry(ticket).State = EntityState.Modified;
             db.SaveChanges();
+            Helpers.TicketHistoryHelpers.AddHistory(User.Identity.GetUserId(), ticketId, "Assigned User", oldAssignedUser, db.Users.Find(userId).FirstName +" "+ db.Users.Find(userId).LastName);
             return RedirectToAction("Details", "Tickets", new { id = ticketId });
         }
 
@@ -160,10 +222,12 @@ namespace Squash.Controllers
         {
             Ticket ticket = db.Tickets.Find(ticketId);
             var projectId = ticket.ProjectId;
+            var oldPriority = ticket.Priority.Name;
             ticket.AssignedUserId = null;
             ticket.StatusId = db.Statuses.FirstOrDefault(x => x.Name == "Resolved").Id;
             db.Entry(ticket).State = EntityState.Modified;
             db.SaveChanges();
+            Helpers.TicketHistoryHelpers.AddHistory(User.Identity.GetUserId(), ticketId, "Priority", oldPriority, "Resolved");
             return RedirectToAction("Index", "Home");
         }
     }

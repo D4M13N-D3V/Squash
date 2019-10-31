@@ -9,13 +9,13 @@ namespace Squash.Models
     {
         public int Id { get; set; }
         public DateTime UpdateDate { get; set; }
-        public int UpdaterId { get; set; }
+        public string UpdaterId { get; set; }
         public int TicketId {get; set;}
         public string Property { get; set; }
         public string OldValue { get; set; }
         public string NewValue { get; set; }
 
-        public ApplicationUser Updater;
+        public virtual ApplicationUser Updater { get; set; }
         public virtual Ticket Ticket { get; set; }
     }
 }

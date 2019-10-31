@@ -6,280 +6,469 @@
     ViewBag.Title = "Details";
 }
 
-    <main id="main-container">
-        <!-- Page Content -->
-        <div class="content">
-            <div class="row">
-                <div class="col-lg-8 col-lg-offset-2">
-                    <div class="row">
-                        <div class="block">
-                            <div class="block-header bg-gray-lighter">
-                                <div class="block-title text-normal">
-                                    <strong>@Model.Ticket.Title</strong>
-                                </div>
-                                <ul class="block-options">
+<main id="main-container">
+    <!-- Page Content -->
+    <div class="content">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2">
+                <div class="row">
+                    <div class="block">
+                        <div class="block-header bg-gray-lighter">  
+                            <ul class="block-options">
+                                <li>
+                                    <button class="btn" style="color:purple !important; width:65%" data-toggle="modal" data-target="#viewHistory"><i class="fa fa-history push-5-r"></i>View History</button>
 
+
+                                    <div class="modal fade" id="viewHistory" tabindex="-1" role="dialog" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-top">
+                                            <div class="modal-content">
+                                                <div class="block">
+                                                    <div class="block-content">
+
+                                                        <table class="table table-striped viewDevelopersTable" id="userManagmentTable">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Updater</th>
+                                                                    <th>Property</th>
+                                                                    <th style="width: 15%;">Old Value</th>
+                                                                    <th style="width: 15%;">New Value</th>
+                                                                    <th class="hidden-xs" style="width: 15%;">Date Changed</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @foreach (var history in Model.History)
+                                                                {
+
+                                                                <tr>
+                                                                    <td class="font-w600">@history.Updater.FirstName @history.Updater.LastName</td>
+                                                                    <td>@history.Property</td>
+                                                                    <td>@history.OldValue</td>
+                                                                    <td>@history.NewValue</td>
+                                                                    <td class="hidden-xs">@history.UpdateDate</td>
+                                                                </tr>
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button class="btn btn-sm btn-default" type="button" data-dismiss="modal"><i class="fa fa-close push-5-r"></i>Close</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </li>
+                                @if (Model.Ticket.OwnerId == User.Identity.GetUserId() || User.IsInRole("Project Manager") && Model.Ticket.Project.Users.Any(x => x.Id == User.Identity.GetUserId()) || User.IsInRole("Administrator") || Model.Ticket.AssignedUserId == User.Identity.GetUserId())
+                                {
+                                    <li>
+                                        <button class="btn" style="color:green !important; width:65%" data-toggle="modal" data-target="#uploadAttachment"><i class="fa fa-upload push-5-r"></i>Upload Attachment</button>
+
+                                        <div class="modal fade" id="uploadAttachment" tabindex="-1" role="dialog" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-top">
+
+                                                @using (Html.BeginForm("UploadAttachment", "Tickets", new { }, FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal push-30-t push-30", role = "form" }))
+                                                {
+                                                    @Html.Hidden("ticketId", Model.Ticket.Id)
+                                                    <div class="modal-content">
+                                                        <div class="block block-themed block-transparent remove-margin-b">
+                                                            <div class="block-header bg-primary-dark">
+                                                                <ul class="block-options">
+                                                                    <li>
+                                                                        <button data-dismiss="modal" type="button"><i class="si si-close"></i></button>
+                                                                    </li>
+                                                                </ul>
+                                                                <h3 class="block-title">Add Attachment To Ticket</h3>
+                                                            </div>
+                                                            <div class="block-content">
+                                                                <div class="col-12">
+                                                                    <input name="fileAttachment" type="file" class="form-control" id="fileAttachment" />
+                                                                    @Html.TextArea("fileDescription", new { @rows = 5, @class = "form-control", @placeholder = "Description of what the file is..." })
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button class="btn btn-sm btn-success" type="submit"><i class="fa fa-upload push-5-r"></i>Upload Attachment</button>
+                                                            <button class="btn btn-sm btn-default" type="button" data-dismiss="modal"><i class="fa fa-close push-5-r"></i>Close</button>
+                                                        </div>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    </li>
+                                }
+                                @if (User.IsInRole("Project Manager") && Model.Ticket.Project.Users.Any(x => x.Id == User.Identity.GetUserId()) || User.IsInRole("Administrator") || Model.Ticket.AssignedUserId == User.Identity.GetUserId())
+                                {
+                                    <li>
+                                        <button class="btn" style="color:red !important; width:65%" data-toggle="modal" data-target="#assignDeveloper">Assign Developer</button>
+                                    </li>
+                                    <li>
+                                        <button class="btn" style="color:red !important; width:65%" data-toggle="modal" data-target="#assignPriority">Assign Priority</button>
+                                    </li>
+                                    <li>
+                                        <button class="btn" style="color:red !important; width:65%" data-toggle="modal" data-target="#assignStatus">Assign Status</button>
+                                    </li>
+                                    <li>
+                                        <button class="btn" style="color:red !important; width:65%" data-toggle="modal" data-target="#assignType">Assign Type</button>
+                                    </li>
+                                    <li>
+                                        @Html.ActionLink("Close Ticket", "CloseTicket", "Tickets", new { ticketId = Model.Ticket.Id }, new { @class = "btn", @style = "color:#d10000    !important;" })
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                        <div class="block-content">
+                            <div class="row" style="padding-bottom:2%">
+                                <div class="col-lg-4">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <a class="block block-rounded block-link-hover3" href="javascript:void(0)">
+                                                <div class="block-content block-content-full clearfix">
+                                                    <div class="pull-right">
+                                                        <img class="img-avatar" src="~/Images/avatars/avatar1.jpg" alt="">
+                                                    </div>
+                                                    <div class="pull-left push-10-t">
+                                                        <div class="font-w600 push-5">@Model.Ticket.Owner.FirstName @Model.Ticket.Owner.LastName</div>
+                                                        <div class="text-muted">Submitter</div>
+                                                        <div class="text-muted">Created @Model.Ticket.CreatedDate.Month/@Model.Ticket.CreatedDate.Day/@Model.Ticket.CreatedDate.Year</div>
+                                                    </div>
+
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <a class="block block-rounded block-link-hover3" href="javascript:void(0)">
+                                        <div class="block-content block-content-full clearfix">
+                                            <div class="pull-right">
+                                                <img class="img-avatar" src="~/Images/avatars/avatar1.jpg" alt="">
+                                            </div>
+                                            <div class="pull-left push-10-t">
+                                                @if (Model.Ticket.AssignedUser == null)
+                                                {
+                                                    <div class="font-w600 push-5">Unassigned</div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="font-w600 push-5">@Model.Ticket.AssignedUser.FirstName @Model.Ticket.AssignedUser.LastName</div>
+                                                }
+                                                <div class="text-muted">Assigned Developer</div>
+                                            </div>
+
+                                        </div>
+                                    </a>
+
+                                    <a class="block block-link-hover2 text-center" href="javascript:void(0)">
+                                        <div class="block-content block-content-full bg-danger">
+                                            <i class="fa fa-exclamation-triangle fa-3x text-white"></i>
+                                            <div class="font-w600 text-white-op push-15-t">Priority : @Model.Ticket.Priority.Name</div>
+                                        </div>
+                                    </a>
+                                    <a class="block block-link-hover2 text-center" href="javascript:void(0)">
+                                        <div class="block-content block-content-full bg-success">
+                                            <i class="fa fa-archive fa-3x text-white"></i>
+                                            <div class="font-w600 text-white-op push-15-t">Status : @Model.Ticket.Status.Name</div>
+                                        </div>
+                                    </a>
+                                    <a class="block block-link-hover2 text-center" href="javascript:void(0)">
+                                        <div class="block-content block-content-full bg-info">
+                                            <i class="fa fa-laptop fa-3x text-white"></i>
+                                            <div class="font-w600 text-white-op push-15-t">Type : @Model.Ticket.Type.Name</div>
+                                        </div>
+                                    </a>
                                     @if (User.IsInRole("Project Manager") && Model.Ticket.Project.Users.Any(x => x.Id == User.Identity.GetUserId()) || User.IsInRole("Administrator") || Model.Ticket.AssignedUserId == User.Identity.GetUserId())
                                     {
-                                        <li>
-                                            <button class="btn" style="color:red !important; width:65%" data-toggle="modal" data-target="#assignDeveloper">Assign Developer</button>
-                                        </li>
-                                        <li>
-                                            <button class="btn" style="color:red !important; width:65%" data-toggle="modal" data-target="#assignPriority">Assign Priority</button>
-                                        </li>
-                                        <li>
-                                            <button class="btn" style="color:red !important; width:65%" data-toggle="modal" data-target="#assignStatus">Assign Status</button>
-                                        </li>
-                                        <li>
-                                            <button class="btn" style="color:red !important; width:65%" data-toggle="modal" data-target="#assignType">Assign Type</button>
-                                        </li>
-                                        <li>
-                                            @Html.ActionLink("Close Ticket", "CloseTicket", "Tickets", new { id = Model.Ticket.Id }, new { @class = "btn", @style = "color:#d10000    !important;" })
-                                        </li>
-                                    }
-                                </ul>
-                            </div>
-                            <div class="block-content">
-                                <div class="row" style="padding-bottom:2%">
-                                    <div class="col-lg-4">
-                                        <div class="row">
-                                            <div class="col-lg-12">
-                                                <a class="block block-rounded block-link-hover3" href="javascript:void(0)">
-                                                    <div class="block-content block-content-full clearfix">
-                                                        <div class="pull-right">
-                                                            <img class="img-avatar" src="~/Images/avatars/avatar1.jpg" alt="">
-                                                        </div>
-                                                        <div class="pull-left push-10-t">
-                                                            <div class="font-w600 push-5">@Model.Ticket.Owner.FirstName @Model.Ticket.Owner.LastName</div>
-                                                            <div class="text-muted">Submitter</div>
-                                                            <div class="text-muted">Created @Model.Ticket.CreatedDate.Month/@Model.Ticket.CreatedDate.Day/@Model.Ticket.CreatedDate.Year</div>
-                                                        </div>
+                                        <div class="modal fade" id="assignDeveloper" tabindex="-1" role="dialog" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-top">
 
+                                                @using (Html.BeginForm("UpdateAssignedUser", "Tickets", new { }, FormMethod.Post, new { @class = "form-horizontal push-30-t push-30", role = "form" }))
+                                                {
+                                                    @Html.Hidden("ticketId", Model.Ticket.Id)
+                                                    <div class="modal-content">
+                                                        <div class="block block-themed block-transparent remove-margin-b">
+                                                            <div class="block-header bg-primary-dark">
+                                                                <ul class="block-options">
+                                                                    <li>
+                                                                        <button data-dismiss="modal" type="button"><i class="si si-close"></i></button>
+                                                                    </li>
+                                                                </ul>
+                                                                <h3 class="block-title">Assign Developer To Ticket</h3>
+                                                            </div>
+                                                            <div class="block-content">
+                                                                <div class="col-12">
+                                                                    <div class="form-material floating">
+                                                                        <select class="form-control" id="userId" name="userId" size="1" style="width:100%">
+                                                                            <option></option><!-- Empty value for demostrating material select box -->
+                                                                            @foreach (var user in Model.Users)
+                                                                            {
+                                                                                <option value="@user.Id">@user.FirstName @user.LastName</option>
+                                                                            }
+                                                                        </select>
+                                                                        <label for="material-select2">Please Select User</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button class="btn btn-sm btn-success" type="submit"><i class="fa fa-check push-5-r"></i>Assign User To Ticket</button>
+                                                            <button class="btn btn-sm btn-default" type="button" data-dismiss="modal"><i class="fa fa-close push-5-r"></i>Close</button>
+                                                        </div>
                                                     </div>
-                                                </a>
+                                                }
                                             </div>
                                         </div>
-                                        <a class="block block-rounded block-link-hover3" href="javascript:void(0)">
-                                            <div class="block-content block-content-full clearfix">
-                                                <div class="pull-right">
-                                                    <img class="img-avatar" src="~/Images/avatars/avatar1.jpg" alt="">
-                                                </div>
-                                                <div class="pull-left push-10-t">
-                                                    @if (Model.Ticket.AssignedUser == null)
-                                                    {
-                                                        <div class="font-w600 push-5">Unassigned</div>
-                                                    }
-                                                    else
-                                                    {
-                                                        <div class="font-w600 push-5">@Model.Ticket.AssignedUser.FirstName @Model.Ticket.AssignedUser.LastName</div>
-                                                    }
-                                                    <div class="text-muted">Assigned Developer</div>
-                                                </div>
 
-                                            </div>
-                                        </a>
 
-                                        <a class="block block-link-hover2 text-center" href="javascript:void(0)">
-                                            <div class="block-content block-content-full bg-danger">
-                                                <i class="fa fa-exclamation-triangle fa-3x text-white"></i>
-                                                <div class="font-w600 text-white-op push-15-t">Priority : @Model.Ticket.Priority.Name</div>
-                                            </div>
-                                        </a>
-                                        <a class="block block-link-hover2 text-center" href="javascript:void(0)">
-                                            <div class="block-content block-content-full bg-success">
-                                                <i class="fa fa-archive fa-3x text-white"></i>
-                                                <div class="font-w600 text-white-op push-15-t">Status : @Model.Ticket.Status.Name</div>
-                                            </div>
-                                        </a>
-                                        <a class="block block-link-hover2 text-center" href="javascript:void(0)">
-                                            <div class="block-content block-content-full bg-info">
-                                                <i class="fa fa-laptop fa-3x text-white"></i>
-                                                <div class="font-w600 text-white-op push-15-t">Type : @Model.Ticket.Type.Name</div>
-                                            </div>
-                                        </a>
-                                        @if (User.IsInRole("Project Manager") && Model.Ticket.Project.Users.Any(x => x.Id == User.Identity.GetUserId()) || User.IsInRole("Administrator") || Model.Ticket.AssignedUserId == User.Identity.GetUserId())
-                                        {
-                                            <div class="modal fade" id="assignDeveloper" tabindex="-1" role="dialog" aria-hidden="true">
-                                                <div class="modal-dialog modal-dialog-top">
 
-                                                    @using (Html.BeginForm("UpdateAssignedUser", "Tickets", new { }, FormMethod.Post, new { @class = "form-horizontal push-30-t push-30", role = "form" }))
-                                                    {
-                                                        @Html.Hidden("ticketId", Model.Ticket.Id)
-                                                        <div class="modal-content">
-                                                            <div class="block block-themed block-transparent remove-margin-b">
-                                                                <div class="block-header bg-primary-dark">
-                                                                    <ul class="block-options">
-                                                                        <li>
-                                                                            <button data-dismiss="modal" type="button"><i class="si si-close"></i></button>
-                                                                        </li>
-                                                                    </ul>
-                                                                    <h3 class="block-title">Assign Developer To Ticket</h3>
-                                                                </div>
-                                                                <div class="block-content">
-                                                                    <div class="col-12">
-                                                                        <div class="form-material floating">
-                                                                            <select class="form-control" id="userId" name="userId" size="1" style="width:100%">
-                                                                                <option></option><!-- Empty value for demostrating material select box -->
-                                                                                @foreach (var user in Model.Users)
-                                                                                {
-                                                                                    <option value="@user.Id">@user.FirstName @user.LastName</option>
-                                                                                }
-                                                                            </select>
-                                                                            <label for="material-select2">Please Select User</label>
-                                                                        </div>
+
+                                        <div class="modal fade" id="assignPriority" tabindex="-1" role="dialog" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-top">
+
+                                                @using (Html.BeginForm("UpdatePriority", "Tickets", new { }, FormMethod.Post, new { @class = "form-horizontal push-30-t push-30", role = "form" }))
+                                                {
+                                                    @Html.Hidden("ticketId", Model.Ticket.Id)
+                                                    <div class="modal-content">
+                                                        <div class="block block-themed block-transparent remove-margin-b">
+                                                            <div class="block-header bg-primary-dark">
+                                                                <ul class="block-options">
+                                                                    <li>
+                                                                        <button data-dismiss="modal" type="button"><i class="si si-close"></i></button>
+                                                                    </li>
+                                                                </ul>
+                                                                <h3 class="block-title">Assign Priority To Ticket</h3>
+                                                            </div>
+                                                            <div class="block-content">
+                                                                <div class="col-12">
+                                                                    <div class="form-material floating">
+                                                                        <select class="form-control" id="priorityId" name="priorityId" size="1" style="width:100%">
+                                                                            <option></option><!-- Empty value for demostrating material select box -->
+                                                                            @foreach (var priority in Model.Priorities)
+                                                                            {
+                                                                                <option value="@priority.Id">@priority.Name</option>
+                                                                            }
+                                                                        </select>
+                                                                        <label for="material-select2">Please Select Priority</label>
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="modal-footer">
-                                                                <button class="btn btn-sm btn-success" type="submit"><i class="fa fa-check push-5-r"></i>Assign User To Ticket</button>
-                                                                <button class="btn btn-sm btn-default" type="button" data-dismiss="modal"><i class="fa fa-close push-5-r"></i>Close</button>
-                                                            </div>
                                                         </div>
-                                                    }
-                                                </div>
+                                                        <div class="modal-footer">
+                                                            <button class="btn btn-sm btn-success" type="submit"><i class="fa fa-check push-5-r"></i>Assign Priority To Ticket</button>
+                                                            <button class="btn btn-sm btn-default" type="button" data-dismiss="modal"><i class="fa fa-close push-5-r"></i>Close</button>
+                                                        </div>
+                                                    </div>
+                                                }
                                             </div>
+                                        </div>
 
+                                        <div class="modal fade" id="assignStatus" tabindex="-1" role="dialog" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-top">
 
-
-
-                                            <div class="modal fade" id="assignPriority" tabindex="-1" role="dialog" aria-hidden="true">
-                                                <div class="modal-dialog modal-dialog-top">
-
-                                                    @using (Html.BeginForm("UpdatePriority", "Tickets", new { }, FormMethod.Post, new { @class = "form-horizontal push-30-t push-30", role = "form" }))
-                                                    {
-                                                        @Html.Hidden("ticketId", Model.Ticket.Id)
-                                                        <div class="modal-content">
-                                                            <div class="block block-themed block-transparent remove-margin-b">
-                                                                <div class="block-header bg-primary-dark">
-                                                                    <ul class="block-options">
-                                                                        <li>
-                                                                            <button data-dismiss="modal" type="button"><i class="si si-close"></i></button>
-                                                                        </li>
-                                                                    </ul>
-                                                                    <h3 class="block-title">Assign Priority To Ticket</h3>
-                                                                </div>
-                                                                <div class="block-content">
-                                                                    <div class="col-12">
-                                                                        <div class="form-material floating">
-                                                                            <select class="form-control" id="priorityId" name="priorityId" size="1" style="width:100%">
-                                                                                <option></option><!-- Empty value for demostrating material select box -->
-                                                                                @foreach (var priority in Model.Priorities)
-                                                                                {
-                                                                                    <option value="@priority.Id">@priority.Name</option>
-                                                                                }
-                                                                            </select>
-                                                                            <label for="material-select2">Please Select Priority</label>
-                                                                        </div>
+                                                @using (Html.BeginForm("UpdateStatus", "Tickets", new { }, FormMethod.Post, new { @class = "form-horizontal push-30-t push-30", role = "form" }))
+                                                {
+                                                    @Html.Hidden("ticketId", Model.Ticket.Id)
+                                                    <div class="modal-content">
+                                                        <div class="block block-themed block-transparent remove-margin-b">
+                                                            <div class="block-header bg-primary-dark">
+                                                                <ul class="block-options">
+                                                                    <li>
+                                                                        <button data-dismiss="modal" type="button"><i class="si si-close"></i></button>
+                                                                    </li>
+                                                                </ul>
+                                                                <h3 class="block-title">Assign Status To Ticket</h3>
+                                                            </div>
+                                                            <div class="block-content">
+                                                                <div class="col-12">
+                                                                    <div class="form-material floating">
+                                                                        <select class="form-control" id="statusId" name="statusId" size="1" style="width:100%">
+                                                                            <option></option><!-- Empty value for demostrating material select box -->
+                                                                            @foreach (var status in Model.Statuses)
+                                                                            {
+                                                                                <option value="@status.Id">@status.Name</option>
+                                                                            }
+                                                                        </select>
+                                                                        <label for="material-select2">Please Select Status</label>
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="modal-footer">
-                                                                <button class="btn btn-sm btn-success" type="submit"><i class="fa fa-check push-5-r"></i>Assign Priority To Ticket</button>
-                                                                <button class="btn btn-sm btn-default" type="button" data-dismiss="modal"><i class="fa fa-close push-5-r"></i>Close</button>
-                                                            </div>
                                                         </div>
-                                                    }
-                                                </div>
+                                                        <div class="modal-footer">
+                                                            <button class="btn btn-sm btn-success" type="submit"><i class="fa fa-check push-5-r"></i>Assign Status To Ticket</button>
+                                                            <button class="btn btn-sm btn-default" type="button" data-dismiss="modal"><i class="fa fa-close push-5-r"></i>Close</button>
+                                                        </div>
+                                                    </div>
+                                                }
                                             </div>
+                                        </div>
+                                        <div class="modal fade" id="assignType" tabindex="-1" role="dialog" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-top">
 
-                                            <div class="modal fade" id="assignStatus" tabindex="-1" role="dialog" aria-hidden="true">
-                                                <div class="modal-dialog modal-dialog-top">
-
-                                                    @using (Html.BeginForm("UpdateStatus", "Tickets", new { }, FormMethod.Post, new { @class = "form-horizontal push-30-t push-30", role = "form" }))
-                                                    {
-                                                        @Html.Hidden("ticketId", Model.Ticket.Id)
-                                                        <div class="modal-content">
-                                                            <div class="block block-themed block-transparent remove-margin-b">
-                                                                <div class="block-header bg-primary-dark">
-                                                                    <ul class="block-options">
-                                                                        <li>
-                                                                            <button data-dismiss="modal" type="button"><i class="si si-close"></i></button>
-                                                                        </li>
-                                                                    </ul>
-                                                                    <h3 class="block-title">Assign Status To Ticket</h3>
-                                                                </div>
-                                                                <div class="block-content">
-                                                                    <div class="col-12">
-                                                                        <div class="form-material floating">
-                                                                            <select class="form-control" id="statusId" name="statusId" size="1" style="width:100%">
-                                                                                <option></option><!-- Empty value for demostrating material select box -->
-                                                                                @foreach (var status in Model.Statuses)
-                                                                                {
-                                                                                    <option value="@status.Id">@status.Name</option>
-                                                                                }
-                                                                            </select>
-                                                                            <label for="material-select2">Please Select Status</label>
-                                                                        </div>
+                                                @using (Html.BeginForm("UpdateType", "Tickets", new { }, FormMethod.Post, new { @class = "form-horizontal push-30-t push-30", role = "form" }))
+                                                {
+                                                    @Html.Hidden("ticketId", Model.Ticket.Id)
+                                                    <div class="modal-content">
+                                                        <div class="block block-themed block-transparent remove-margin-b">
+                                                            <div class="block-header bg-primary-dark">
+                                                                <ul class="block-options">
+                                                                    <li>
+                                                                        <button data-dismiss="modal" type="button"><i class="si si-close"></i></button>
+                                                                    </li>
+                                                                </ul>
+                                                                <h3 class="block-title">Assign Type To Ticket</h3>
+                                                            </div>
+                                                            <div class="block-content">
+                                                                <div class="col-12">
+                                                                    <div class="form-material floating">
+                                                                        <select class="form-control" id="typeId" name="typeId" size="1" style="width:100%">
+                                                                            <option></option><!-- Empty value for demostrating material select box -->
+                                                                            @foreach (var type in Model.Types)
+                                                                            {
+                                                                                <option value="@type.Id">@type.Name</option>
+                                                                            }
+                                                                        </select>
+                                                                        <label for="material-select2">Please Select Type</label>
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="modal-footer">
-                                                                <button class="btn btn-sm btn-success" type="submit"><i class="fa fa-check push-5-r"></i>Assign Status To Ticket</button>
-                                                                <button class="btn btn-sm btn-default" type="button" data-dismiss="modal"><i class="fa fa-close push-5-r"></i>Close</button>
-                                                            </div>
                                                         </div>
-                                                    }
-                                                </div>
+                                                        <div class="modal-footer">
+                                                            <button class="btn btn-sm btn-success" type="submit"><i class="fa fa-check push-5-r"></i>Assign Type To Ticket</button>
+                                                            <button class="btn btn-sm btn-default" type="button" data-dismiss="modal"><i class="fa fa-close push-5-r"></i>Close</button>
+                                                        </div>
+                                                    </div>
+                                                }
                                             </div>
-                                            <div class="modal fade" id="assignType" tabindex="-1" role="dialog" aria-hidden="true">
-                                                <div class="modal-dialog modal-dialog-top">
+                                        </div>
+                                    }
+                                </div>
+                                <div class="col-lg-8">
+                                    <div class="row">
+                                        <div class="block block-bordered">
+                                            <div class="block-header bg-gray-lighter">
+                                                <h3 class="block-title">Ticket Attachments</h3>
+                                            </div>
+                                            <div class="block-content">
+                                                <table class="table table-striped" id="userManagmentTable">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="hidden-xs">Description</th>
+                                                            <th class="hidden-xs">Creation Date</th>
+                                                            <th class="hidden-xs">Uploader</th>
+                                                            <th class="hidden-xs">Download</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach (var attachment in Model.Ticket.TicketAttachments)
+                                                        {
 
-                                                    @using (Html.BeginForm("UpdateType", "Tickets", new { }, FormMethod.Post, new { @class = "form-horizontal push-30-t push-30", role = "form" }))
-                                                    {
-                                                        @Html.Hidden("ticketId", Model.Ticket.Id)
-                                                        <div class="modal-content">
-                                                            <div class="block block-themed block-transparent remove-margin-b">
-                                                                <div class="block-header bg-primary-dark">
-                                                                    <ul class="block-options">
-                                                                        <li>
-                                                                            <button data-dismiss="modal" type="button"><i class="si si-close"></i></button>
-                                                                        </li>
-                                                                    </ul>
-                                                                    <h3 class="block-title">Assign Type To Ticket</h3>
-                                                                </div>
-                                                                <div class="block-content">
-                                                                    <div class="col-12">
-                                                                        <div class="form-material floating">
-                                                                            <select class="form-control" id="typeId" name="typeId" size="1" style="width:100%">
-                                                                                <option></option><!-- Empty value for demostrating material select box -->
-                                                                                @foreach (var type in Model.Types)
-                                                                                {
-                                                                                    <option value="@type.Id">@type.Name</option>
-                                                                                }
-                                                                            </select>
-                                                                            <label for="material-select2">Please Select Type</label>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button class="btn btn-sm btn-success" type="submit"><i class="fa fa-check push-5-r"></i>Assign Type To Ticket</button>
-                                                                <button class="btn btn-sm btn-default" type="button" data-dismiss="modal"><i class="fa fa-close push-5-r"></i>Close</button>
-                                                            </div>
-                                                        </div>
-                                                    }
-                                                </div>
+                                                            <tr>
+                                                                <td class="hidden-xs">@attachment.Description</td>
+                                                                <td class="hidden-xs">@attachment.UploadDate</td>
+                                                                <td class="hidden-xs">@attachment.User.FirstName @attachment.User.LastName</td>
+                                                                <td><a download href="@MiscHelpers.GetBaseUrl()/@attachment.FilePath"><h3 class="block-title">Download</h3></a> </td>
+                                                            </tr>
+                                                        }
+                                                    </tbody>
+                                                </table>
                                             </div>
-                                        }
+                                        </div>
                                     </div>
-                                    <div class="col-lg-8">
-                                        <div class="row">
-                                            @foreach (var attachment in Model.Ticket.TicketAttachments)
-                                            {
-                                                <div class="col-lg-2">
-                                                    <p>
-                                                        @attachment.Description 
-                                                    </p>
-                                                    <a download href="@MiscHelpers.GetBaseUrl()/@attachment.FilePath">Download</a>
+                                    <div class="row">
+                                        <div class="block block-bordered">
+                                            <div class="block-header bg-gray-lighter">
+                                                <h3 class="block-title">Ticket Content</h3>
+                                            </div>
+                                            <div class="block-content">
+                                                <div class="text-center" style="padding-bottom:5%">
+
+                                                    <h1>@Model.Ticket.Title</h1>
                                                 </div>
-                                            }
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-lg-12">
-                                                @Html.Raw(Model.Ticket.Summary)
+                                                <div style="padding-bottom:2%">
+                                                    @Html.Raw(Model.Ticket.Summary)
+                                                </div>
                                             </div>
                                         </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="block block-bordered">
+                                            <div class="block-header bg-gray-lighter">
+                                                <ul class="block-options">
+                                                    @if (Model.Ticket.OwnerId == User.Identity.GetUserId() || User.IsInRole("Project Manager") && Model.Ticket.Project.Users.Any(x => x.Id == User.Identity.GetUserId()) || User.IsInRole("Administrator") || Model.Ticket.AssignedUserId == User.Identity.GetUserId())
+                                                    {
+                                                        <li>
+                                                            <button type="button" data-toggle="modal" data-target="#addComment" style="color:green"><i class="fa fa-reply"></i> Reply To Ticket</button>
 
+                                                            <div class="modal fade" id="addComment" tabindex="-1" role="dialog" aria-hidden="true">
+                                                                <div class="modal-dialog modal-dialog-top">
+
+                                                                    @using (Html.BeginForm("AddComment", "Tickets", new { }, FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal push-30-t push-30", role = "form" }))
+                                                                    {
+                                                                        @Html.Hidden("ticketId", Model.Ticket.Id)
+                                                                        <div class="modal-content">
+                                                                            <div class="block block-themed block-transparent remove-margin-b">
+                                                                                <div class="block-header bg-primary-dark">
+                                                                                    <ul class="block-options">
+                                                                                        <li>
+                                                                                            <button data-dismiss="modal" type="button"><i class="si si-close"></i></button>
+                                                                                        </li>
+                                                                                    </ul>
+                                                                                    <h3 class="block-title">Add Comment To Ticket</h3>
+                                                                                </div>
+                                                                                <div class="block-content">
+                                                                                    <div class="col-12">
+                                                                                        @Html.TextArea("commentBody", new { @rows = 5, @class = "form-control", @placeholder = "Write your comment for the ticket here...." })
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="modal-footer">
+                                                                                <button class="btn btn-sm btn-success" type="submit"><i class="fa fa-upload push-5-r"></i>Submit Comment</button>
+                                                                                <button class="btn btn-sm btn-default" type="button" data-dismiss="modal"><i class="fa fa-close push-5-r"></i>Close</button>
+                                                                            </div>
+                                                                        </div>
+                                                                    }
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    }
+                                                </ul>
+
+
+                                                <h3 class="block-title">Ticket Comments</h3>
+                                            </div>
+                                            <div class="block-content">
+                                                @if (Model.Ticket.TicketComments.Any())
+                                                {<table class="table table-striped table-borderless">
+                                                        <tbody>
+                                                            @foreach (var comment in Model.Ticket.TicketComments)
+                                                            {
+
+                                                                <tr>
+                                                                    <td class="hidden-xs"></td>
+                                                                    <td class="font-s13 text-muted">
+                                                                        @comment.Owner.FirstName @comment.Owner.LastName on @comment.CreatedDate
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td class="text-center hidden-xs" style="width: 140px;">
+                                                                        <div class="push-10">
+                                                                            <img class="img-avatar" src="~/Images/avatars/avatar4.jpg" alt="">
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        @comment.Body
+                                                                    </td>
+                                                                </tr>
+                                                            }
+                                                        </tbody>
+                                                    </table>
+                                                }
+                                                else
+                                                {
+                                                    <div class="text-capitalize text-center" style="padding-bottom:2%">
+                                                        NO COMMENTS HAVE BEEN MADE!
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -288,5 +477,14 @@
                 </div>
             </div>
         </div>
-        <!-- END Page Content -->
-    </main>
+    </div>
+    <!-- END Page Content -->
+</main>
+@section scripts{
+    <script>
+
+        $(document).ready(function () {
+            $('#userManagmentTable').DataTable();
+        });
+    </script>
+}

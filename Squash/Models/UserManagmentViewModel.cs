@@ -13,5 +13,6 @@ namespace Squash.Models
         public string Role { get; set; }
         public ICollection<Project> ProjectsIn { get; set; }
         public ICollection<Project> ProjectsOut { get; set; }
+        public ICollection<Ticket> TicketsIn { get; set; }
     }
 }

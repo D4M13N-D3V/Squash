@@ -178,6 +178,7 @@
     </Compile>
     <Compile Include="Helpers\MiscHelpers.cs" />
     <Compile Include="Helpers\RoleHelpers.cs" />
+    <Compile Include="Helpers\TicketHistoryHelpers.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\DashboardViewModel.cs" />

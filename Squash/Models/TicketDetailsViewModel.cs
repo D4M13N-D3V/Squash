@@ -11,6 +11,7 @@ namespace Squash.Models
         public IEnumerable<Priority> Priorities { get; set; }
         public IEnumerable<Status> Statuses { get; set; }
         public IEnumerable<Type> Types { get; set; }
+        public IEnumerable<TicketHistory> History { get; set; }
         public Ticket Ticket { get; set; }
         public ApplicationUser AssignedUser { get; set;}
     }
