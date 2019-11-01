@@ -474,6 +474,13 @@ namespace Squash.Controllers
 
             base.Dispose(disposing);
         }
+        
+        public void RemoveNotification(int notificationId)
+        {
+            Notification notification = db.Notifications.Find(notificationId);
+            db.Notifications.Remove(notification);
+            db.SaveChanges();
+        }
 
         #region Helpers
         // Used for XSRF protection when adding external logins

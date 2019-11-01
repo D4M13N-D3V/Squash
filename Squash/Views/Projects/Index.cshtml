@@ -68,9 +68,9 @@
                                                             <i class="si si-trash text-danger pull-right"></i>
                                                             Delete Project
                                                         </a>
-                                                        @using (Html.BeginForm("Delete", "Projects", null, FormMethod.Post, new { id = "deleteForm-"+project.Id }))
+                                                        @using (Html.BeginForm("Delete", "Projects", null, FormMethod.Post, new { id = "deleteForm-" + project.Id }))
                                                         {
-                                                            @Html.Hidden("id",project.Id)
+                                                            @Html.Hidden("id", project.Id)
                                                             @Html.AntiForgeryToken();
                                                         }
                                                     </li>
@@ -150,32 +150,32 @@
                                                                     @foreach (var user in project.UsersInProject)
                                                                     {
 
-                                                                    <tr>
-                                                                        <td class="font-w600">@user.FirstName @user.LastName</td>
-                                                                        <td class="hidden-xs">@user.Email</td>
-                                                                        <td class="hidden-xs">@user.AssignedTickets.Count</td>
-                                                                        <td class="hidden-xs">@user.Projects.Count</td>
-                                                                        <td class="hidden-xs">
-                                                                            @switch (user.Role)
-                                                                            {
-                                                                                case "Administrator":
-                                                                                    <span class="label label-danger">Administrator</span>
-                                                                                    break;
-                                                                                case "Project Manager":
-                                                                                    <span class="label label-warning">Project Manager</span>
-                                                                                    break;
-                                                                                case "Developer":
-                                                                                    <span class="label label-success">Developer</span>
-                                                                                    break;
-                                                                                case "Submitter":
-                                                                                    <span class="label label-primary">Submitter</span>
-                                                                                    break;
-                                                                                default:
-                                                                                    <span class="label label-info">UNKNOWN</span>
-                                                                                    break;
-                                                                            }
-                                                                        </td>
-                                                                    </tr>
+                                                                        <tr>
+                                                                            <td class="font-w600">@user.FirstName @user.LastName</td>
+                                                                            <td class="hidden-xs">@user.Email</td>
+                                                                            <td class="hidden-xs">@user.AssignedTickets.Count</td>
+                                                                            <td class="hidden-xs">@user.Projects.Count</td>
+                                                                            <td class="hidden-xs">
+                                                                                @switch (user.Role)
+                                                                                {
+                                                                                    case "Administrator":
+                                                                                        <span class="label label-danger">Administrator</span>
+                                                                                        break;
+                                                                                    case "Project Manager":
+                                                                                        <span class="label label-warning">Project Manager</span>
+                                                                                        break;
+                                                                                    case "Developer":
+                                                                                        <span class="label label-success">Developer</span>
+                                                                                        break;
+                                                                                    case "Submitter":
+                                                                                        <span class="label label-primary">Submitter</span>
+                                                                                        break;
+                                                                                    default:
+                                                                                        <span class="label label-info">UNKNOWN</span>
+                                                                                        break;
+                                                                                }
+                                                                            </td>
+                                                                        </tr>
                                                                     }
                                                                 </tbody>
                                                             </table>
@@ -197,7 +197,7 @@
                                                 <div class="modal-content">
                                                     <div class="block">
                                                         <div class="block-content">
-                                                            <table class="table table-striped ticketViewTable" id="userManagmentTable">
+                                                            <table class="table hoverTable hoverTable table-striped ticketViewTable" id="userManagmentTable">
                                                                 <thead>
                                                                     <tr>
                                                                         <th>Title</th>
@@ -255,15 +255,15 @@
                                                                                 }
                                                                             </td>
                                                                             <td class="hidden-xs"><span class="label label-info">@ticket.Type.Name</span></td>
-                                                                            
-                                                                                @if (ticket.AssignedUser == null)
-                                                                                {
-                                                                                    <td>Unassigned</td>
-                                                                                }
-                                                                                else
-                                                                                {
-                                                                                    <td>@ticket.AssignedUser.FirstName @ticket.AssignedUser.LastName</td>
-                                                                                }
+
+                                                                            @if (ticket.AssignedUser == null)
+                                                                            {
+                                                                                <td>Unassigned</td>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <td>@ticket.AssignedUser.FirstName @ticket.AssignedUser.LastName</td>
+                                                                            }
                                                                         </tr>
                                                                     }
                                                                 </tbody>
@@ -386,3 +386,5 @@
         });
     </script>
 }
+
+

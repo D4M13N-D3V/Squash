@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using Squash.Models;
 using Microsoft.AspNet.Identity;
 using System.IO;
+using Squash.Extensions;
 
 namespace Squash.Controllers
 {
@@ -66,7 +67,7 @@ namespace Squash.Controllers
 
         public ActionResult AddComment(int ticketId, string commentBody)
         {
-            if (commentBody.Length > 5)
+            if (commentBody.Length > 0)
             {
                 var ticket = db.Tickets.Find(ticketId);
                 var newComment = db.TicketComment.Add(new TicketComment()
@@ -77,6 +78,8 @@ namespace Squash.Controllers
                     CreatedDate = DateTime.Now
                 });
                 db.SaveChanges();
+
+                Helpers.NotificationHelpers.SendTicketNotification(ticket.Id, "Ticket '" + ticket.Title + "' has a new comment!", "Ticket has a new comment posted by " + User.Identity.GetUserFirstName() + " " + User.Identity.GetUserLastName(), db.Users.Find(User.Identity.GetUserId()));
             }
             return RedirectToAction("Details", "Tickets", new { id = ticketId });
 
@@ -100,6 +103,8 @@ namespace Squash.Controllers
                 }); ;
                 var newAttachment = db.TicketAttachments.Add(attachment);
                 ticket.TicketAttachments.Add(newAttachment);
+
+                Helpers.NotificationHelpers.SendTicketNotification(ticket.Id, "Ticket '" + ticket.Title + "' has a new attachment!", "Ticket has a new attachment uploaded by " + User.Identity.GetUserFirstName() + " " + User.Identity.GetUserLastName(), db.Users.Find(User.Identity.GetUserId()));
             }
             db.SaveChanges();
             return RedirectToAction("Details", "Tickets", new { id = ticketId });
@@ -143,6 +148,7 @@ namespace Squash.Controllers
                     newticket.TicketAttachments.Add(newAttachment);
                 }
                 db.SaveChanges();
+                Helpers.NotificationHelpers.SendProjectNotification(projectId, "Ticket Submitted On " + db.Projects.Find(projectId).Name, "New ticket submitted by " + User.Identity.GetUserFirstName() + " " + User.Identity.GetUserLastName(), db.Users.Find(User.Identity.GetUserId()));
                 return RedirectToAction("Index","Home");
             }
             return View();
@@ -160,6 +166,8 @@ namespace Squash.Controllers
             ticket.PriorityId = priorityId;
             db.Entry(ticket).State = EntityState.Modified;
             db.SaveChanges();
+
+            Helpers.NotificationHelpers.SendTicketNotification(ticket.Id, "Ticket Priority Updated On '" + ticket.Title +"'", "Priority updated to " + db.Tickets.Find(ticketId).Priority.Name + "  by " + ticket.Owner.FirstName + " " + ticket.Owner.LastName, db.Users.Find(User.Identity.GetUserId()));
             Helpers.TicketHistoryHelpers.AddHistory(User.Identity.GetUserId(), ticketId, "Priority", oldPriority, db.Tickets.Find(ticketId).Priority.Name);
             return RedirectToAction("Details", "Tickets", new { id=ticketId });
         }
@@ -176,6 +184,7 @@ namespace Squash.Controllers
             ticket.StatusId = statusId;
             db.Entry(ticket).State = EntityState.Modified;
             db.SaveChanges();
+            Helpers.NotificationHelpers.SendTicketNotification(ticket.Id, "Ticket Status Updated On '" + ticket.Title + "'", "Status updated to " + db.Tickets.Find(ticketId).Status.Name + "  by " + ticket.Owner.FirstName + " " + ticket.Owner.LastName, db.Users.Find(User.Identity.GetUserId()));
             Helpers.TicketHistoryHelpers.AddHistory(User.Identity.GetUserId(), ticketId, "Status", oldStatus, db.Tickets.Find(ticketId).Status.Name);
             return RedirectToAction("Details", "Tickets", new { id = ticketId });
         }
@@ -192,6 +201,7 @@ namespace Squash.Controllers
             ticket.TypeId = typeId;
             db.Entry(ticket).State = EntityState.Modified;
             db.SaveChanges();
+            Helpers.NotificationHelpers.SendTicketNotification(ticket.Id, "Ticket Type Updated On '" + ticket.Title + "'", "Type updated to "+ db.Tickets.Find(ticketId).Type.Name + " by " + ticket.Owner.FirstName + " " + ticket.Owner.LastName, db.Users.Find(User.Identity.GetUserId()));
             Helpers.TicketHistoryHelpers.AddHistory(User.Identity.GetUserId(), ticketId, "Type", oldType, db.Tickets.Find(ticketId).Type.Name);
             return RedirectToAction("Details", "Tickets", new {id=ticketId });
         }
@@ -213,6 +223,7 @@ namespace Squash.Controllers
             ticket.StatusId = db.Statuses.FirstOrDefault(x=>x.Name=="Assigned").Id;
             db.Entry(ticket).State = EntityState.Modified;
             db.SaveChanges();
+            Helpers.NotificationHelpers.SendTicketNotification(ticket.Id, "Ticket '" + ticket.Title + "' has been assigned!", "Ticket has been assigned to " + db.Tickets.Find(ticketId).AssignedUser.FirstName + " "+db.Tickets.Find(ticketId).AssignedUser.LastName +" by " + User.Identity.GetUserFirstName() + " " + User.Identity.GetUserLastName(), db.Users.Find(User.Identity.GetUserId()));
             Helpers.TicketHistoryHelpers.AddHistory(User.Identity.GetUserId(), ticketId, "Assigned User", oldAssignedUser, db.Users.Find(userId).FirstName +" "+ db.Users.Find(userId).LastName);
             return RedirectToAction("Details", "Tickets", new { id = ticketId });
         }

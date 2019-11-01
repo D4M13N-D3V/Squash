@@ -20,6 +20,10 @@ namespace Squash.Controllers
         public ActionResult AddToProject(string userId, int projectId)
         {
             Helpers.ProjectHelpers.AddUserToProject(userId, projectId);
+            var projectName = db.Projects.Find(projectId).Name;
+            var user = db.Users.Find(userId);
+            var fullName = user.FirstName + " " + user.LastName;
+            Helpers.NotificationHelpers.SendProjectNotification(projectId, "Project Member Added!", "'" + fullName + "' was added to '"+projectName+"'!", db.Users.Find(User.Identity.GetUserId()));
             return RedirectToAction("Details", "Projects", new { id = projectId });
         }
         [HttpPost]
@@ -27,6 +31,10 @@ namespace Squash.Controllers
         public ActionResult RemoveFromProject(string userId, int projectId)
         {
             Helpers.ProjectHelpers.RemoveUserFromProject(userId, projectId);
+            var projectName = db.Projects.Find(projectId).Name;
+            var user = db.Users.Find(userId);
+            var fullName = user.FirstName + " " + user.LastName;
+            Helpers.NotificationHelpers.SendProjectNotification(projectId, "Project Member Removed!", "'" + fullName + "' was removed from '" + projectName + "'!", db.Users.Find(User.Identity.GetUserId()));
             return RedirectToAction("Details", "Projects", new { id = projectId });
         }
 
@@ -88,8 +96,9 @@ namespace Squash.Controllers
             {
                 project.CreatedDate = DateTime.Now;
                 project.Users.Add(db.Users.Find(User.Identity.GetUserId()));
-                db.Projects.Add(project);
+                var newProject = db.Projects.Add(project);
                 db.SaveChanges();
+                Helpers.NotificationHelpers.SendProjectNotification(newProject.Id, "Project Created!", "A project named '"+newProject.Name+"' was created!", db.Users.Find(User.Identity.GetUserId()));
                 return RedirectToAction("Index");
             }
 
@@ -124,6 +133,7 @@ namespace Squash.Controllers
                 project.UpdatedDate = DateTime.Now;
                 db.Entry(project).State = EntityState.Modified;
                 db.SaveChanges();
+                Helpers.NotificationHelpers.SendProjectNotification(project.Id, "Project Edited!", "'" + project.Name + "' was edited!", db.Users.Find(User.Identity.GetUserId()));
                 return RedirectToAction("Index");
             }
             return View(project);
@@ -137,6 +147,10 @@ namespace Squash.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Project project = db.Projects.Find(id);
+            foreach(var notification in db.Notifications.Where(x => x.ProjectId == project.Id))
+            {
+                db.Notifications.Remove(notification);
+            }
             db.Projects.Remove(project);
             db.SaveChanges();
             return RedirectToAction("Index");

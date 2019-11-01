@@ -39,13 +39,13 @@
                                                                 @foreach (var history in Model.History)
                                                                 {
 
-                                                                <tr>
-                                                                    <td class="font-w600">@history.Updater.FirstName @history.Updater.LastName</td>
-                                                                    <td>@history.Property</td>
-                                                                    <td>@history.OldValue</td>
-                                                                    <td>@history.NewValue</td>
-                                                                    <td class="hidden-xs">@history.UpdateDate</td>
-                                                                </tr>
+                                                                    <tr>
+                                                                        <td class="font-w600">@history.Updater.FirstName @history.Updater.LastName</td>
+                                                                        <td>@history.Property</td>
+                                                                        <td>@history.OldValue</td>
+                                                                        <td>@history.NewValue</td>
+                                                                        <td class="hidden-xs">@history.UpdateDate</td>
+                                                                    </tr>
                                                                 }
                                                             </tbody>
                                                         </table>
@@ -99,20 +99,25 @@
                                 }
                                 @if (User.IsInRole("Project Manager") && Model.Ticket.Project.Users.Any(x => x.Id == User.Identity.GetUserId()) || User.IsInRole("Administrator") || Model.Ticket.AssignedUserId == User.Identity.GetUserId())
                                 {
-                                    <li>
-                                        <button class="btn" style="color:red !important; width:65%" data-toggle="modal" data-target="#assignDeveloper">Assign Developer</button>
-                                    </li>
-                                    <li>
-                                        <button class="btn" style="color:red !important; width:65%" data-toggle="modal" data-target="#assignPriority">Assign Priority</button>
-                                    </li>
-                                    <li>
-                                        <button class="btn" style="color:red !important; width:65%" data-toggle="modal" data-target="#assignStatus">Assign Status</button>
-                                    </li>
-                                    <li>
-                                        <button class="btn" style="color:red !important; width:65%" data-toggle="modal" data-target="#assignType">Assign Type</button>
-                                    </li>
-                                    <li>
-                                        @Html.ActionLink("Close Ticket", "CloseTicket", "Tickets", new { ticketId = Model.Ticket.Id }, new { @class = "btn", @style = "color:#d10000    !important;" })
+                                    <li class="dropdown open">
+                                        <button type="button" style="color:red !important" data-toggle="dropdown" aria-expanded="true">Ticket Management Tools<span class="caret"></span></button>
+                                        <ul class="dropdown-menu dropdown-menu-right">
+                                            <li>
+                                                <button class="btn btn-danger" style="width:100%" data-toggle="modal" data-target="#assignDeveloper">Assign Developer</button>
+                                            </li>
+                                            <li>
+                                                <button class="btn btn-danger" style= "width:100%" data-toggle="modal" data-target="#assignPriority">Assign Priority</button>
+                                            </li>
+                                            <li>
+                                                <button class="btn btn-danger" style= "width:100%" data-toggle="modal" data-target="#assignStatus">Assign Status</button>
+                                            </li>
+                                            <li>
+                                                <button class="btn btn-danger" style= "width:100%" data-toggle="modal" data-target="#assignType">Assign Type</button>
+                                            </li>
+                                            <li>
+                                                @Html.ActionLink("Close Ticket", "CloseTicket", "Tickets", new { ticketId = Model.Ticket.Id }, new { @class = "btn", @style = "color:#d10000    !important;" })
+                                            </li>
+                                        </ul>
                                     </li>
                                 }
                             </ul>
@@ -125,7 +130,7 @@
                                             <a class="block block-rounded block-link-hover3" href="javascript:void(0)">
                                                 <div class="block-content block-content-full clearfix">
                                                     <div class="pull-right">
-                                                        <img class="img-avatar" src="~/Images/avatars/avatar1.jpg" alt="">
+                                                        <img class="img-avatar" src="@string.Format("https://ui-avatars.com/api/?name={0}+{1}",@Model.Ticket.Owner.FirstName, @Model.Ticket.Owner.LastName )" alt="">
                                                     </div>
                                                     <div class="pull-left push-10-t">
                                                         <div class="font-w600 push-5">@Model.Ticket.Owner.FirstName @Model.Ticket.Owner.LastName</div>
@@ -140,7 +145,14 @@
                                     <a class="block block-rounded block-link-hover3" href="javascript:void(0)">
                                         <div class="block-content block-content-full clearfix">
                                             <div class="pull-right">
-                                                <img class="img-avatar" src="~/Images/avatars/avatar1.jpg" alt="">
+                                                @if (Model.Ticket.AssignedUser != null)
+                                                {
+                                                    <img class="img-avatar" src="@string.Format("https://ui-avatars.com/api/?name={0}+{1}",@Model.Ticket.AssignedUser.FirstName, @Model.Ticket.AssignedUser.LastName )" alt="">
+                                                }
+                                                else
+                                                {
+                                                    <img class="img-avatar" src="~/Images/avatars/avatar1.jpg" alt="">
+                                                }
                                             </div>
                                             <div class="pull-left push-10-t">
                                                 @if (Model.Ticket.AssignedUser == null)

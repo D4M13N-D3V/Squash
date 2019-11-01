@@ -22,6 +22,7 @@
     <link rel="stylesheet" id="css-main" href="~/Content/oneui.css">
     <link href="~/Content/jquery.dataTables.min.css" rel="stylesheet" />
     <link href="~/Content/custom.css" rel="stylesheet" />
+    <script src="~/Scripts/core/jquery.min.js"></script>
     <!-- You can include a specific file from css/themes/ folder to alter the default color theme of the template. eg: -->
     <!-- <link rel="stylesheet" id="css-theme" href="~/Content/themes/flat.min.css"> -->
     <!-- END Stylesheets -->
@@ -58,8 +59,8 @@
                         <i class="fa fa-times"></i>
                     </button>
                     <span>
-                        <img class="img-avatar img-avatar32" src="~/Images/avatars/avatar10.jpg" alt="">
-                        <span class="font-w600 push-10-l">Eugene Burke</span>
+                        <img class="img-avatar img-avatar32" src="@string.Format("https://ui-avatars.com/api/?name={0}+{1}",User.Identity.GetUserFirstName(),User.Identity.GetUserLastName())" alt="">
+                        <span class="font-w600 push-10-l">@User.Identity.GetUserFirstName() @User.Identity.GetUserLastName()    </span>
                     </span>
                 </div>
                 <!-- END Side Header -->
@@ -69,301 +70,81 @@
                     <div class="block pull-r-l border-t">
                         <ul class="nav nav-tabs nav-tabs-alt nav-justified" data-toggle="tabs">
                             <li class="active">
-                                <a href="#tabs-side-overlay-overview"><i class="fa fa-fw fa-coffee"></i> Overview</a>
+                                <a href="#tickets-notifications"><i class="fa fa-files-o push-5-r"></i>Tickets</a>
                             </li>
                             <li>
-                                <a href="#tabs-side-overlay-sales"><i class="fa fa-fw fa-line-chart"></i> Sales</a>
+                                <a href="#projects-notifications"><i class="fa fa-folder push-5-r"></i>Projects</a>
                             </li>
                         </ul>
+                        <script>
+                            function removeElement(elementId) {
+    // Removes an element from the document
+    var element = document.getElementById(elementId);
+    element.parentNode.removeChild(element);
+}
+                        </script>
                         <div class="block-content tab-content">
-                            <!-- Overview Tab -->
-                            <div class="tab-pane fade fade-right in active" id="tabs-side-overlay-overview">
-                                <!-- Activity -->
-                                <div class="block pull-r-l">
-                                    <div class="block-header bg-gray-lighter">
-                                        <ul class="block-options">
-                                            <li>
-                                                <button type="button" data-toggle="block-option" data-action="refresh_toggle" data-action-mode="demo"><i class="si si-refresh"></i></button>
-                                            </li>
-                                            <li>
-                                                <button type="button" data-toggle="block-option" data-action="content_toggle"></button>
-                                            </li>
-                                        </ul>
-                                        <h3 class="block-title">Recent Activity</h3>
+                            <div class="tab-pane fade fade-right in active" id="tickets-notifications">
+                                @foreach (var ticketNotification in User.Identity.GetNotifications().Where(x => x.Ticket != null))
+                                {
+                                    <div class="block block-rounded block-themed" style="cursor:pointer" id="notification-@ticketNotification.Id">
+                                        <div class="block-header bg-amethyst border-black-op">
+                                            <ul class="block-options">
+                                                <li>
+                                                    <a>Clear</a>
+                                                </li>
+                                            </ul>
+                                            <h3 class="block-title">@ticketNotification.Title</h3>
+                                        </div>
+                                        <div class="block-content border-black-op">
+                                            <p>@ticketNotification.Body</p>
+                                        </div>
                                     </div>
-                                    <div class="block-content">
-                                        <!-- Activity List -->
-                                        <ul class="list list-activity">
-                                            <li>
-                                                <i class="si si-wallet text-success"></i>
-                                                <div class="font-w600">New sale ($15)</div>
-                                                <div><a href="javascript:void(0)">Admin Template</a></div>
-                                                <div><small class="text-muted">3 min ago</small></div>
-                                            </li>
-                                            <li>
-                                                <i class="si si-pencil text-info"></i>
-                                                <div class="font-w600">You edited the file</div>
-                                                <div><a href="javascript:void(0)"><i class="fa fa-file-text-o"></i> Documentation.doc</a></div>
-                                                <div><small class="text-muted">15 min ago</small></div>
-                                            </li>
-                                            <li>
-                                                <i class="si si-close text-danger"></i>
-                                                <div class="font-w600">Project deleted</div>
-                                                <div><a href="javascript:void(0)">Line Icon Set</a></div>
-                                                <div><small class="text-muted">4 hours ago</small></div>
-                                            </li>
-                                        </ul>
-                                        <!-- END Activity List -->
-                                    </div>
-                                </div>
-                                <!-- END Activity -->
-                                <!-- Online Friends -->
-                                <div class="block pull-r-l">
-                                    <div class="block-header bg-gray-lighter">
-                                        <ul class="block-options">
-                                            <li>
-                                                <button type="button" data-toggle="block-option" data-action="refresh_toggle" data-action-mode="demo"><i class="si si-refresh"></i></button>
-                                            </li>
-                                            <li>
-                                                <button type="button" data-toggle="block-option" data-action="content_toggle"></button>
-                                            </li>
-                                        </ul>
-                                        <h3 class="block-title">Online Friends</h3>
-                                    </div>
-                                    <div class="block-content block-content-full">
-                                        <!-- Users Navigation -->
-                                        <ul class="nav-users remove-margin-b">
-                                            <li>
-                                                <a href="base_pages_profile.html">
-                                                    <img class="img-avatar" src="~/Images/avatars/avatar2.jpg" alt="">
-                                                    <i class="fa fa-circle text-success"></i> Emma Cooper
-                                                    <div class="font-w400 text-muted"><small>Copywriter</small></div>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="base_pages_profile.html">
-                                                    <img class="img-avatar" src="~/Images/avatars/avatar15.jpg" alt="">
-                                                    <i class="fa fa-circle text-success"></i> Ronald George
-                                                    <div class="font-w400 text-muted"><small>Web Developer</small></div>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="base_pages_profile.html">
-                                                    <img class="img-avatar" src="~/Images/avatars/avatar7.jpg" alt="">
-                                                    <i class="fa fa-circle text-success"></i> Evelyn Willis
-                                                    <div class="font-w400 text-muted"><small>Web Designer</small></div>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="base_pages_profile.html">
-                                                    <img class="img-avatar" src="~/Images/avatars/avatar3.jpg" alt="">
-                                                    <i class="fa fa-circle text-warning"></i> Megan Dean
-                                                    <div class="font-w400 text-muted"><small>Photographer</small></div>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="base_pages_profile.html">
-                                                    <img class="img-avatar" src="~/Images/avatars/avatar10.jpg" alt="">
-                                                    <i class="fa fa-circle text-warning"></i> Bruce Edwards
-                                                    <div class="font-w400 text-muted"><small>Graphic Designer</small></div>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                        <!-- END Users Navigation -->
-                                    </div>
-                                </div>
-                                <!-- END Online Friends -->
-                                <!-- Quick Settings -->
-                                <div class="block pull-r-l">
-                                    <div class="block-header bg-gray-lighter">
-                                        <ul class="block-options">
-                                            <li>
-                                                <button type="button" data-toggle="block-option" data-action="content_toggle"></button>
-                                            </li>
-                                        </ul>
-                                        <h3 class="block-title">Quick Settings</h3>
-                                    </div>
-                                    <div class="block-content">
-                                        <!-- Quick Settings Form -->
-                                        <form class="form-bordered" action="base_pages_dashboard.html" method="post" onsubmit="return false;">
-                                            <div class="form-group">
-                                                <div class="row">
-                                                    <div class="col-xs-8">
-                                                        <div class="font-s13 font-w600">Online Status</div>
-                                                        <div class="font-s13 font-w400 text-muted">Show your status to all</div>
-                                                    </div>
-                                                    <div class="col-xs-4 text-right">
-                                                        <label class="css-input switch switch-sm switch-primary push-10-t">
-                                                            <input type="checkbox"><span></span>
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="row">
-                                                    <div class="col-xs-8">
-                                                        <div class="font-s13 font-w600">Auto Updates</div>
-                                                        <div class="font-s13 font-w400 text-muted">Keep up to date</div>
-                                                    </div>
-                                                    <div class="col-xs-4 text-right">
-                                                        <label class="css-input switch switch-sm switch-primary push-10-t">
-                                                            <input type="checkbox"><span></span>
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="row">
-                                                    <div class="col-xs-8">
-                                                        <div class="font-s13 font-w600">Notifications</div>
-                                                        <div class="font-s13 font-w400 text-muted">Do you need them?</div>
-                                                    </div>
-                                                    <div class="col-xs-4 text-right">
-                                                        <label class="css-input switch switch-sm switch-primary push-10-t">
-                                                            <input type="checkbox" checked><span></span>
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="row">
-                                                    <div class="col-xs-8">
-                                                        <div class="font-s13 font-w600">API Access</div>
-                                                        <div class="font-s13 font-w400 text-muted">Enable/Disable access</div>
-                                                    </div>
-                                                    <div class="col-xs-4 text-right">
-                                                        <label class="css-input switch switch-sm switch-primary push-10-t">
-                                                            <input type="checkbox" checked><span></span>
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </form>
-                                        <!-- END Quick Settings Form -->
-                                    </div>
-                                </div>
-                                <!-- END Quick Settings -->
+                                    <script>
+                                        document.getElementById("notification-@ticketNotification.Id").addEventListener("click", function () {
+                                            removeElement("notification-@ticketNotification.Id")
+                                            $.ajax({
+                                                url:"@Url.Action("RemoveNotification","Account",new { notificationId=ticketNotification.Id})",
+                                                success: function () {
+                                                }
+                                            })
+                                        })
+                                    </script>
+                                }
                             </div>
-                            <!-- END Overview Tab -->
-                            <!-- Sales Tab -->
-                            <div class="tab-pane fade fade-left" id="tabs-side-overlay-sales">
-                                <div class="block pull-r-l">
-                                    <!-- Stats -->
-                                    <div class="block-content pull-t">
-                                        <div class="row items-push">
-                                            <div class="col-xs-6">
-                                                <div class="font-w700 text-gray-darker text-uppercase">Sales</div>
-                                                <a class="h3 font-w300 text-primary" href="javascript:void(0)">22030</a>
-                                            </div>
-                                            <div class="col-xs-6">
-                                                <div class="font-w700 text-gray-darker text-uppercase">Balance</div>
-                                                <a class="h3 font-w300 text-primary" href="javascript:void(0)">$ 4.589,00</a>
-                                            </div>
+                            <div class="tab-pane fade fade-left" id="projects-notifications">
+
+                                @foreach (var projectNotification in User.Identity.GetNotifications().Where(x => x.Project != null))
+                                {
+                                    <div class="block block-rounded block-themed" id="notification-@projectNotification.Id" style="cursor:pointer">
+                                        <div class="block-header bg-city border-black-op">
+                                            <ul class="block-options">
+                                                <li>
+                                                    <a>Clear</a>
+                                                </li>
+                                            </ul>
+                                            <h3 class="block-title">@projectNotification.Title</h3>
+                                        </div>
+                                        <div class="block-content border-black-op">
+                                            <p>@projectNotification.Body</p>
                                         </div>
                                     </div>
-                                    <!-- END Stats -->
-                                    <!-- Today -->
-                                    <div class="block-content block-content-full block-content-mini bg-gray-lighter">
-                                        <div class="row">
-                                            <div class="col-xs-6">
-                                                <span class="font-w600 font-s13 text-gray-darker text-uppercase">Today</span>
-                                            </div>
-                                            <div class="col-xs-6 text-right">
-                                                <span class="font-s13 text-muted">$996</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="block-content">
-                                        <ul class="list list-activity pull-r-l">
-                                            <li>
-                                                <i class="fa fa-circle text-success"></i>
-                                                <div class="font-w600">New sale! + $249</div>
-                                                <div><small class="text-muted">3 min ago</small></div>
-                                            </li>
-                                            <li>
-                                                <i class="fa fa-circle text-success"></i>
-                                                <div class="font-w600">New sale! + $129</div>
-                                                <div><small class="text-muted">50 min ago</small></div>
-                                            </li>
-                                            <li>
-                                                <i class="fa fa-circle text-success"></i>
-                                                <div class="font-w600">New sale! + $119</div>
-                                                <div><small class="text-muted">2 hours ago</small></div>
-                                            </li>
-                                            <li>
-                                                <i class="fa fa-circle text-success"></i>
-                                                <div class="font-w600">New sale! + $499</div>
-                                                <div><small class="text-muted">3 hours ago</small></div>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <!-- END Today -->
-                                    <!-- Yesterday -->
-                                    <div class="block-content block-content-full block-content-mini bg-gray-lighter">
-                                        <div class="row">
-                                            <div class="col-xs-6">
-                                                <span class="font-w600 font-s13 text-gray-darker text-uppercase">Yesterday</span>
-                                            </div>
-                                            <div class="col-xs-6 text-right">
-                                                <span class="font-s13 text-muted">$765</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="block-content">
-                                        <ul class="list list-activity pull-r-l">
-                                            <li>
-                                                <i class="fa fa-circle text-success"></i>
-                                                <div class="font-w600">New sale! + $249</div>
-                                                <div><small class="text-muted">26 hours ago</small></div>
-                                            </li>
-                                            <li>
-                                                <i class="fa fa-circle text-danger"></i>
-                                                <div class="font-w600">Product Purchase - $50</div>
-                                                <div><small class="text-muted">28 hours ago</small></div>
-                                            </li>
-                                            <li>
-                                                <i class="fa fa-circle text-success"></i>
-                                                <div class="font-w600">New sale! + $119</div>
-                                                <div><small class="text-muted">29 hours ago</small></div>
-                                            </li>
-                                            <li>
-                                                <i class="fa fa-circle text-danger"></i>
-                                                <div class="font-w600">Paypal Withdrawal - $300</div>
-                                                <div><small class="text-muted">37 hours ago</small></div>
-                                            </li>
-                                            <li>
-                                                <i class="fa fa-circle text-success"></i>
-                                                <div class="font-w600">New sale! + $129</div>
-                                                <div><small class="text-muted">39 hours ago</small></div>
-                                            </li>
-                                            <li>
-                                                <i class="fa fa-circle text-success"></i>
-                                                <div class="font-w600">New sale! + $119</div>
-                                                <div><small class="text-muted">45 hours ago</small></div>
-                                            </li>
-                                            <li>
-                                                <i class="fa fa-circle text-success"></i>
-                                                <div class="font-w600">New sale! + $499</div>
-                                                <div><small class="text-muted">46 hours ago</small></div>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <!-- END Yesterday -->
-                                    <!-- More -->
-                                    <div class="text-center">
-                                        <small><a href="javascript:void(0)">Load More..</a></small>
-                                    </div>
-                                    <!-- END More -->
-                                </div>
+                                    <script>
+                                        document.getElementById("notification-@projectNotification.Id").addEventListener("click", function () {
+                                            removeElement("notification-@projectNotification.Id")
+                                            $.ajax({
+                                                url:"@Url.Action("RemoveNotification","Account",new { notificationId=projectNotification.Id})",
+                                                success: function () {
+                                                }
+                                            })
+                                        })
+                                    </script>
+                                }
                             </div>
-                            <!-- END Sales Tab -->
                         </div>
                     </div>
-                    <!-- END Side Overlay Tabs -->
                 </div>
-                <!-- END Side Content -->
             </div>
-            <!-- END Side Overlay Scroll Container -->
         </aside>
         <!-- END Side Overlay -->
         <!-- Sidebar -->
@@ -448,7 +229,7 @@
                 <li>
                     <div class="btn-group">
                         <button class="btn btn-default btn-image dropdown-toggle" data-toggle="dropdown" type="button">
-                            <img src="~/Images/avatars/avatar10.jpg" alt="Avatar">
+                            <img src="@string.Format("https://ui-avatars.com/api/?name={0}+{1}",User.Identity.GetUserFirstName(),User.Identity.GetUserLastName())" alt="Avatar">
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-right">
@@ -528,7 +309,6 @@
         <!-- END Footer -->
     </div>
 
-    <script src="~/Scripts/core/jquery.min.js"></script>
     <script src="~/Scripts/core/bootstrap.min.js"></script>
     <script src="~/Scripts/core/jquery.slimscroll.min.js"></script>
     <script src="~/Scripts/core/jquery.scrollLock.min.js"></script>
@@ -540,6 +320,7 @@
     <script src="~/Scripts/base_tables_datatables.js"></script>
     <script src="~/Scripts/app.js"></script>
     <script src="https://kit.fontawesome.com/0e4ebe25a9.js" crossorigin="anonymous"></script>
+    
     @RenderSection("scripts", required: false)
 </body>
 </html>

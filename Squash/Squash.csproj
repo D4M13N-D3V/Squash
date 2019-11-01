@@ -46,6 +46,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -173,10 +174,12 @@
     <Compile Include="Controllers\ProjectsController.cs" />
     <Compile Include="Controllers\TicketsController.cs" />
     <Compile Include="Controllers\UserManagmentController.cs" />
+    <Compile Include="Extensions\IdentityExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\MiscHelpers.cs" />
+    <Compile Include="Helpers\NotificationHelpers.cs" />
     <Compile Include="Helpers\RoleHelpers.cs" />
     <Compile Include="Helpers\TicketHistoryHelpers.cs" />
     <Compile Include="Migrations\Configuration.cs" />

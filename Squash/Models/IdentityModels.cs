@@ -17,6 +17,8 @@ namespace Squash.Models
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
             var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
             // Add custom user claims here
+            userIdentity.AddClaim(new Claim("FirstName", FirstName));
+            userIdentity.AddClaim(new Claim("LastName", LastName));
             return userIdentity;
         }
 
@@ -25,10 +27,11 @@ namespace Squash.Models
             CreatedTickets = new HashSet<Ticket>();
             Projects = new HashSet<Project>();
         }
+
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Role { get; set; }    
-        public virtual ICollection<TicketNotification> Notifications { get; set; }
+        public virtual ICollection<Notification> Notifications { get; set; }
         public virtual ICollection<Ticket> AssignedTickets { get; set; }
         public virtual ICollection<Ticket> CreatedTickets { get; set; }
         public virtual ICollection<TicketComment> TicketComments { get; set; }
@@ -46,7 +49,7 @@ namespace Squash.Models
         public DbSet<Project> Projects { get; set; }
         public DbSet<Priority> Priorities { get; set; }
         public DbSet<Status> Statuses { get; set; }
-        public DbSet<TicketNotification> Notifications { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
         public DbSet<Type> Types { get; set; }
         public DbSet<TicketAttachment> TicketAttachments { get; set; }
         public DbSet<TicketComment> TicketComment { get; set; }
