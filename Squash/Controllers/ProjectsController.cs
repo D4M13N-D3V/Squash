@@ -153,7 +153,34 @@ namespace Squash.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Project project = db.Projects.Find(id);
-            foreach(var notification in db.Notifications.Where(x => x.ProjectId == project.Id))
+            foreach (var notification in db.Notifications.Where(x => x.ProjectId == project.Id).ToList())
+            {
+                db.Notifications.Remove(notification);
+            }
+            foreach (var ticket in db.Tickets.Where(x => x.ProjectId == project.Id))
+            {
+                foreach (var attachment in ticket.TicketAttachments.ToList())
+                {
+                    db.TicketAttachments.Remove(attachment);
+                }
+
+                foreach (var comment in ticket.TicketComments.ToList())
+                {
+                    db.TicketComment.Remove(comment);
+                }
+
+                foreach (var history in ticket.TicketHistorys.ToList())
+                {
+                    db.TicketHistory.Remove(history);
+                }
+                foreach(var notification in db.Notifications.Where(x => x.TicketId == ticket.Id).ToList())
+                {
+                    db.Notifications.Remove(notification);
+                }
+                db.Tickets.Remove(ticket);
+            }
+
+            foreach (var notification in db.Notifications.Where(x => x.ProjectId == project.Id).ToList())
             {
                 db.Notifications.Remove(notification);
             }
