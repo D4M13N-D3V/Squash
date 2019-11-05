@@ -22,7 +22,11 @@ namespace Squash.Controllers
             {
                 FullName = user.FirstName+" "+user.LastName,
                 AssignedProjects = user.Projects.ToList(),
-                OwnedTickets = db.Tickets.Where(x=>x.OwnerId==id).ToList()
+                OwnedTickets = db.Tickets.Where(x=>x.OwnerId==id).ToList(),
+                Statuses = db.Statuses.ToList(),
+                Priorities = db.Priorities.ToList(),
+                Types = db.Types.ToList(),
+                Projects = db.Projects.ToList()
             });
         }
 

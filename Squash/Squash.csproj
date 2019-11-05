@@ -369,6 +369,7 @@
     <Content Include="Scripts\app.js" />
     <Content Include="Scripts\base_tables_datatables.js" />
     <Content Include="Scripts\core\bootstrap.min.js" />
+    <Content Include="Scripts\core\Chart.min.js" />
     <Content Include="Scripts\core\jquery.appear.min.js" />
     <Content Include="Scripts\core\jquery.countTo.min.js" />
     <Content Include="Scripts\core\jquery.min.js" />

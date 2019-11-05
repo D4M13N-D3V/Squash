@@ -13,7 +13,7 @@ namespace Squash.Helpers
         public static void SendProjectNotification(int projectId, string title, string body, ApplicationUser sender)
         {
             var users = db.Users.Where(x => x.Projects.Any(z => projectId == z.Id)).ToList();
-            //users.Remove(sender);
+            users.Remove(sender);
 
             List<string> emails = new List<string>();
             foreach (var user in users)
@@ -41,7 +41,10 @@ namespace Squash.Helpers
         {
             var ticket = db.Tickets.Find(ticketId);
             var users = new List<ApplicationUser>();
-            users.Add(ticket.AssignedUser);
+            if (ticket.AssignedUser != null)
+            {
+                users.Add(ticket.AssignedUser);
+            }
             users.Add(ticket.Owner);
             users.Remove(sender);
             List<string> emails = new List<string>();

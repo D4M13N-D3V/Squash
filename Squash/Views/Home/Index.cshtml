@@ -11,8 +11,61 @@
     <div class="content">
         @if (User.IsInRole("Administrator"))
         {
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="block">
+                    <div class="block-header">
+                        <ul class="block-options">
+                            <li>
+                                <button type="button" data-toggle="block-option" data-action="refresh_toggle" data-action-mode="demo"><i class="si si-refresh"></i></button>
+                            </li>
+                        </ul>
+                        <h3 class="block-title">Ticket Status Statistics</h3>
+                    </div>
+                    <div class="block-content block-content-full text-center">
+                        <div class="chartjs-size-monitor" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
+                        <!-- Donut Chart Container -->
+                        <canvas id="statusChart" class="js-chartjs2-donut chartjs-render-monitor" width="558" height="279" style="display: block; width: 558px; height: 279px;"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="block">
+                    <div class="block-header">
+                        <ul class="block-options">
+                            <li>
+                                <button type="button" data-toggle="block-option" data-action="refresh_toggle" data-action-mode="demo"><i class="si si-refresh"></i></button>
+                            </li>
+                        </ul>
+                        <h3 class="block-title">Ticket Priority Statistics</h3>
+                    </div>
+                    <div class="block-content block-content-full text-center">
+                        <div class="chartjs-size-monitor" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
+                        <!-- Donut Chart Container -->
+                        <canvas id="priorityChart" class="js-chartjs2-donut chartjs-render-monitor" width="558" height="279" style="display: block; width: 558px; height: 279px;"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="block">
+                    <div class="block-header">
+                        <ul class="block-options">
+                            <li>
+                                <button type="button" data-toggle="block-option" data-action="refresh_toggle" data-action-mode="demo"><i class="si si-refresh"></i></button>
+                            </li>
+                        </ul>
+                        <h3 class="block-title">Ticket Type Statistics</h3>
+                    </div>
+                    <div class="block-content block-content-full text-center">
+                        <div class="chartjs-size-monitor" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
+                        <!-- Donut Chart Container -->
+                        <canvas id="typeChart" class="js-chartjs2-donut chartjs-render-monitor" width="558" height="279" style="display: block; width: 558px; height: 279px;"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
             <div class="row">
-                <div class="col-lg-4">
+                <div class="col-lg-8 col-lg-offset-2">
                     <div class="block">
                         <div class="block-header">
                             <ul class="block-options">
@@ -20,50 +73,12 @@
                                     <button type="button" data-toggle="block-option" data-action="refresh_toggle" data-action-mode="demo"><i class="si si-refresh"></i></button>
                                 </li>
                             </ul>
-                            <h3 class="block-title">Ticket Stats</h3>
+                            <h3 class="block-title">Ticket Priority Statistics By Project</h3>
                         </div>
                         <div class="block-content block-content-full text-center">
                             <div class="chartjs-size-monitor" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
-                            <!-- Donut Chart Container -->
-                            <canvas class="js-chartjs2-donut chartjs-render-monitor" width="558" height="279" style="display: block; width: 558px; height: 279px;"></canvas>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-8">
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <div class="block">
-                                <div class="block-header">
-                                    <ul class="block-options">
-                                        <li>
-                                            <button type="button" data-toggle="block-option" data-action="refresh_toggle" data-action-mode="demo"><i class="si si-refresh"></i></button>
-                                        </li>
-                                    </ul>
-                                    <h3 class="block-title">Ticket Stats</h3>
-                                </div>
-                                <div class="block-content block-content-full text-center">
-                                    <div class="chartjs-size-monitor" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
-                                    <!-- Donut Chart Container -->
-                                    <canvas class="js-chartjs2-donut chartjs-render-monitor" width="558" height="279" style="display: block; width: 558px; height: 279px;"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="block">
-                                <div class="block-header">
-                                    <ul class="block-options">
-                                        <li>
-                                            <button type="button" data-toggle="block-option" data-action="refresh_toggle" data-action-mode="demo"><i class="si si-refresh"></i></button>
-                                        </li>
-                                    </ul>
-                                    <h3 class="block-title">Ticket Stats</h3>
-                                </div>
-                                <div class="block-content block-content-full text-center">
-                                    <div class="chartjs-size-monitor" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
-                                    <!-- Donut Chart Container -->
-                                    <canvas class="js-chartjs2-donut chartjs-render-monitor" width="558" height="279" style="display: block; width: 558px; height: 279px;"></canvas>
-                                </div>
-                            </div>
+
+                            <canvas id="projectChart" class="js-chartjs2-bars"></canvas>
                         </div>
                     </div>
                 </div>
@@ -92,58 +107,58 @@
                                             <th style="word-wrap:break-word; width:15%">Title</th>
                                             <th class="hidden-xs" style="width:18%">Summary</th>
                                             <th style="width:15%">Priority</th>
-                                            <th style="width:15%"class="hidden-xs">Status</th>
-                                            <th style="width:12%"class="hidden-xs">Type</th>
-                                            <th style="width:15%"class="hidden-xs">Created</th>
+                                            <th style="width:15%" class="hidden-xs">Status</th>
+                                            <th style="width:12%" class="hidden-xs">Type</th>
+                                            <th style="width:15%" class="hidden-xs">Created</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach (var ticket in Model.OwnedTickets)
-                                            {
+                                        {
 
-                                                <tr style="cursor:pointer" onclick="window.location.href = '@Url.Action("Details","Tickets", new { id=ticket.Id })';" >
-                                                    <td style="word-wrap:break-word;">@ticket.Title</td>
-                                                    <td class="hidden-xs">@ticket.Summary</td>
-                                                    <td>
-                                                        @switch (ticket.Priority.Name)
-                                                        {
-                                                            case "High":
-                                                                <span class="label label-danger">High</span>
-                                                                break;
-                                                            case "Medium":
-                                                                <span class="label label-warning">Medium</span>
-                                                                break;
-                                                            case "Low":
-                                                                <span class="label label-info">Low</span>
-                                                                break;
-                                                        }
-                                                    </td>
-                                                    <td class="hidden-xs">
+                                            <tr style="cursor:pointer" onclick="window.location.href = '@Url.Action("Details","Tickets", new { id=ticket.Id })';">
+                                                <td style="word-wrap:break-word;">@ticket.Title</td>
+                                                <td class="hidden-xs">@ticket.Summary</td>
+                                                <td>
+                                                    @switch (ticket.Priority.Name)
+                                                    {
+                                                        case "High":
+                                                            <span class="label label-danger">High</span>
+                                                            break;
+                                                        case "Medium":
+                                                            <span class="label label-warning">Medium</span>
+                                                            break;
+                                                        case "Low":
+                                                            <span class="label label-info">Low</span>
+                                                            break;
+                                                    }
+                                                </td>
+                                                <td class="hidden-xs">
 
-                                                        @switch (ticket.Status.Name)
-                                                        {
-                                                            case "Created":
-                                                                <span class="label label-danger">Created</span>
-                                                                break;
-                                                            case "Assigned":
-                                                                <span class="label label-warning">Assigned</span>
-                                                                break;
-                                                            case "Resolved":
-                                                                <span class="label label-success">Resolved</span>
-                                                                break;
-                                                            case "Reopened":
-                                                                <span class="label label-danger">Reopened</span>
-                                                                break;
-                                                            case "Archived":
-                                                                <span class="label label-info">Archived</span>
-                                                                break;
-                                                        }
-                                                    </td>
-                                                    <td class="hidden-xs"><span class="label label-info">@ticket.Type.Name</span></td>
+                                                    @switch (ticket.Status.Name)
+                                                    {
+                                                        case "Created":
+                                                            <span class="label label-danger">Created</span>
+                                                            break;
+                                                        case "Assigned":
+                                                            <span class="label label-warning">Assigned</span>
+                                                            break;
+                                                        case "Resolved":
+                                                            <span class="label label-success">Resolved</span>
+                                                            break;
+                                                        case "Reopened":
+                                                            <span class="label label-danger">Reopened</span>
+                                                            break;
+                                                        case "Archived":
+                                                            <span class="label label-info">Archived</span>
+                                                            break;
+                                                    }
+                                                </td>
+                                                <td class="hidden-xs"><span class="label label-info">@ticket.Type.Name</span></td>
 
-                                                    <td class="hidden-xs">@ticket.CreatedDate</td>
-                                                </tr>
-                                            }
+                                                <td class="hidden-xs">@ticket.CreatedDate</td>
+                                            </tr>
+                                        }
                                     </tbody>
                                 </table>
                             </div>
@@ -208,32 +223,32 @@
                                                                                 @foreach (var user in project.Users)
                                                                                 {
 
-                                                                                <tr>
-                                                                                    <td class="font-w600">@user.FirstName @user.LastName</td>
-                                                                                    <td class="hidden-xs">@user.Email</td>
-                                                                                    <td class="hidden-xs">@user.AssignedTickets.Count</td>
-                                                                                    <td class="hidden-xs">@user.Projects.Count</td>
-                                                                                    <td class="hidden-xs">
-                                                                                        @switch (user.Role)
-                                                                                        {
-                                                                                            case "Administrator":
-                                                                                                <span class="label label-danger">Administrator</span>
-                                                                                                break;
-                                                                                            case "Project Manager":
-                                                                                                <span class="label label-warning">Project Manager</span>
-                                                                                                break;
-                                                                                            case "Developer":
-                                                                                                <span class="label label-success">Developer</span>
-                                                                                                break;
-                                                                                            case "Submitter":
-                                                                                                <span class="label label-primary">Submitter</span>
-                                                                                                break;
-                                                                                            default:
-                                                                                                <span class="label label-info">UNKNOWN</span>
-                                                                                                break;
-                                                                                        }
-                                                                                    </td>
-                                                                                </tr>
+                                                                                    <tr>
+                                                                                        <td class="font-w600">@user.FirstName @user.LastName</td>
+                                                                                        <td class="hidden-xs">@user.Email</td>
+                                                                                        <td class="hidden-xs">@user.AssignedTickets.Count</td>
+                                                                                        <td class="hidden-xs">@user.Projects.Count</td>
+                                                                                        <td class="hidden-xs">
+                                                                                            @switch (user.Role)
+                                                                                            {
+                                                                                                case "Administrator":
+                                                                                                    <span class="label label-danger">Administrator</span>
+                                                                                                    break;
+                                                                                                case "Project Manager":
+                                                                                                    <span class="label label-warning">Project Manager</span>
+                                                                                                    break;
+                                                                                                case "Developer":
+                                                                                                    <span class="label label-success">Developer</span>
+                                                                                                    break;
+                                                                                                case "Submitter":
+                                                                                                    <span class="label label-primary">Submitter</span>
+                                                                                                    break;
+                                                                                                default:
+                                                                                                    <span class="label label-info">UNKNOWN</span>
+                                                                                                    break;
+                                                                                            }
+                                                                                        </td>
+                                                                                    </tr>
                                                                                 }
                                                                             </tbody>
                                                                         </table>
@@ -453,7 +468,7 @@
                                             foreach (var ticket in project.Tickets.Where(x => x.AssignedUserId == User.Identity.GetUserId()))
                                             {
 
-                                                <tr  style="cursor:pointer" onclick="window.location.href = '@Url.Action("Details","Tickets", new { id=ticket.Id })';">
+                                                <tr style="cursor:pointer" onclick="window.location.href = '@Url.Action("Details","Tickets", new { id=ticket.Id })';">
                                                     <td>@ticket.Title</td>
                                                     <td class="hidden-xs">@ticket.Summary</td>
                                                     <td>
@@ -511,11 +526,179 @@
     </div>
 </main>
 @section scripts{
+    <script src="~/Scripts/core/Chart.min.js"></script>
     <script>
         $(document).ready(function () {
             $('#ticketViewTable').DataTable();
             $('.viewDevelopersTable').DataTable();
             $(".viewTicketsModal").DataTable();
         });
+    </script>
+    <script>
+
+        Chart.defaults.global.defaultFontColor              = '#999';
+        Chart.defaults.global.defaultFontFamily             = 'Open Sans';
+        Chart.defaults.global.defaultFontStyle              = '600';
+        Chart.defaults.scale.gridLines.color               = "rgba(0,0,0,.05)";
+        Chart.defaults.scale.gridLines.zeroLineColor       = "rgba(0,0,0,.1)";
+        Chart.defaults.global.elements.line.borderWidth     = 2;
+        Chart.defaults.global.elements.point.radius         = 4;
+        Chart.defaults.global.elements.point.hoverRadius    = 6;
+        Chart.defaults.global.tooltips.titleFontFamily      = 'Source Sans Pro';
+        Chart.defaults.global.tooltips.bodyFontFamily       = 'Open Sans';
+        Chart.defaults.global.tooltips.cornerRadius         = 3;
+        Chart.defaults.global.legend.labels.boxWidth = 15;
+
+
+        var labels = [];
+        var lowPriorityAmounts = []
+        var mediumPriorityAmounts = []
+        var highPriorityAmounts = []
+        
+        @foreach (var project in Model.Projects) {
+            @:labels.push("@project.Name");
+            @:lowPriorityAmounts.push("@project.Tickets.Where(x=>x.Priority.Name=="Low").Count()");
+            @:mediumPriorityAmounts.push("@project.Tickets.Where(x=>x.Priority.Name=="Medium").Count()");
+            @:highPriorityAmounts.push("@project.Tickets.Where(x=>x.Priority.Name=="High").Count()");
+        }
+
+        var projectInformation = {
+            labels: labels,
+            datasets: [
+                {
+                label: 'High Priority',
+                    fill: true,
+                    backgroundColor: 'rgba(220,220,220,.3)',
+                    borderColor: 'rgba(220,220,220,1)',
+                    pointBackgroundColor: 'rgba(220,220,220,1)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgba(220,220,220,1)',
+                    data: lowPriorityAmounts
+                },
+                {
+                label: 'Medium Priority',
+                    fill: true,
+                    backgroundColor: 'rgba(171, 227, 125, .3)',
+                    borderColor: 'rgba(171, 227, 125, 1)',
+                    pointBackgroundColor: 'rgba(171, 227, 125, 1)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgba(171, 227, 125, 1)',
+                    data: mediumPriorityAmounts
+                },
+                {
+                label: 'Low Priority',
+                    fill: true,
+                    backgroundColor: 'rgba(227, 171, 125, .3)',
+                    borderColor: 'rgba(171, 227, 125, 1)',
+                    pointBackgroundColor: 'rgba(277, 171, 125, 1)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgba(277, 171, 125, 1)',
+                    data: lowPriorityAmounts
+                }
+            ]
+        };
+
+
+
+
+        var statusData = {
+            labels: [
+                'Unassigned',
+                'Assigned',
+                'Resolved'
+            ],
+            datasets: [{
+                data: [
+                    @Model.Statuses.First(x=>x.Name=="Created").Tickets.Count(),
+                    @Model.Statuses.First(x=>x.Name=="Assigned").Tickets.Count(),
+                    @Model.Statuses.First(x=>x.Name=="Resolved").Tickets.Count()
+                ],
+                backgroundColor: [
+                    'rgba(171, 227, 125, 1)',
+                    'rgba(250, 219, 125, 1)',
+                    'rgba(117, 176, 235, 1)'
+                ],
+                hoverBackgroundColor: [
+                    'rgba(171, 227, 125, .75)',
+                    'rgba(250, 219, 125, .75)',
+                    'rgba(117, 176, 235, .75)'
+                ],
+                borderWidth: [
+                    0,
+                    0,
+                    0
+                ]
+            }]
+        };
+        var priorityData = {
+            labels: [
+                'High',
+                'Medium',
+                'Low'
+            ],
+            datasets: [{
+                data: [
+                    @Model.Priorities.First(x=>x.Name=="High").Tickets.Count(),
+                    @Model.Priorities.First(x=>x.Name=="Medium").Tickets.Count(),
+                    @Model.Priorities.First(x=>x.Name=="Low").Tickets.Count()
+                ],
+                backgroundColor: [
+                    'rgba(220,60, 60, 1)',
+                    'rgba(250, 219, 125, 1)',
+                    'rgba(171, 227, 125, 1)',
+                ],
+                hoverBackgroundColor: [
+                    'rgba(220,60, 60, 0.75)',
+                    'rgba(250, 219, 125, 0.75)',
+                    'rgba(171, 227, 125, 0.75)',
+                ],
+                borderWidth: [
+                    0,
+                    0,
+                    0
+                ]
+            }]
+        };
+
+        var typeData = {
+            labels: [
+                'Software',
+                'Hardware',
+                'UI',
+                "Other"
+            ],
+            datasets: [{
+                data: [
+                    @Model.Types.First(x=>x.Name=="Software").Tickets.Count(),
+                    @Model.Types.First(x=>x.Name=="Hardware").Tickets.Count(),
+                    @Model.Types.First(x=>x.Name=="UI").Tickets.Count(),
+                    @Model.Types.First(x=>x.Name=="Other").Tickets.Count(),
+                ],
+                backgroundColor: [
+                    'rgba(220,60, 60, 1)',
+                    'rgba(250, 219, 125, 1)',
+                    'rgba(171, 227, 125, 1)',
+                    'rgba(153, 51, 153, 1)',
+                ],
+                hoverBackgroundColor: [
+                    'rgba(220,60, 60, 0.75)',
+                    'rgba(250, 219, 125, 0.75)',
+                    'rgba(171, 227, 125, 0.75)',
+                    'rgba(153, 51, 153, 0.75)'
+                ],
+                borderWidth: [
+                    0,
+                    0,
+                    0
+                ]
+            }]
+        };
+        $chart2Donut = new Chart("statusChart", { type: 'doughnut', data: statusData });
+        $chart2Donut = new Chart("priorityChart", { type: 'doughnut', data: priorityData });
+        $chart2Donut = new Chart("typeChart", { type: 'doughnut', data: typeData });
+        $chart2Donut = new Chart("projectChart", { type: 'bar', data: projectInformation });
     </script>
 }
