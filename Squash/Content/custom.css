@@ -2,3 +2,10 @@
 .hoverTable tr:hover {
     background-color: #b8d1f3 !important;
 }
+table {
+    table-layout: fixed;
+    width: 100%;
+}
+th, td {
+    word-wrap: break-word;
+}

@@ -150,26 +150,22 @@
                 <div class="block">
                     <div class="block-content">
                         <!-- DataTables init on table by adding .js-dataTable-full class, functionality initialized in js/pages/base_tables_datatables.js -->
-                        <table class="table  table-striped" id="ticketViewTable">
+                        <table class="table hoverTable table-striped" id="ticketViewTable">
                             <thead>
                                 <tr>
-                                    <th style="width">Title</th>
-                                    <th class="hidden-xs">Summary</th>
-                                    <th>Priority</th>
-                                    <th class="hidden-xs" style="width:10%">Status</th>
-                                    <th class="hidden-xs" style="width:10%">Type</th>
-                                    <th class="hidden-xs" style="width:10%">Created</th>
-                                    @if (User.IsInRole("Administrator") || User.IsInRole("Project Manager"))
-                                    {
-                                        <th style="width:10%" 2>Action</th>
-                                    }
+                                    <th style="width:20%">Title</th>
+                                    <th style="width:20%" class="hidden-xs">Summary</th>
+                                    <th style="width:16%">Priority</th>
+                                    <th class="hidden-xs" style="width:15%">Status</th>
+                                    <th class="hidden-xs" style="width:14%">Type</th>
+                                    <th class="hidden-xs" style="width:16%">Created</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach (var ticket in Model.Project.Tickets)
                                 {
 
-                                <tr>
+                                <tr style="cursor:pointer" onclick="window.location.href = '@Url.Action("Details","Tickets", new { id=ticket.Id })';">
                                     <td>@ticket.Title</td>
                                     <td class="hidden-xs">@ticket.Summary</td>
                                     <td>
@@ -210,17 +206,6 @@
                                     <td class="hidden-xs"><span class="label label-info">@ticket.Type.Name</span></td>
 
                                     <td class="hidden-xs">@ticket.CreatedDate</td>
-
-                                    @if (User.IsInRole("Administrator") || User.IsInRole("Project Manager"))
-                                    {
-                                        <td class="text-center">
-                                            <div class="btn-group">
-                                                <a class="btn btn-xs btn-default" data-toggle="tooltip" data-title="Edit Ticket" href="@Url.Action("Details", "Tickets", new { id = ticket.Id })">
-                                                    Edit Ticket <i class="fa fa-pencil push-5-l"></i>
-                                                </a>
-                                            </div>
-                                        </td>
-                                    }
                                 </tr>
                                 }
                             </tbody>

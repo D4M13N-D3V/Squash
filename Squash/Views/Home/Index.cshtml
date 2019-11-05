@@ -9,6 +9,66 @@
         </div>
     </div>
     <div class="content">
+        @if (User.IsInRole("Administrator"))
+        {
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="block">
+                        <div class="block-header">
+                            <ul class="block-options">
+                                <li>
+                                    <button type="button" data-toggle="block-option" data-action="refresh_toggle" data-action-mode="demo"><i class="si si-refresh"></i></button>
+                                </li>
+                            </ul>
+                            <h3 class="block-title">Ticket Stats</h3>
+                        </div>
+                        <div class="block-content block-content-full text-center">
+                            <div class="chartjs-size-monitor" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
+                            <!-- Donut Chart Container -->
+                            <canvas class="js-chartjs2-donut chartjs-render-monitor" width="558" height="279" style="display: block; width: 558px; height: 279px;"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="block">
+                                <div class="block-header">
+                                    <ul class="block-options">
+                                        <li>
+                                            <button type="button" data-toggle="block-option" data-action="refresh_toggle" data-action-mode="demo"><i class="si si-refresh"></i></button>
+                                        </li>
+                                    </ul>
+                                    <h3 class="block-title">Ticket Stats</h3>
+                                </div>
+                                <div class="block-content block-content-full text-center">
+                                    <div class="chartjs-size-monitor" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
+                                    <!-- Donut Chart Container -->
+                                    <canvas class="js-chartjs2-donut chartjs-render-monitor" width="558" height="279" style="display: block; width: 558px; height: 279px;"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="block">
+                                <div class="block-header">
+                                    <ul class="block-options">
+                                        <li>
+                                            <button type="button" data-toggle="block-option" data-action="refresh_toggle" data-action-mode="demo"><i class="si si-refresh"></i></button>
+                                        </li>
+                                    </ul>
+                                    <h3 class="block-title">Ticket Stats</h3>
+                                </div>
+                                <div class="block-content block-content-full text-center">
+                                    <div class="chartjs-size-monitor" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
+                                    <!-- Donut Chart Container -->
+                                    <canvas class="js-chartjs2-donut chartjs-render-monitor" width="558" height="279" style="display: block; width: 558px; height: 279px;"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
         <div class="row">
             @if (Model.OwnedTickets.Any())
             {
@@ -29,12 +89,12 @@
                                 <table class="table hoverTable table-striped viewTicketsModal" id="submittedTicketViewTable">
                                     <thead>
                                         <tr>
-                                            <th style="width">Title</th>
-                                            <th class="hidden-xs">Summary</th>
-                                            <th>Priority</th>
-                                            <th class="hidden-xs">Status</th>
-                                            <th class="hidden-xs">Type</th>
-                                            <th class="hidden-xs">Created</th>
+                                            <th style="word-wrap:break-word; width:15%">Title</th>
+                                            <th class="hidden-xs" style="width:18%">Summary</th>
+                                            <th style="width:15%">Priority</th>
+                                            <th style="width:15%"class="hidden-xs">Status</th>
+                                            <th style="width:12%"class="hidden-xs">Type</th>
+                                            <th style="width:15%"class="hidden-xs">Created</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -42,7 +102,7 @@
                                             {
 
                                                 <tr style="cursor:pointer" onclick="window.location.href = '@Url.Action("Details","Tickets", new { id=ticket.Id })';" >
-                                                    <td>@ticket.Title</td>
+                                                    <td style="word-wrap:break-word;">@ticket.Title</td>
                                                     <td class="hidden-xs">@ticket.Summary</td>
                                                     <td>
                                                         @switch (ticket.Priority.Name)
@@ -137,10 +197,10 @@
                                                                         <table class="table table-striped viewDevelopersTable" id="userManagmentTable">
                                                                             <thead>
                                                                                 <tr>
-                                                                                    <th>Name</th>
-                                                                                    <th class="hidden-xs">Email</th>
-                                                                                    <th class="hidden-xs" style="width: 15%;">Assigned Tickets</th>
-                                                                                    <th class="hidden-xs" style="width: 15%;">Assigned Projects</th>
+                                                                                    <th style="width:15%">Name</th>
+                                                                                    <th style="width:15%" class="hidden-xs">Email</th>
+                                                                                    <th class="hidden-xs" style="width: 12%;">Assigned Tickets</th>
+                                                                                    <th class="hidden-xs" style="width: 12%;">Assigned Projects</th>
                                                                                     <th class="hidden-xs" style="width: 15%;">Role</th>
                                                                                 </tr>
                                                                             </thead>
@@ -202,10 +262,10 @@
                                                                         <table class="table table-striped hoverTable viewTicketsModal" id="userManagmentTable">
                                                                             <thead>
                                                                                 <tr>
-                                                                                    <th>Title</th>
-                                                                                    <th>Summary</th>
-                                                                                    <th class="hidden-xs" style="width: 15%;">Created Date</th>
-                                                                                    <th class="hidden-xs" style="width: 15%;">Updated Date</th>
+                                                                                    <th style="width:20%">Title</th>
+                                                                                    <th style="width:45%">Summary</th>
+                                                                                    <th class="hidden-xs" style="width: 10%;">Created Date</th>
+                                                                                    <th class="hidden-xs" style="width: 10%;">Updated Date</th>
                                                                                     <th class="hidden-xs" style="width: 5%;">Priority</th>
                                                                                     <th class="hidden-xs" style="width: 5%;">Status</th>
                                                                                     <th class="hidden-xs" style="width: 5%;">Type</th>
@@ -277,10 +337,10 @@
                                                                         <table class="table table-striped hoverTable viewTicketsModal" id="userManagmentTable">
                                                                             <thead>
                                                                                 <tr>
-                                                                                    <th>Title</th>
-                                                                                    <th>Summary</th>
-                                                                                    <th class="hidden-xs" style="width: 15%;">Created Date</th>
-                                                                                    <th class="hidden-xs" style="width: 15%;">Updated Date</th>
+                                                                                    <th style="width:20%">Title</th>
+                                                                                    <th style="width:45%">Summary</th>
+                                                                                    <th class="hidden-xs" style="width: 10%;">Created Date</th>
+                                                                                    <th class="hidden-xs" style="width: 10%;">Updated Date</th>
                                                                                     <th class="hidden-xs" style="width: 5%;">Priority</th>
                                                                                     <th class="hidden-xs" style="width: 5%;">Status</th>
                                                                                     <th class="hidden-xs" style="width: 5%;">Type</th>
@@ -379,12 +439,12 @@
                                 <table class="table  table-striped hoverTable" id="ticketViewTable">
                                     <thead>
                                         <tr>
-                                            <th style="width">Title</th>
-                                            <th class="hidden-xs">Summary</th>
-                                            <th>Priority</th>
-                                            <th class="hidden-xs">Status</th>
-                                            <th class="hidden-xs">Type</th>
-                                            <th class="hidden-xs">Created</th>
+                                            <th style="word-wrap:break-word; width:15%">Title</th>
+                                            <th class="hidden-xs" style="width:18%">Summary</th>
+                                            <th style="width:15%">Priority</th>
+                                            <th style="width:15%" class="hidden-xs">Status</th>
+                                            <th style="width:12%" class="hidden-xs">Type</th>
+                                            <th style="width:15%" class="hidden-xs">Created</th>
                                         </tr>
                                     </thead>
                                     <tbody>

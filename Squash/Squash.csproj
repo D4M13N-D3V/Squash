@@ -434,6 +434,7 @@
     <Content Include="Views\Tickets\Details.cshtml" />
     <Content Include="Views\Home\ViewAssignedTicketsList.cshtml" />
     <Content Include="Views\Home\ViewAllTickets.cshtml" />
+    <None Include="Properties\PublishProfiles\Squash-Bugtracker - Web Deploy.pubxml" />
     <None Include="Views\Tickets\Edit.cshtml" />
   </ItemGroup>
   <PropertyGroup>

@@ -35,6 +35,12 @@ namespace Squash.Controllers
             var user = db.Users.Find(userId);
             var fullName = user.FirstName + " " + user.LastName;
             Helpers.NotificationHelpers.SendProjectNotification(projectId, "Project Member Removed!", "'" + fullName + "' was removed from '" + projectName + "'!", db.Users.Find(User.Identity.GetUserId()));
+            foreach(var ticket in user.AssignedTickets)
+            {
+                ticket.AssignedUserId = null;
+                db.Entry(ticket).State = EntityState.Modified;
+            }
+            db.SaveChanges();    
             return RedirectToAction("Details", "Projects", new { id = projectId });
         }
 

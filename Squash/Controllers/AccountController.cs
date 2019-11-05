@@ -482,6 +482,68 @@ namespace Squash.Controllers
             db.SaveChanges();
         }
 
+        #region Demo Login Buttons
+        [AllowAnonymous]
+        public ActionResult LoginDemoAdmin()
+        {
+            var result = SignInManager.PasswordSignIn("administrator@mailinator.com", "demoPassword1!", false, shouldLockout: false);
+            switch (result)
+            {
+                case SignInStatus.Success:
+                    return RedirectToAction("Index", "Home");
+                case SignInStatus.Failure:
+                default:
+                    ModelState.AddModelError("", "Invalid login attempt.");
+                    return RedirectToAction("Login","Account");
+            }
+        }
+
+        [AllowAnonymous]
+        public ActionResult LoginDemoManager()
+        {
+            var result = SignInManager.PasswordSignIn("projectmanager@mailinator.com", "demoPassword1!", false, shouldLockout: false);
+            switch (result)
+            {
+                case SignInStatus.Success:
+                    return RedirectToAction("Index", "Home");
+                case SignInStatus.Failure:
+                default:
+                    ModelState.AddModelError("", "Invalid login attempt.");
+                    return RedirectToAction("Login", "Account");
+            }
+        }
+
+        [AllowAnonymous]
+        public ActionResult LoginDemoDeveloper()
+        {
+            var result = SignInManager.PasswordSignIn("developer@mailinator.com", "demoPassword1!", false, shouldLockout: false);
+            switch (result)
+            {
+                case SignInStatus.Success:
+                    return RedirectToAction("Index", "Home");
+                case SignInStatus.Failure:
+                default:
+                    ModelState.AddModelError("", "Invalid login attempt.");
+                    return RedirectToAction("Login", "Account");
+            }
+        }
+
+        [AllowAnonymous]
+        public ActionResult LoginDemoSubmitter()
+        {
+            var result = SignInManager.PasswordSignIn("submitter@mailinator.com", "demoPassword1!", false, shouldLockout: false);
+            switch (result)
+            {
+                case SignInStatus.Success:
+                    return RedirectToAction("Index", "Home");
+                case SignInStatus.Failure:
+                default:
+                    ModelState.AddModelError("", "Invalid login attempt.");
+                    return RedirectToAction("Login", "Account");
+            }
+        }
+        #endregion
+
         #region Helpers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
