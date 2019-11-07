@@ -368,6 +368,7 @@
     <Content Include="Images\videos\hero_tech.webm" />
     <Content Include="Scripts\app.js" />
     <Content Include="Scripts\base_tables_datatables.js" />
+    <Content Include="Scripts\bootstrap-notify.min.js" />
     <Content Include="Scripts\core\bootstrap.min.js" />
     <Content Include="Scripts\core\Chart.min.js" />
     <Content Include="Scripts\core\jquery.appear.min.js" />
@@ -378,6 +379,13 @@
     <Content Include="Scripts\core\jquery.slimscroll.min.js" />
     <Content Include="Scripts\core\js.cookie.min.js" />
     <Content Include="Scripts\jquery.dataTables.min.js" />
+    <Content Include="Uploads\637080369691535728-BrD1erF.jpg" />
+    <Content Include="Uploads\637080371181947767-BrD1erF.jpg" />
+    <Content Include="Uploads\637080377109761647-BrD1erF.jpg" />
+    <Content Include="Uploads\637080589315816964-0.jpg" />
+    <Content Include="Uploads\637080650727650795-0.jpg" />
+    <Content Include="Uploads\637081515767025812-0.jpg" />
+    <Content Include="Uploads\637082146092945020-0.jpg" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -414,7 +422,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Uploads\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Fonts\glyphicons-halflings-regular.eot" />

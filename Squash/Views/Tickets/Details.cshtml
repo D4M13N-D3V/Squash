@@ -454,17 +454,12 @@
                                                             {
 
                                                                 <tr>
-                                                                    <td class="hidden-xs"></td>
                                                                     <td class="font-s13 text-muted">
+                                                                        <img class="img-avatar" src="@string.Format("https://ui-avatars.com/api/?name={0}+{1}",comment.Owner.FirstName,comment.Owner.LastName)" alt="Avatar" alt="">
                                                                         @comment.Owner.FirstName @comment.Owner.LastName on @comment.CreatedDate
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td class="text-center hidden-xs" style="width: 140px;">
-                                                                        <div class="push-10">
-                                                                            <img class="img-avatar" src="~/Images/avatars/avatar4.jpg" alt="">
-                                                                        </div>
-                                                                    </td>
                                                                     <td>
                                                                         @comment.Body
                                                                     </td>

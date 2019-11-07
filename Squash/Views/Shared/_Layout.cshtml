@@ -28,6 +28,7 @@
     <!-- END Stylesheets -->
 </head>
 <body>
+
     <!-- Page Container -->
     <!--
         Available Classes:
@@ -78,10 +79,10 @@
                         </ul>
                         <script>
                             function removeElement(elementId) {
-    // Removes an element from the document
-    var element = document.getElementById(elementId);
-    element.parentNode.removeChild(element);
-}
+                                // Removes an element from the document
+                                var element = document.getElementById(elementId);
+                                element.parentNode.removeChild(element);
+                            }
                         </script>
                         <div class="block-content tab-content">
                             <div class="tab-pane fade fade-right in active" id="tickets-notifications">
@@ -90,6 +91,9 @@
                                     <div class="block block-rounded block-themed" style="cursor:pointer" id="notification-@ticketNotification.Id">
                                         <div class="block-header bg-amethyst border-black-op">
                                             <ul class="block-options">
+                                                <li>
+                                                    <a>@ticketNotification.SentDate</a>
+                                                </li>
                                                 <li>
                                                     <a>Clear</a>
                                                 </li>
@@ -120,6 +124,9 @@
                                     <div class="block block-rounded block-themed" id="notification-@projectNotification.Id" style="cursor:pointer">
                                         <div class="block-header bg-city border-black-op">
                                             <ul class="block-options">
+                                                <li>
+                                                    <a>@projectNotification.SentDate</a>
+                                                </li>
                                                 <li>
                                                     <a>Clear</a>
                                                 </li>
@@ -321,7 +328,51 @@
     <script src="~/Scripts/base_tables_datatables.js"></script>
     <script src="~/Scripts/app.js"></script>
     <script src="https://kit.fontawesome.com/0e4ebe25a9.js" crossorigin="anonymous"></script>
-    
+    <script src="~/Scripts/bootstrap-notify.min.js"></script>
     @RenderSection("scripts", required: false)
+    <script>
+        $.notify({
+	// options
+	message: "You have @User.Identity.GetNotifications().Where(x => x.ProjectId != null).Count() project notifications and @User.Identity.GetNotifications().Where(x => x.TicketId != null).Count() ticket notifications.",
+        }, {
+	// settings
+	element: 'body',
+	position: null,
+	type: "info",
+	allow_dismiss: true,
+	newest_on_top: false,
+	showProgressbar: false,
+	placement: {
+		from: "top",
+		align: "right"
+	},
+	offset: 75,
+	spacing: 10,
+	z_index: 1031,
+	delay: 30000,
+	timer: 1000,
+	url_target: '_blank',
+	mouse_over: null,
+	animate: {
+		enter: 'animated fadeInDown',
+		exit: 'animated fadeOutUp'
+	},
+	onShow: null,
+	onShown: null,
+	onClose: null,
+	onClosed: null,
+	icon_type: 'class',
+	template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
+		'<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
+		'<span data-notify="icon"></span> ' +
+		'<span data-notify="title">{1}</span> ' +
+		'<span data-notify="message">{2}</span>' +
+		'<div class="progress" data-notify="progressbar">' +
+			'<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
+		'</div>' +
+		'<a href="{3}" target="{4}" data-notify="url"></a>' +
+	'</div>' 
+});
+    </script>
 </body>
 </html>
