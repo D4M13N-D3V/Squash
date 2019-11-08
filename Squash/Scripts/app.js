@@ -243,15 +243,23 @@ var App = function() {
             case 'sidebar_mini_toggle':
                 if ($windowW > 991) {
                     $lPage.toggleClass('sidebar-mini');
+                    if ($lPage.hasClass('sidebar-mini')) {
+                        $("#logoImage").attr("src", "/Images/logo2.svg");
+                    }
+                    else {
+                        $("#logoImage").attr("src", "/Images/logo.svg");
+                    }
                 }
                 break;
             case 'sidebar_mini_on':
                 if ($windowW > 991) {
+                    $("#logoImage").attr("src", "/Images/logo2.svg");
                     $lPage.addClass('sidebar-mini');
                 }
                 break;
             case 'sidebar_mini_off':
                 if ($windowW > 991) {
+                    $("#logoImage").attr("src", "/Images/logo.svg");
                     $lPage.removeClass('sidebar-mini');
                 }
                 break;

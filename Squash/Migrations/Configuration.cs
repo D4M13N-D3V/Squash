@@ -210,7 +210,18 @@ namespace Squash.Migrations
                 );
                 context.SaveChanges();
             }
-            context.SaveChanges();
+            foreach(var project in projects)
+            {
+                Helpers.ProjectHelpers.AddUserToProject(demodeveloper.Id, project.Id);
+                Helpers.ProjectHelpers.AddUserToProject(demosubmitter.Id, project.Id);
+            }
+            foreach(var ticket in tickets)
+            {
+                ticket.AssignedUserId = demodeveloper.Id;
+                ticket.OwnerId = demosubmitter.Id;
+                context.Entry(ticket).State = EntityState.Modified;
+                context.SaveChanges();
+            }
 
         }
     }

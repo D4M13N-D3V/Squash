@@ -248,6 +248,8 @@
     <Content Include="Images\favicons\favicon-96x96.png" />
     <Content Include="Images\favicons\favicon.png" />
     <Content Include="Images\logo.png" />
+    <Content Include="Images\logo.svg" />
+    <Content Include="Images\logo2.svg" />
     <Content Include="Images\photos\photo1%402x.jpg" />
     <Content Include="Images\photos\photo1.jpg" />
     <Content Include="Images\photos\photo10%402x.jpg" />
