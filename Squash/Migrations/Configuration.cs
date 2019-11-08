@@ -24,10 +24,10 @@ namespace Squash.Migrations
             var userstore = new UserStore<ApplicationUser>(context);
             var usermanager = new UserManager<ApplicationUser>(userstore);
 
-            ApplicationUser demopm = null;
-            ApplicationUser demoadmin = null;
-            ApplicationUser demosubmitter = null;
-            ApplicationUser demodeveloper = null;
+            ApplicationUser demopm = context.Users.FirstOrDefault(x => x.Email == "projectmanager@mailinator.com");
+            ApplicationUser demoadmin = context.Users.FirstOrDefault(x => x.Email == "administrator@mailinator.com");
+            ApplicationUser demosubmitter = context.Users.FirstOrDefault(x => x.Email == "submitter@mailinator.com");
+            ApplicationUser demodeveloper = context.Users.FirstOrDefault(x => x.Email == "developer@mailinator.com");
             #region Role Seeding
             if (!context.Roles.Any(r => r.Name == "Administrator")) 
                 rolemanager.Create(new IdentityRole { Name = "Administrator" });
@@ -73,14 +73,6 @@ namespace Squash.Migrations
 
 
 
-            //#region Project Seed
-            //context.Projects.AddOrUpdate(
-            //    p => p.Name,
-            //    new Project() { Name = "First Demo", Description = "The first demo project seed", CreatedDate = DateTime.Now },
-            //    new Project() { Name = "Second Demo", Description = "The second demo project seed", CreatedDate = DateTime.Now },
-            //    new Project() { Name = "Third Demo", Description = "The third demo project seed", CreatedDate = DateTime.Now },
-            //    new Project() { Name = "Fourth Demo", Description = "The fourth demo project seed", CreatedDate = DateTime.Now });
-            //#endregion
             #region Ticket Status Seed
             context.Statuses.AddOrUpdate(
                 s => s.Name,
@@ -107,57 +99,54 @@ namespace Squash.Migrations
             #endregion
 
             context.SaveChanges();
-            var projects = context.Projects;
-            var statuses = context.Statuses;
-            var priorities = context.Priorities;
-            var types = context.Types;
-            var users = context.Users;
-            var roles = context.Roles;
+            var statuses = context.Statuses.ToList();
+            var priorities = context.Priorities.ToList();
+            var types = context.Types.ToList();
+            var users = context.Users.ToList();
+            var roles = context.Roles.ToList();
 
 
 
 
-            for (int i = 0; i < 12; i++)
+            for (int i = 0; i < 4; i++)
             {
                 context.Projects.AddOrUpdate(p => p.Name, new Project() { Name = "Demo Project #" + i, Description = "The is a seeded demo project.", CreatedDate = DateTime.Now });
 
             }
             context.SaveChanges();
-            foreach(var project in context.Projects)
+            var projects = context.Projects.ToList();
+            foreach (var project in projects)
             {
                 var count = 1;
-                foreach(var status in context.Statuses)
+                foreach(var status in statuses)
                 {
-                    foreach (var type in context.Types)
+                    foreach (var type in types) 
                     {
-                        foreach (var priority in context.Priorities)
+                        foreach (var priority in priorities)
                         {
-                            var rng = new Random();
-                            if (rng.NextDouble() < 0.5 || count<20)
-                            {
 
-                                context.Tickets.AddOrUpdate(
-                                    t => t.Title,
-                                    new Ticket
-                                    {
-                                        ProjectId = project.Id,
-                                        TypeId = type.Id,
-                                        PriorityId = priority.Id,
-                                        StatusId = status.Id,
-                                        OwnerId = demosubmitter.Id,
-                                        AssignedUserId = demodeveloper.Id,
-                                        Title = "Demo Ticket " + count,
-                                        Summary = "A demo ticket of priority '" + priority.Name + "', type '" + type.Name + "', status '" + status.Name + "'",
-                                        CreatedDate = DateTime.Now
-                                    });
-                                count++;
-                            }
+                            context.Tickets.AddOrUpdate(
+                                t => t.Title,
+                                new Ticket
+                                {
+                                    ProjectId = project.Id,
+                                    TypeId = type.Id,
+                                    PriorityId = priority.Id,
+                                    StatusId = status.Id,
+                                    OwnerId = demosubmitter.Id,
+                                    AssignedUserId = demodeveloper.Id,
+                                    Title = project.Name+" Demo Ticket " + count,
+                                    Summary = "A demo ticket of priority '" + priority.Name + "', type '" + type.Name + "', status '" + status.Name + "'",
+                                    CreatedDate = DateTime.Now
+                                });
+                            count++;
+                            context.SaveChanges();
                         }
                     }
                 }
             }
-            context.SaveChanges();
-            foreach (var ticket in context.Tickets)
+            var tickets = context.Tickets.ToList();
+            foreach (var ticket in tickets)
             {
                 for(var i = 0; i < 4; i++)
                 {
@@ -196,84 +185,32 @@ namespace Squash.Migrations
             context.SaveChanges();
 
 
-            for(var i =0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
                 context.Notifications.AddOrUpdate(
-                    t => t.Id,
+                    t => t.Title,
                     new Notification()
                     {
-                        TicketId = i + 1,
+                        TicketId = 1,
                         IsRead = false,
-                        Title = "Test " + (i + 1),
+                        Title = "Test Ticket " + (i + 1),
                         Body = "Test Ticket Notification",
                         SentDate = DateTime.Now,
                         ReciepentId = demoadmin.Id
                     },
                     new Notification()
                     {
-                        TicketId = i + 1,
+                        ProjectId = 1,
                         IsRead = false,
-                        Title = "Test " + (i + 1),
-                        Body = "Test Ticket Notification",
-                        SentDate = DateTime.Now,
-                        ReciepentId = demodeveloper.Id
-                    },
-                    new Notification()
-                    {
-                        TicketId = i + 1,
-                        IsRead = false,
-                        Title = "Test " + (i + 1),
-                        Body = "Test Ticket Notification",
-                        SentDate = DateTime.Now,
-                        ReciepentId = demodeveloper.Id
-                    },
-                    new Notification()
-                    {
-                        TicketId = i + 1,
-                        IsRead = false,
-                        Title = "Test " + (i + 1),
-                        Body = "Test Ticket Notification",
-                        SentDate = DateTime.Now,
-                        ReciepentId = demosubmitter.Id
-                    },
-                    new Notification()
-                    {
-                        ProjectId = i + 1,
-                        IsRead = false,
-                        Title = "Test " + (i + 1),
+                        Title = "Test Project " + (1),
                         Body = "Test Project Notification",
                         SentDate = DateTime.Now,
                         ReciepentId = demoadmin.Id
-                    },
-                    new Notification()
-                    {
-                        ProjectId = i + 1,
-                        IsRead = false,
-                        Title = "Test " + (i + 1),
-                        Body = "Test Project Notification",
-                        SentDate = DateTime.Now,
-                        ReciepentId = demodeveloper.Id
-                    },
-                    new Notification()
-                    {
-                        ProjectId = i + 1,
-                        IsRead = false,
-                        Title = "Test " + (i + 1),
-                        Body = "Test Project Notification",
-                        SentDate = DateTime.Now,
-                        ReciepentId = demodeveloper.Id
-                    },
-                    new Notification()
-                    {
-                        ProjectId = i + 1,
-                        IsRead = false,
-                        Title = "Test " + (i + 1),
-                        Body = "Test Project Notification",
-                        SentDate = DateTime.Now,
-                        ReciepentId = demosubmitter.Id
                     }
-                    );
+                );
+                context.SaveChanges();
             }
+            context.SaveChanges();
 
         }
     }
