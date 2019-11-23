@@ -1,6 +1,6 @@
-﻿@model IEnumerable<Squash.Models.Project>
+﻿@model Squash.Models.TicketCreationViewModel
 
-@{
+@{      
     ViewBag.Title = "Create";
 }
 
@@ -46,21 +46,21 @@
                             <div class="col-sm-6 col-sm-offset-3">
                                 <div class="form-group">
                                     <div class="col-xs-12">
-                                        @Html.Editor("ticketTitle", new { htmlAttributes = new { @class = "form-control input-lg", @placeholder = "Title" } })
-                                        @Html.ValidationMessage("ticketTitle", "", new { @class = "text-danger" })
+                                        @Html.EditorFor(x=>x.ticketTitle, new { htmlAttributes = new { @class = "form-control input-lg", @placeholder = "Title" } })
+                                        @Html.ValidationMessageFor(x=>x.ticketSummary, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="col-xs-12">
 
-                                        @Html.TextArea("ticketSummary", new { @rows = "7", @class = "form-control", @placeholder = "Summary of the problem." })
-                                        @Html.ValidationMessage("ticketSummary", "", new { @class = "text-danger" })
+                                        @Html.TextAreaFor(x=>x.ticketSummary, new { @rows = "7", @class = "form-control", @placeholder = "Summary of the problem." })
+                                        @Html.ValidationMessageFor(x=>x.ticketSummary, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="col-xs-12">
                                         <select class="form-control" id="projectId" name="projectId" size="1" style="width:100%">
-                                            @foreach (var project in Model)
+                                            @foreach (var project in Model.Projects)
                                             {
                                                 <option value="@project.Id">@project.Name</option>
                                             }
@@ -78,7 +78,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div>  
                     }
                 </div>
             </div>

@@ -38,7 +38,7 @@ namespace Squash.Migrations
             if (!context.Roles.Any(r => r.Name == "Submitter"))
                 rolemanager.Create(new IdentityRole { Name = "Submitter" });
             #endregion
-
+            
             #region Demo User Seeds
             if (!context.Users.Any(u => u.UserName == "administrator@mailinator.com"))
             {
@@ -193,7 +193,7 @@ namespace Squash.Migrations
                     {
                         TicketId = 1,
                         IsRead = false,
-                        Title = "Test Ticket " + (i + 1),
+                        Title = "Test Ticket Admin" + (i + 1),
                         Body = "Test Ticket Notification",
                         SentDate = DateTime.Now,
                         ReciepentId = demoadmin.Id
@@ -202,10 +202,64 @@ namespace Squash.Migrations
                     {
                         ProjectId = 1,
                         IsRead = false,
-                        Title = "Test Project " + (1),
+                        Title = "Test Project Admin" + (1),
                         Body = "Test Project Notification",
                         SentDate = DateTime.Now,
                         ReciepentId = demoadmin.Id
+                    },
+                    new Notification()
+                    {
+                        TicketId = 1,
+                        IsRead = false,
+                        Title = "Test Ticket Dev" + (i + 1),
+                        Body = "Test Ticket Notification",
+                        SentDate = DateTime.Now,
+                        ReciepentId = demodeveloper.Id
+                    },
+                    new Notification()
+                    {
+                        ProjectId = 1,
+                        IsRead = false,
+                        Title = "Test Project Dev" + (1),
+                        Body = "Test Project Notification",
+                        SentDate = DateTime.Now,
+                        ReciepentId = demodeveloper.Id
+                    },
+                    new Notification()
+                    {
+                        TicketId = 1,
+                        IsRead = false,
+                        Title = "Test Ticket PM" + (i + 1),
+                        Body = "Test Ticket Notification",
+                        SentDate = DateTime.Now,
+                        ReciepentId = demopm.Id
+                    },
+                    new Notification()
+                    {
+                        ProjectId = 1,
+                        IsRead = false,
+                        Title = "Test Project PM" + (1),
+                        Body = "Test Project Notification",
+                        SentDate = DateTime.Now,
+                        ReciepentId = demopm.Id
+                    },
+                    new Notification()
+                    {
+                        TicketId = 1,
+                        IsRead = false,
+                        Title = "Test Ticket Sub" + (i + 1),
+                        Body = "Test Ticket Notification",
+                        SentDate = DateTime.Now,
+                        ReciepentId = demosubmitter.Id
+                    },
+                    new Notification()
+                    {
+                        ProjectId = 1,
+                        IsRead = false,
+                        Title = "Test Project Sub" + (1),
+                        Body = "Test Project Notification",
+                        SentDate = DateTime.Now,
+                        ReciepentId = demosubmitter.Id
                     }
                 );
                 context.SaveChanges();
@@ -214,6 +268,7 @@ namespace Squash.Migrations
             {
                 Helpers.ProjectHelpers.AddUserToProject(demodeveloper.Id, project.Id);
                 Helpers.ProjectHelpers.AddUserToProject(demosubmitter.Id, project.Id);
+                Helpers.ProjectHelpers.AddUserToProject(demopm.Id, project.Id);
             }
             foreach(var ticket in tickets)
             {

@@ -178,6 +178,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\AttachmentHelper.cs" />
     <Compile Include="Helpers\MiscHelpers.cs" />
     <Compile Include="Helpers\NotificationHelpers.cs" />
     <Compile Include="Helpers\RoleHelpers.cs" />
@@ -444,7 +445,7 @@
     <Content Include="Views\Tickets\Details.cshtml" />
     <Content Include="Views\Home\ViewAssignedTicketsList.cshtml" />
     <Content Include="Views\Home\ViewAllTickets.cshtml" />
-    <None Include="Properties\PublishProfiles\Squash-Bugtracker - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\Squashed - Web Deploy.pubxml" />
     <None Include="Views\Tickets\Edit.cshtml" />
   </ItemGroup>
   <PropertyGroup>

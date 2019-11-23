@@ -362,8 +362,9 @@
                                                 <table class="table table-striped" id="userManagmentTable">
                                                     <thead>
                                                         <tr>
+                                                            <th style="width:10%"></th>
                                                             <th class="hidden-xs">Description</th>
-                                                            <th class="hidden-xs">Creation Date</th>
+                                                            <th class="hidden-xs">Created</th>
                                                             <th class="hidden-xs">Uploader</th>
                                                             <th class="hidden-xs">Download</th>
                                                         </tr>
@@ -373,10 +374,15 @@
                                                         {
 
                                                             <tr>
+                                                                <td><i class="@Squash.Helpers.AttachmentHelper.GetIcon(attachment.FilePath) fa-3x"></i></td>
                                                                 <td class="hidden-xs">@attachment.Description</td>
                                                                 <td class="hidden-xs">@attachment.UploadDate</td>
                                                                 <td class="hidden-xs">@attachment.User.FirstName @attachment.User.LastName</td>
-                                                                <td><a download href="@MiscHelpers.GetBaseUrl()/@attachment.FilePath"><h3 class="block-title">Download</h3></a> </td>
+                                                                <td>
+                                                                    <a download href="@MiscHelpers.GetBaseUrl()/@attachment.FilePath">
+                                                                        <h6>DOWNLOAD</h6>
+                                                                    </a> 
+                                                                </td>
                                                             </tr>
                                                         }
                                                     </tbody>
@@ -486,7 +492,7 @@
         </div>
     </div>
     <!-- END Page Content -->
-</main>
+</main> 
 @section scripts{
     <script>
 

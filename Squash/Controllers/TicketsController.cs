@@ -49,22 +49,7 @@ namespace Squash.Controllers
             return View(viewModel);
         }
 
-        // GET: Tickets/Create
-        [Authorize(Roles = "Submitter, Administrator")]
-        public ActionResult Create()
-        {
-            var id = User.Identity.GetUserId();
-            var projects = db.Projects.Where(x => x.Users.Any(z => z.Id == id)).ToList();
-            if (projects.Any())
-            {
-                return View(projects);
-            }
-            else
-            {
-                return RedirectToAction("Index", "Home");
-            }
-        }
-
+        [Authorize]
         public ActionResult AddComment(int ticketId, string commentBody)
         {
             if (commentBody.Length > 0)
@@ -110,14 +95,39 @@ namespace Squash.Controllers
             return RedirectToAction("Details", "Tickets", new { id = ticketId });
         }
 
+
+
+        // GET: Tickets/Create
+        [Authorize(Roles = "Submitter, Administrator")]
+        public ActionResult Create()
+        {
+            var id = User.Identity.GetUserId();
+            var projects = db.Projects.Where(x => x.Users.Any(z => z.Id == id)).ToList();
+            var vm = new TicketCreationViewModel()
+            {
+                Projects = projects
+            };
+            if (projects.Any())
+            {
+                return View(vm);
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
+        }
+
         // POST: Tickets/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Submitter, Administrator")]
-        public ActionResult Create(string ticketTitle, string ticketSummary, int projectId,HttpPostedFileBase fileAttachment)
+        public ActionResult Create(TicketCreationViewModel model, HttpPostedFileBase fileAttachment)
         {
+            var ticketTitle = model.ticketTitle;
+            var ticketSummary = model.ticketSummary;
+            var projectId = model.projectId;
             if (ModelState.IsValid)
             {
                 var ticket = new Ticket();

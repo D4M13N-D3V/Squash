@@ -13,5 +13,12 @@ namespace Squash.Models
         }
         public Ticket Ticket { get; set; }
         public IEnumerable<Project> Projects {get; set;}
+        public string ticketTitle { get; set; }
+        public string ticketSummary { get; set; }
+        public int projectId { get; set; }
+    }
+    public class TicketCreationViewModelTwo : TicketCreationViewModel
+    {
+
     }
 }

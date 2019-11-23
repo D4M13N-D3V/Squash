@@ -137,17 +137,12 @@ namespace Squash.Controllers
             }
         }
 
-
-        //
-        // GET: /Account/Register
         [AllowAnonymous]
         public ActionResult Register()
         {
             return View();
         }
 
-        //
-        // POST: /Account/Register
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -157,7 +152,7 @@ namespace Squash.Controllers
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName };
                 var result = await UserManager.CreateAsync(user, model.Password);
-                Helpers.RoleHelpers.AddUserToRole(user.Id, "Submitter");
+ //               Helpers.RoleHelpers.AddUserToRole(user.Id, "Submitter");
                 if (result.Succeeded)
                 {
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
